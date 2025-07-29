@@ -4,6 +4,8 @@ use App\Http\Controllers\PlanController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
+// these uncommented functions are just for building ui
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
@@ -11,6 +13,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('dashboard');
 })->name('dashboard');
+
+Route::get('/billing', function () {
+    return Inertia::render('billing');
+})->name('billing');
 
 // Route::middleware(['auth', 'verified'])->group(function () {
 // // 📦 Plans

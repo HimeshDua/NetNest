@@ -1,0 +1,46 @@
+export const pricingTiers = [
+    {
+        name: 'Essential',
+        price: '$2,900',
+        description: 'For businesses ready to level up their digital presence with a professional website and brand identity.',
+        teamMembers: '2 Team members',
+        features: [
+            { text: '1 active project at a time', included: true },
+            { text: 'Web design & development', included: true },
+            { text: 'Basic brand design', included: true },
+            { text: 'Monthly design iterations', included: true },
+            { text: 'Response within 48h', included: true },
+            { text: '3-month minimum commitment', included: true },
+        ],
+    },
+    {
+        name: 'Growth',
+        price: '$4,900',
+        description: 'For companies who need ongoing design and development across web, brand, and product.',
+        teamMembers: '3 Team members',
+        highlighted: true,
+        popular: true,
+        features: [
+            { text: '2 active projects at a time', included: true },
+            { text: 'Product design', included: true },
+            { text: 'Full brand identity', included: true },
+            { text: 'Weekly design iterations', included: true },
+            { text: 'Response within 24h', included: true },
+            { text: '2-month minimum commitment', included: true },
+        ],
+    },
+    {
+        name: 'Scale',
+        price: '$7,900',
+        description: 'For established businesses who need a dedicated team to handle all their digital needs.',
+        teamMembers: 'Unlimited Team members',
+        features: [
+            { text: '3 active projects at a time', included: true },
+            { text: 'Advanced motion graphics', included: true },
+            { text: 'Full brand strategy', included: true },
+            { text: 'Unlimited design iterations', included: true },
+            { text: 'Same-day response', included: true },
+            { text: '1-month minimum commitment', included: true },
+        ],
+    },
+];
