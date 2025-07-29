@@ -1,21 +1,20 @@
+import { Typography } from '@/components/ui/typography';
+import { cn } from '@/lib/utils';
 import { CheckCircle2 } from 'lucide-react';
-import { cn } from '../../../resources/js/lib/utils';
 
-const featuresData = [
+const feature01Data = [
     {
-        feature: 'SEO',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan',
+        feature: 'Plan Management',
+        description: 'Easily create, update, or delete internet packages with dynamic pricing, data limits, and speed tiers to match your market.',
     },
     {
-        feature: 'PPC',
-        description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan',
+        feature: 'Customer Dashboard',
+        description: 'Let users view active plans, billing history, support tickets, and submit new connection requests from a personalized portal.',
     },
     {
-        feature: 'Social Media',
+        feature: 'Support Ticket System',
         description:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan',
+            'Integrated support feature allows users to raise issues and receive admin responses, ensuring better service and accountability.',
     },
 ];
 
@@ -23,7 +22,7 @@ export default function Feature01() {
     return (
         <div className="flex h-full w-full items-center justify-center">
             <div className="mt-16 grid grid-cols-1 gap-4 rounded-lg p-6 sm:grid-cols-2 xl:grid-cols-3">
-                {featuresData.map((item) => (
+                {feature01Data.map((item) => (
                     <div
                         key={item.feature}
                         className={cn('flex flex-col gap-y-4 rounded-lg p-4 lg:p-9', 'border bg-gradient-to-b from-muted/40 to-background')}
@@ -32,8 +31,12 @@ export default function Feature01() {
                             <CheckCircle2 className="size-6 fill-primary text-white lg:size-7" />
                         </div>
                         <div className="flex flex-col gap-y-2">
-                            <h3 className="text-xl font-medium capitalize">{item.feature}</h3>
-                            <p className="text-muted-foreground">{item.description}</p>
+                            <Typography as="h3" variant="xl/medium" className="capitalize">
+                                {item.feature}
+                            </Typography>
+                            <Typography as="p" variant="base/normal" className="text-muted-foreground">
+                                {item.description}
+                            </Typography>
                         </div>
                     </div>
                 ))}
