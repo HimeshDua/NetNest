@@ -1,3 +1,0 @@
-{
-    "buildCommand": "composer install --no-dev && pnpm install && pnpm build"
-}
