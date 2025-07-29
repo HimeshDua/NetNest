@@ -1,56 +1,167 @@
-import { NavFooter } from '@/components/nav-footer';
+'use client';
+
+import { BookOpen, Frame, Map, PieChart, Settings2, SquareTerminal } from 'lucide-react';
+import * as React from 'react';
+
 import { NavMain } from '@/components/nav-main';
+import { NavProjects } from '@/components/nav-projects';
 import { NavUser } from '@/components/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarRail,
+} from '@/components/ui/sidebar';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
-    },
-];
+const data = {
+    navMain: [
+        {
+            title: 'Dashboard',
+            url: '/dashboard',
+            icon: SquareTerminal,
+            isActive: true,
+            items: [
+                {
+                    title: 'Overview',
+                    url: '/dashboard',
+                },
+                {
+                    title: 'Analytics',
+                    url: '/dashboard/analytics',
+                },
+            ],
+        },
+        {
+            title: 'Connections',
+            url: '/dashboard/connection-requests',
+            icon: Map,
+            items: [
+                {
+                    title: 'Requests',
+                    url: '/dashboard/connection-requests',
+                },
+                {
+                    title: 'Active Users',
+                    url: '/dashboard/users',
+                },
+            ],
+        },
+        {
+            title: 'Billing',
+            url: '/dashboard/billing',
+            icon: PieChart,
+            items: [
+                {
+                    title: 'Invoices',
+                    url: '/dashboard/billing',
+                },
+                {
+                    title: 'Payments',
+                    url: '/dashboard/payments',
+                },
+            ],
+        },
+        {
+            title: 'Support',
+            url: '/dashboard/support',
+            icon: BookOpen,
+            items: [
+                {
+                    title: 'Tickets',
+                    url: '/dashboard/support',
+                },
+                {
+                    title: 'Responses',
+                    url: '/dashboard/support/responses',
+                },
+            ],
+        },
+        {
+            title: 'CMS',
+            url: '/dashboard/cms',
+            icon: Frame,
+            items: [
+                {
+                    title: 'Home Page',
+                    url: '/dashboard/cms/home',
+                },
+                {
+                    title: 'About Page',
+                    url: '/dashboard/cms/about',
+                },
+                {
+                    title: 'Contact Page',
+                    url: '/dashboard/cms/contact',
+                },
+            ],
+        },
+        {
+            title: 'Settings',
+            url: '/dashboard/settings',
+            icon: Settings2,
+            items: [
+                {
+                    title: 'General',
+                    url: '/dashboard/settings',
+                },
+                {
+                    title: 'Plans',
+                    url: '/dashboard/plans',
+                },
+                {
+                    title: 'Team',
+                    url: '/dashboard/settings/team',
+                },
+            ],
+        },
+    ],
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
-
-export function AppSidebar() {
+    projects: [
+        {
+            name: 'Marketing Site',
+            url: '/dashboard/cms',
+            icon: Frame,
+        },
+        {
+            name: 'Analytics Reports',
+            url: '/dashboard/analytics',
+            icon: PieChart,
+        },
+        {
+            name: 'User Network Map',
+            url: '/dashboard/users',
+            icon: Map,
+        },
+    ],
+};
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href="/" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={data.navMain} />
+                <NavProjects projects={data.projects} />
             </SidebarContent>
-
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
+            <SidebarRail />
         </Sidebar>
     );
 }

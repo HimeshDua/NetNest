@@ -8,6 +8,10 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+Route::get('/dashboard', function () {
+    return Inertia::render('dashboard');
+})->name('dashboard');
+
 // Route::middleware(['auth', 'verified'])->group(function () {
 // // 📦 Plans
 Route::get('/plans', [PlanController::class, 'index']);
@@ -30,7 +34,7 @@ Route::get('/plans', [PlanController::class, 'index']);
 
 // // 🛠️ Admin Routes
 // Route::middleware(['auth', 'verified', 'isAdmin'])->prefix('admin')->group(function () {
-//     // Route::get('/dashboard', [DashboardController::class, 'index']);
+// Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 //     // Route::resource('/users', UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
 // Route::resource('/plans', PlanManagementController::class)->except(['edit', 'create']);
