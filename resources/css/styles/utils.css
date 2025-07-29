@@ -1,0 +1,66 @@
+/* Glass effects */
+.glass-1 {
+    border-width: 1px;
+    border-color: var(--border);
+    background-image: linear-gradient(to bottom, var(--card, #fff) 80%, var(--card, #fff) 40%);
+    /* Add dark mode styles using a selector or media query if needed */
+}
+.glass-2 {
+    border-width: 1px;
+    border-color: var(--border);
+    background-image: linear-gradient(to bottom, var(--card, #fff) 100%, var(--card, #fff) 80%);
+    /* Add dark mode styles using a selector or media query if needed */
+}
+.glass-3 {
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--border);
+    background: linear-gradient(to bottom, rgba(var(--card-rgb), 0.3), rgba(var(--card-rgb), 0.2));
+}
+.glass-4 {
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--border);
+    border-bottom-color: var(--input);
+    background: linear-gradient(to bottom, rgba(var(--card-rgb), 0.6), rgba(var(--card-rgb), 0.2));
+}
+.glass-5 {
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--border);
+    border-bottom-color: var(--input);
+    background: linear-gradient(to bottom, rgba(var(--card-rgb), 1), rgba(var(--card-rgb), 0.2));
+}
+/* Add dark mode overrides using a media query or a .dark selector if needed */
+
+/* Fade effects */
+.fade-x {
+    mask-image: linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%);
+}
+.fade-y {
+    mask-image: linear-gradient(to top, transparent 0%, black 25%, black 75%, transparent 100%);
+}
+.fade-top {
+    mask-image: linear-gradient(to bottom, transparent 0%, black 35%);
+}
+.fade-bottom {
+    mask-image: linear-gradient(to top, transparent 0%, black 35%);
+}
+.fade-top-lg {
+    mask-image: linear-gradient(to bottom, transparent 15%, black 100%);
+}
+.fade-bottom-lg {
+    mask-image: linear-gradient(to top, transparent 15%, black 100%);
+}
+.fade-left {
+    mask-image: linear-gradient(to right, transparent 0%, black 35%);
+}
+.fade-right {
+    mask-image: linear-gradient(to left, transparent 0%, black 35%);
+}
+.fade-left-lg {
+    mask-image: linear-gradient(to right, transparent 15%, black 100%);
+}
+.fade-right-lg {
+    mask-image: linear-gradient(to left, transparent 15%, black 100%);
+}
