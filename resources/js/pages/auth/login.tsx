@@ -1,6 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
-import { route } from 'ziggy-js';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
