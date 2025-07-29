@@ -45,7 +45,8 @@ export default function Navigation({
     menuItems = [
         {
             title: 'Plans',
-            content: 'plans',
+            isLink: true,
+            href: '/plans',
         },
         {
             title: 'Dashboard',

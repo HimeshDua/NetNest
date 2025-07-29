@@ -1,3 +1,5 @@
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Typography } from '@/components/ui/typography';
 import { type PropsWithChildren } from 'react';
 
 interface AuthLayoutProps {
@@ -8,18 +10,22 @@ interface AuthLayoutProps {
 
 export default function AuthSimpleLayout({ children, title, description }: PropsWithChildren<AuthLayoutProps>) {
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
-            <div className="w-full max-w-sm">
-                <div className="flex flex-col gap-8">
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="space-y-2 text-center">
-                            <h1 className="text-xl font-medium">{title}</h1>
-                            <p className="text-center text-sm text-muted-foreground">{description}</p>
-                        </div>
-                    </div>
-                    {children}
-                </div>
-            </div>
+        <div className="flex min-h-svh items-center justify-center bg-background px-4 py-10 md:px-6">
+            <Card className="w-full max-w-sm border bg-card shadow-md">
+                <CardHeader className="text-center">
+                    {title && (
+                        <Typography as="h1" variant="lg/semibold" className="mb-1">
+                            {title}
+                        </Typography>
+                    )}
+                    {description && (
+                        <Typography as="p" variant="sm/normal" className="text-muted-foreground">
+                            {description}
+                        </Typography>
+                    )}
+                </CardHeader>
+                <CardContent className="pt-0">{children}</CardContent>
+            </Card>
         </div>
     );
 }

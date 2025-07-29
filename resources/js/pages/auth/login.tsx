@@ -1,25 +1,28 @@
 import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
+import { route } from 'ziggy-js';
 
-import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Typography } from '@/components/ui/typography';
+import { LoaderCircle } from 'lucide-react';
+
+import InputError from '@/components/ui/input-error';
+import TextLink from '@/components/ui/text-link';
 import AuthLayout from '@/layouts/auth-layout';
 import Layout from '@/layouts/layout';
 
-type LoginForm = {
+interface LoginProps {
+    status?: string;
+    canResetPassword?: boolean;
+}
+
+interface LoginForm {
     email: string;
     password: string;
     remember: boolean;
-};
-
-interface LoginProps {
-    status?: string;
-    canResetPassword: boolean;
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
@@ -38,11 +41,10 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     return (
         <Layout>
-            <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
-                <Head title="Log in" />
-
-                <form className="flex flex-col gap-6" onSubmit={submit}>
-                    <div className="grid gap-6">
+            <AuthLayout title="Log in to your account" description="Access your dashboard and manage your ISP from a single place.">
+                <Head title="Login" />
+                <form onSubmit={submit} className="space-y-6">
+                    <div className="grid gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email address</Label>
                             <Input
@@ -50,20 +52,19 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 type="email"
                                 required
                                 autoFocus
-                                tabIndex={1}
                                 autoComplete="email"
+                                placeholder="you@example.com"
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
-                                placeholder="email@example.com"
                             />
                             <InputError message={errors.email} />
                         </div>
 
                         <div className="grid gap-2">
-                            <div className="flex items-center">
+                            <div className="flex items-center justify-between">
                                 <Label htmlFor="password">Password</Label>
                                 {canResetPassword && (
-                                    <TextLink href={route('password.request')} className="ml-auto text-sm" tabIndex={5}>
+                                    <TextLink href={route('password.request')} className="text-sm">
                                         Forgot password?
                                     </TextLink>
                                 )}
@@ -72,41 +73,43 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 id="password"
                                 type="password"
                                 required
-                                tabIndex={2}
                                 autoComplete="current-password"
+                                placeholder="••••••••"
                                 value={data.password}
                                 onChange={(e) => setData('password', e.target.value)}
-                                placeholder="Password"
                             />
                             <InputError message={errors.password} />
                         </div>
 
-                        <div className="flex items-center space-x-3">
+                        <div className="flex items-center gap-2">
                             <Checkbox
                                 id="remember"
                                 name="remember"
                                 checked={data.remember}
-                                onClick={() => setData('remember', !data.remember)}
-                                tabIndex={3}
+                                onCheckedChange={(checked) => setData('remember', checked as boolean)}
                             />
                             <Label htmlFor="remember">Remember me</Label>
                         </div>
-
-                        <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
-                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                            Log in
-                        </Button>
                     </div>
 
-                    <div className="text-center text-sm text-muted-foreground">
-                        Don't have an account?{' '}
-                        <TextLink href={route('register')} tabIndex={5}>
+                    <Button type="submit" className="w-full" disabled={processing}>
+                        {processing && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+                        Log in
+                    </Button>
+
+                    <Typography as="p" variant="sm/normal" className="text-center text-muted-foreground">
+                        Don’t have an account?{' '}
+                        <TextLink href={route('register')} className="font-medium">
                             Sign up
                         </TextLink>
-                    </div>
-                </form>
+                    </Typography>
 
-                {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
+                    {status && (
+                        <Typography as="p" variant="sm/medium" className="text-center text-green-600">
+                            {status}
+                        </Typography>
+                    )}
+                </form>
             </AuthLayout>
         </Layout>
     );

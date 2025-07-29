@@ -23,6 +23,7 @@ interface TypographyProps
   extends React.HTMLAttributes<HTMLElement>,
     VariantProps<typeof typographyVariants> {
   as?: React.ElementType;
+  href?: string;
   variant?: `${TypographyFontSize}/${TypographyFontWeight}`;
 }
 
@@ -121,6 +122,7 @@ const typographyVariants = cva("font-normal text-foreground", {
 
 function Typography({
   as = "p",
+  href,
   variant = "base/normal",
   className,
   ...props
