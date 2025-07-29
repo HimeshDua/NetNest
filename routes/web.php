@@ -1,61 +1,58 @@
 <?php
 
-use App\Http\Controllers\PlanController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-
-// these uncommented functions are just for building ui
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
-
-Route::get('/dashboard', function () {
-    return Inertia::render('dashboard');
-})->name('dashboard');
-
-Route::get('/billing', function () {
-    return Inertia::render('billing');
-})->name('billing');
-
-// Route::middleware(['auth', 'verified'])->group(function () {
-// // 📦 Plans
-Route::get('/plans', [PlanController::class, 'index']);
-
-// // 🌐 Connection Requests
-// Route::post('/connection-request', [ConnectionRequestController::class, 'store']);
-
-// // 💰 Billing
-// Route::get('/billing', [BillingController::class, 'index']);
-// Route::get('/billing/{id}', [BillingController::class, 'show']);
-// Route::post('/payment/verify', [PaymentController::class, 'verify']);
-
-// // 🧾 Support
-// Route::post('/support', [SupportTicketController::class, 'store']);
-// Route::get('/support', [SupportTicketController::class, 'index']);
-// });
-
-// Public CMS Route
-// Route::get('/cms/{section}', [CMSController::class, 'show']);
-
-// // 🛠️ Admin Routes
-// Route::middleware(['auth', 'verified', 'isAdmin'])->prefix('admin')->group(function () {
-// Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-//     // Route::resource('/users', UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
-// Route::resource('/plans', PlanManagementController::class)->except(['edit', 'create']);
-//     // Route::resource('/connection-requests', ConnectionRequestAdminController::class)->only(['index', 'update']);
-//     // Route::resource('/billing', BillingAdminController::class)->only(['index', 'update']);
-//     // Route::resource('/support', SupportAdminController::class)->only(['index']);
-//     Route::get('/cms', [CMSAdminController::class, 'index']);
-//     Route::put('/cms/{section}', [CMSAdminController::class, 'update']);
-// });
-
-//cms 
-// content managment system
-// 
-
-
-
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
+
+// Public routes
+Route::get('/', fn() => Inertia::render('Public/Home'))->name('home');
+Route::get('/about', fn() => Inertia::render('Public/About'))->name('about');
+Route::get('/contact', fn() => Inertia::render('Public/Contact'))->name('contact');
+Route::get('/plans', [\App\Http\Controllers\Public\PlanController::class, 'index'])->name('plans');
+
+// Auth routes (already in `auth.php`)
+
+// ---------------------------
+// Customer Routes
+// ---------------------------
+Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
+
+    Route::get('/plans', [\App\Http\Controllers\Customer\ConnectionController::class, 'myPlans'])->name('customer.plans');
+    Route::get('/billing', [\App\Http\Controllers\Customer\BillingController::class, 'index'])->name('customer.billing');
+    Route::get('/support', [\App\Http\Controllers\Customer\SupportTicketController::class, 'index'])->name('customer.support');
+    Route::post('/support', [\App\Http\Controllers\Customer\SupportTicketController::class, 'store']);
+    Route::get('/connection-status', [\App\Http\Controllers\Customer\ConnectionController::class, 'status'])->name('customer.connection.status');
+    Route::get('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'index'])->name('customer.profile');
+});
+
+// ---------------------------
+// Vendor Routes
+// ---------------------------
+Route::middleware(['auth', 'verified', 'role:vendor'])->prefix('vendor')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index'])->name('vendor.dashboard');
+
+    Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
+    Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
+    Route::get('/support', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'index'])->name('vendor.support');
+    Route::get('/profile', [\App\Http\Controllers\Vendor\ProfileController::class, 'index'])->name('vendor.profile');
+});
+
+// ---------------------------
+// Admin Routes
+// ---------------------------
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+
+    Route::resource('/users', \App\Http\Controllers\Admin\UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
+    Route::resource('/plans', \App\Http\Controllers\Admin\PlanManagementController::class)->except(['edit', 'create']);
+    Route::resource('/billing', \App\Http\Controllers\Admin\BillingManagementController::class)->only(['index', 'update']);
+    Route::resource('/support', \App\Http\Controllers\Admin\SupportManagementController::class)->only(['index']);
+
+    Route::get('/cms', [\App\Http\Controllers\Admin\CMSController::class, 'index'])->name('admin.cms');
+    Route::put('/cms/{section}', [\App\Http\Controllers\Admin\CMSController::class, 'update']);
+
+    Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics');
+});
