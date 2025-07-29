@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PlanController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -9,8 +10,7 @@ Route::get('/', function () {
 
 // Route::middleware(['auth', 'verified'])->group(function () {
 // // 📦 Plans
-// Route::get('/plans', [PlanController::class, 'index']);
-// Route::get('/plans/{id}', [PlanController::class, 'show']);
+Route::get('/plans', [PlanController::class, 'index']);
 
 // // 🌐 Connection Requests
 // Route::post('/connection-request', [ConnectionRequestController::class, 'store']);
@@ -33,7 +33,7 @@ Route::get('/', function () {
 //     // Route::get('/dashboard', [DashboardController::class, 'index']);
 
 //     // Route::resource('/users', UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
-//     // Route::resource('/plans', PlanManagementController::class)->except(['edit', 'create']);
+// Route::resource('/plans', PlanManagementController::class)->except(['edit', 'create']);
 //     // Route::resource('/connection-requests', ConnectionRequestAdminController::class)->only(['index', 'update']);
 //     // Route::resource('/billing', BillingAdminController::class)->only(['index', 'update']);
 //     // Route::resource('/support', SupportAdminController::class)->only(['index']);

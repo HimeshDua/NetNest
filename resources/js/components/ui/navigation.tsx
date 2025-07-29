@@ -44,71 +44,69 @@ interface NavigationProps {
 export default function Navigation({
     menuItems = [
         {
-            title: 'Getting started',
-            content: 'default',
+            title: 'Plans',
+            content: 'plans',
         },
         {
-            title: 'Components',
-            content: 'components',
+            title: 'Dashboard',
+            content: 'dashboard',
         },
         {
-            title: 'Documentation',
+            title: 'Support',
             isLink: true,
-            href: siteConfig.url,
+            href: '/support',
         },
     ],
     components = [
         {
-            title: 'Alert Dialog',
-            href: '/docs/primitives/alert-dialog',
-            description: 'A modal dialog that interrupts the user with important content and expects a response.',
+            title: 'Connection Requests',
+            href: '/dashboard/connection-requests',
+            description: 'View and manage new internet connection requests submitted by users.',
         },
         {
-            title: 'Hover Card',
-            href: '/docs/primitives/hover-card',
-            description: 'For sighted users to preview content available behind a link.',
+            title: 'Billing & Invoices',
+            href: '/dashboard/billing',
+            description: 'Track user billing history, invoices, and payment statuses in one place.',
         },
         {
-            title: 'Progress',
-            href: '/docs/primitives/progress',
-            description: 'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
+            title: 'CMS Manager',
+            href: '/dashboard/cms',
+            description: 'Update and publish homepage, about, and contact page content using the CMS editor.',
         },
         {
-            title: 'Scroll-area',
-            href: '/docs/primitives/scroll-area',
-            description: 'Visually or semantically separates content.',
+            title: 'Support Tickets',
+            href: '/dashboard/support',
+            description: 'Manage and reply to customer support tickets efficiently.',
         },
         {
-            title: 'Tabs',
-            href: '/docs/primitives/tabs',
-            description: 'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
+            title: 'User Management',
+            href: '/dashboard/users',
+            description: 'View, edit, or remove user accounts from the platform dashboard.',
         },
         {
-            title: 'Tooltip',
-            href: '/docs/primitives/tooltip',
-            description:
-                'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+            title: 'Analytics',
+            href: '/dashboard/analytics',
+            description: 'Monitor usage stats, signups, and support metrics to make informed decisions.',
         },
     ],
-    // logo = <LaunchUI />,
-    logoTitle = 'Launch UI',
-    logoDescription = 'Landing page template built with React, Shadcn/ui and Tailwind that you can copy/paste into your project.',
-    logoHref = siteConfig.url,
+    logoTitle = 'NetNest',
+    logoDescription = 'ISP business dashboard and website framework designed to help you launch, manage, and scale your internet service operations.',
+    logoHref = '/',
     introItems = [
         {
-            title: 'Introduction',
-            href: siteConfig.url,
-            description: 'Re-usable components built using Radix UI and Tailwind CSS.',
+            title: 'Overview',
+            href: '/about',
+            description: 'Learn more about what NetNest does and who it’s for.',
         },
         {
-            title: 'Installation',
-            href: siteConfig.url,
-            description: 'How to install dependencies and structure your app.',
+            title: 'Getting Started',
+            href: '/register',
+            description: 'Create your account and set up your ISP dashboard in minutes.',
         },
         {
-            title: 'Typography',
-            href: siteConfig.url,
-            description: 'Styles for headings, paragraphs, lists...etc',
+            title: 'How it works',
+            href: '/how-it-works',
+            description: 'See how NetNest helps you manage plans, users, support, and content.',
         },
     ],
 }: NavigationProps) {
@@ -153,9 +151,30 @@ export default function Navigation({
                                                 </ListItem>
                                             ))}
                                         </ul>
+                                    ) : item.content === 'plans' ? (
+                                        <ul className="grid w-[300px] gap-3 p-4">
+                                            <ListItem href="/plans/basic" title="Basic Plan">
+                                                Affordable and reliable internet access for small households.
+                                            </ListItem>
+                                            <ListItem href="/plans/pro" title="Pro Plan">
+                                                Higher bandwidth for professionals and gamers.
+                                            </ListItem>
+                                            <ListItem href="/plans/business" title="Business Plan">
+                                                Scalable internet packages tailored for businesses.
+                                            </ListItem>
+                                        </ul>
+                                    ) : item.content === 'dashboard' ? (
+                                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                                            {components.map((component) => (
+                                                <ListItem key={component.title} title={component.title} href={component.href}>
+                                                    {component.description}
+                                                </ListItem>
+                                            ))}
+                                        </ul>
                                     ) : (
                                         item.content
-                                    )}
+                                    )
+                                    }
                                 </NavigationMenuContent>
                             </>
                         )}

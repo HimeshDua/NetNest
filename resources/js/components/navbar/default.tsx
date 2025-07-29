@@ -36,18 +36,20 @@ interface NavbarProps {
 
 export default function Navbar({
     logo = '',
-    name = 'Net Nest',
+    name = 'NetNest',
     homeUrl = siteConfig.url,
     mobileLinks = [
-        { text: 'Getting Started', href: siteConfig.url },
-        { text: 'Components', href: siteConfig.url },
-        { text: 'Documentation', href: siteConfig.url },
+        { text: 'Home', href: '/' },
+        { text: 'Plans', href: '/plans' },
+        { text: 'Dashboard', href: '/dashboard' },
+        { text: 'Support', href: '/support' },
+        { text: 'Contact', href: '/contact' },
     ],
     actions = [
-        { text: 'Sign in', href: siteConfig.url, isButton: false },
+        { text: 'Sign In', href: '/login', isButton: false },
         {
             text: 'Get Started',
-            href: siteConfig.url,
+            href: '/register',
             isButton: true,
             variant: 'default',
         },

@@ -6,7 +6,7 @@ export const siteConfig = {
     description: 'NetNest is a modern ISP management system offering dashboards, billing, support, and CMS tools for growing internet providers.',
     links: {
         twitter: 'https://twitter.com/netnestISP',
-        github: 'https://github.com/himeshdua/NetNest',
+        github: 'https://github.com/HimeshDua/NetNest-Laravel.12-React',
         email: 'mailto:support@netnest.io',
     },
     pricing: {
