@@ -1,0 +1,6 @@
+#!/bin/bash
+
+composer install --no-dev
+php artisan ziggy:generate resources/js/ziggy.js
+pnpm install
+pnpm build
