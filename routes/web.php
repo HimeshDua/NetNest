@@ -14,12 +14,13 @@ Route::get('/plans', [\App\Http\Controllers\Public\PlanController::class, 'index
 Route::get('/vendors', fn() => Inertia::render('Public/Vendors'))->name('vendor');
 
 
-// Auth routes (already in `auth.php`)
+// Auth routes (already in `auth.php`) 
+
+Route::middleware(['auth', 'redirect.role'])->get('/dashboard', fn() => null)->name('dashboard');
 
 // ---------------------------
 // Customer Routes
 // ---------------------------
-
 
 Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');

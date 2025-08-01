@@ -57,6 +57,7 @@ function Navigation() {
             { title: 'Home', isLink: true, href: '/' },
             { title: 'Plans', isLink: true, href: '/plans' },
             { title: 'Vendors', isLink: true, href: '/vendors' },
+            { title: 'About', isLink: true, href: '/about' },
             { title: 'Contact', isLink: true, href: '/contact' },
         ];
     } else if (userRole === 'admin') {

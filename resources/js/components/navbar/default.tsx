@@ -139,16 +139,10 @@ export default function Navbar({
                         variant: 'secondary',
                     },
                     {
-                        text: 'Profile',
-                        href: '/logout',
+                        text: 'Dashboard',
+                        href: '/dashboard',
                         isButton: true,
                         variant: 'default',
-                    },
-                    {
-                        text: 'Profile',
-                        href: '/logout',
-                        isButton: true,
-                        variant: 'destructive',
                     },
                 ];
                 break;
