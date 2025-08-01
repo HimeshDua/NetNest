@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-class SupportTicketController extends Controller
+use Inertia\Inertia;
+class SupportTicketController
 {
-    //
+    public function index(){
+        return Inertia::render('Customer/Support');
+    }
+    public function store(){
+        return ;
+    }
 }

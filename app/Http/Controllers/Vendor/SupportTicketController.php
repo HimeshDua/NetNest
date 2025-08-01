@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-class SupportTicketController extends Controller
+use Inertia\Inertia;
+class SupportTicketController
 {
-    //
+   public function index(){
+        return Inertia::render('Vendor/Support');
+    }
 }

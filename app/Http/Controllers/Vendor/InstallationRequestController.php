@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-class InstallationRequestController extends Controller
+use Inertia\Inertia;
+class InstallationRequestController
 {
-    //
+    public function index(){
+        return Inertia::render('Vendor/AssignedConnections');
+    }
+    public function request(){
+        return Inertia::render('Vendor/InstallationRequests');
+    }
 }

@@ -11,12 +11,16 @@ Route::get('/', fn() => Inertia::render('Public/Home'))->name('home');
 Route::get('/about', fn() => Inertia::render('Public/About'))->name('about');
 Route::get('/contact', fn() => Inertia::render('Public/Contact'))->name('contact');
 Route::get('/plans', [\App\Http\Controllers\Public\PlanController::class, 'index'])->name('plans');
+Route::get('/vendors', fn() => Inertia::render('Public/Vendors'))->name('vendor');
+
 
 // Auth routes (already in `auth.php`)
 
 // ---------------------------
 // Customer Routes
 // ---------------------------
+
+
 Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
 

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Public;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class PlanController extends Controller
+class PlanController
 {
-    public function index()
-    {
-        return Inertia::render('Public/Plans');
-    }
+   public function index(){
+      return Inertia::render('Public/Home');
+   }
+ 
 }

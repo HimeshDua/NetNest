@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inertia\Inertia; 
 
-class ConnectionController extends Controller
+class ConnectionController
 {
-    //
+    public function myPlans(){
+        return Inertia::render('Customer/MyPlans');
+    }
+    public function status(){
+        return ;
+    }
 }

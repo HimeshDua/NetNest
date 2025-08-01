@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Customer;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-class BillingController extends Controller
+use Inertia\Inertia;
+class BillingController
 {
-    //
+    public function index(){
+        return Inertia::render('Customer/Billing');
+    }
 }

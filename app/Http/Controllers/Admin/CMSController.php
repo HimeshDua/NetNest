@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-class CMSController extends Controller
+use Inertia\Inertia;
+class CMSController
 {
-    //
+    public function index(){
+        return Inertia::render('Admin/CMS');
+    }
 }

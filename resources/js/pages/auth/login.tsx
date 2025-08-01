@@ -11,7 +11,7 @@ import { LoaderCircle } from 'lucide-react';
 import InputError from '@/components/ui/input-error';
 import TextLink from '@/components/ui/text-link';
 import AuthLayout from '@/layouts/auth-layout';
-import Layout from '@/layouts/layout';
+import Layout from '@/layouts/Layout';
 
 interface LoginProps {
     status?: string;

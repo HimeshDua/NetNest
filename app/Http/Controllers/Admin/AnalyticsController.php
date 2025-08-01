@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-class AnalyticsController extends Controller
+use Inertia\Inertia;
+class AnalyticsController
 {
-    //
+    public function index(){
+        return Inertia::render('Admin/Analytics');
+    }
 }
