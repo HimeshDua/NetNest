@@ -14,6 +14,7 @@ import {
 } from '../ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import { usePage } from '@inertiajs/react';
+import { PageProps } from '@/types';
 
 interface ComponentItem {
     title: string;
@@ -43,13 +44,7 @@ interface NavigationProps {
 }
 
 function Navigation() {
-    const { auth } = usePage().props as {
-        auth: {
-            user?: {
-                role?: 'admin' | 'vendor' | 'customer' | null;
-            };
-        };
-    };
+    const { auth } = usePage<PageProps>().props
 
     const userRole = auth?.user?.role;
 
