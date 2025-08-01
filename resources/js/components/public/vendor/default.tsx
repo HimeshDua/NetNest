@@ -3,28 +3,17 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { JobPosition, jobPositions } from '@/data/jobsList';
-import {
-    BarChartIcon,
-    BookmarkIcon,
-    BriefcaseIcon,
-    BuildingIcon,
-    CalendarIcon,
-    DollarSignIcon,
-    MapPinIcon,
-    StarIcon,
-    TrendingUpIcon,
-    UsersIcon,
-} from 'lucide-react';
+import { services } from '@/data/vendorService';
+import { VendorService } from '@/interfaces/vendorService';
+import { BarChartIcon, BookmarkIcon, CalendarIcon, DollarSignIcon, GlobeIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
 import { useState } from 'react';
 
-const jobsPerPage = 6;
+const servicesPerPage = 6;
 
-export default function VendorComponent() {
+export default function VendorServiceGrid() {
     const [currentPage, setCurrentPage] = useState(1);
-
-    const totalPages = Math.ceil(jobPositions.length / jobsPerPage);
-    const paginatedJobs = jobPositions.slice((currentPage - 1) * jobsPerPage, currentPage * jobsPerPage);
+    const totalPages = Math.ceil(services.length / servicesPerPage);
+    const paginatedServices = services.slice((currentPage - 1) * servicesPerPage, currentPage * servicesPerPage);
 
     const getDaysAgo = (dateString: string) => {
         const postDate = new Date(dateString);
@@ -34,35 +23,7 @@ export default function VendorComponent() {
         return diffDays === 0 ? 'Today' : diffDays === 1 ? 'Yesterday' : `${diffDays} days ago`;
     };
 
-    const formatLocationType = (type: string) => {
-        switch (type) {
-            case 'remote':
-                return 'Remote';
-            case 'hybrid':
-                return 'Hybrid';
-            case 'onsite':
-                return 'On-site';
-            default:
-                return type;
-        }
-    };
-
-    const formatEmploymentType = (type: string) => {
-        switch (type) {
-            case 'full-time':
-                return 'Full-time';
-            case 'part-time':
-                return 'Part-time';
-            case 'contract':
-                return 'Contract';
-            case 'internship':
-                return 'Internship';
-            default:
-                return type;
-        }
-    };
-
-    const getHighlightDetails = (highlight: JobPosition['highlight']) => {
+    const getHighlightDetails = (highlight: VendorService['highlight']) => {
         switch (highlight) {
             case 'new':
                 return {
@@ -76,10 +37,10 @@ export default function VendorComponent() {
                     label: 'Trending',
                     color: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
                 };
-            case 'competitive':
+            case 'reliable':
                 return {
                     icon: <BarChartIcon className="h-4 w-4" />,
-                    label: 'Competitive',
+                    label: 'Reliable',
                     color: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
                 };
             case 'popular':
@@ -96,47 +57,45 @@ export default function VendorComponent() {
     return (
         <div className="container mx-auto px-4 py-12">
             <div className="mb-10 text-center">
-                <h2 className="mb-4 text-3xl font-bold tracking-tight">Featured Opportunities</h2>
+                <h2 className="mb-4 text-3xl font-bold tracking-tight">Top Vendor Services</h2>
                 <p className="mx-auto max-w-2xl text-muted-foreground">
-                    Discover top job listings from leading vendors. These are handpicked roles offering career growth, benefits, and innovation.
+                    Explore high-speed internet, secure VPN, dedicated lines, and more. Curated for your business and home needs.
                 </p>
             </div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {paginatedJobs.map((job) => {
-                    const highlightDetails = job.highlight ? getHighlightDetails(job.highlight) : null;
+                {paginatedServices.map((service) => {
+                    const highlight = getHighlightDetails(service.highlight);
 
                     return (
-                        <Card key={job.id} className="flex h-full flex-col">
+                        <Card key={service.id} className="flex h-full flex-col">
                             <CardHeader className="pb-2">
                                 <div className="flex items-start justify-between">
                                     <div className="relative flex h-12 w-12 items-center justify-center rounded-md border bg-card">
-                                        <div className="absolute flex h-full w-full items-center justify-center">
-                                            {job.companyLogo ? (
-                                                <img
-                                                    src={job.companyLogo}
-                                                    alt={job.companyName}
-                                                    width={48}
-                                                    height={48}
-                                                    className="h-12 w-12 object-contain"
-                                                />
-                                            ) : (
-                                                <BuildingIcon className="h-6 w-6 text-muted-foreground" />
-                                            )}
-                                        </div>
+                                        {service.vendorLogo ? (
+                                            <img
+                                                src={service.vendorLogo}
+                                                alt={service.vendorName}
+                                                width={48}
+                                                height={48}
+                                                className="h-12 w-12 object-contain"
+                                            />
+                                        ) : (
+                                            <ServerIcon className="h-6 w-6 text-muted-foreground" />
+                                        )}
                                     </div>
-                                    {highlightDetails && (
-                                        <Badge variant="secondary" className={`flex items-center gap-1 ${highlightDetails.color}`}>
-                                            {highlightDetails.icon}
-                                            {highlightDetails.label}
+                                    {highlight && (
+                                        <Badge variant="secondary" className={`flex items-center gap-1 ${highlight.color}`}>
+                                            {highlight.icon}
+                                            {highlight.label}
                                         </Badge>
                                     )}
                                 </div>
                                 <div className="mt-3">
-                                    <CardTitle>{job.title}</CardTitle>
+                                    <CardTitle>{service.title}</CardTitle>
                                     <div className="mt-1 flex items-center gap-1">
-                                        <BuildingIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                                        <CardDescription className="!mt-0">{job.companyName}</CardDescription>
+                                        <GlobeIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                                        <CardDescription className="!mt-0">{service.vendorName}</CardDescription>
                                     </div>
                                 </div>
                             </CardHeader>
@@ -144,42 +103,32 @@ export default function VendorComponent() {
                             <CardContent className="flex flex-grow flex-col gap-3">
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2">
-                                        <MapPinIcon className="h-4 w-4 text-muted-foreground" />
-                                        <span className="text-sm">{job.location}</span>
-                                        <Badge variant="outline" className="ml-auto text-xs">
-                                            {formatLocationType(job.locationType)}
-                                        </Badge>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <BriefcaseIcon className="h-4 w-4 text-muted-foreground" />
-                                        <span className="text-sm">{job.department}</span>
-                                        <Badge variant="outline" className="ml-auto text-xs">
-                                            {formatEmploymentType(job.employmentType)}
-                                        </Badge>
+                                        <ServerIcon className="h-4 w-4 text-muted-foreground" />
+                                        <span className="text-sm capitalize">{service.serviceType.replace('-', ' ')}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
-                                        <span className="text-sm">{job.salary}</span>
+                                        <span className="text-sm">{service.price}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                                        <span className="text-sm">Posted {getDaysAgo(job.postedDate)}</span>
+                                        <span className="text-sm">Posted {getDaysAgo(service.postedDate)}</span>
                                     </div>
                                 </div>
 
-                                <p className="mt-2 text-sm text-muted-foreground">{job.description}</p>
+                                <p className="mt-2 text-sm text-muted-foreground">{service.description}</p>
 
                                 <div className="mt-auto">
-                                    <p className="mb-1.5 text-xs font-medium text-muted-foreground">Perks & Benefits:</p>
+                                    <p className="mb-1.5 text-xs font-medium text-muted-foreground">Features:</p>
                                     <div className="flex flex-wrap gap-1.5">
-                                        {job.perks.slice(0, 3).map((perk, index) => (
+                                        {service.features.slice(0, 3).map((feature, index) => (
                                             <Badge variant="secondary" key={index} className="text-xs">
-                                                {perk}
+                                                {feature}
                                             </Badge>
                                         ))}
-                                        {job.perks.length > 3 && (
+                                        {service.features.length > 3 && (
                                             <Badge variant="outline" className="text-xs">
-                                                +{job.perks.length - 3} more
+                                                +{service.features.length - 3} more
                                             </Badge>
                                         )}
                                     </div>
@@ -192,7 +141,7 @@ export default function VendorComponent() {
                                     Save
                                 </Button>
                                 <Button size="sm" className="w-1/2">
-                                    Apply Now
+                                    Subscribe
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -204,11 +153,9 @@ export default function VendorComponent() {
                 <Button variant="outline" size="sm" disabled={currentPage === 1} onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}>
                     Previous
                 </Button>
-
                 <span className="text-sm text-muted-foreground">
                     Page {currentPage} of {totalPages}
                 </span>
-
                 <Button
                     variant="outline"
                     size="sm"

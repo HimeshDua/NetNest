@@ -9,6 +9,8 @@ class VendorController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Public/Vendors');
+        return Inertia::render('Public/Vendors', [
+            'jobPositions' => ['']
+        ]);
     }
 }

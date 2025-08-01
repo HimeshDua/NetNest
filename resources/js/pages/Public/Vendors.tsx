@@ -1,10 +1,10 @@
-import VendorComponent from '@/components/public/vendor/default';
+import VendorServiceGrid from '@/components/public/vendor/default';
 import Layout from '@/layouts/Layout';
 
 function Vendors() {
     return (
         <Layout>
-            <VendorComponent />
+            <VendorServiceGrid />
         </Layout>
     );
 }
