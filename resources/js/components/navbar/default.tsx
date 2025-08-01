@@ -112,14 +112,58 @@ export default function Navbar({
                 break;
         }
 
-        actions = [
-            {
-                text: 'Logout',
-                href: '/logout',
-                isButton: true,
-                variant: 'default',
-            },
-        ];
+        switch (auth.user.role) {
+            case 'admin':
+                actions = [
+                    {
+                        text: 'Logout',
+                        href: '/logout',
+                        isButton: true,
+                        variant: 'default',
+                    },
+                ];
+                break;
+
+            case 'vendor':
+                actions = [
+                    {
+                        text: 'Profile',
+                        href: '/logout',
+                        isButton: true,
+                        variant: 'outline',
+                    },
+                    {
+                        text: 'Profile',
+                        href: '/logout',
+                        isButton: true,
+                        variant: 'secondary',
+                    },
+                    {
+                        text: 'Profile',
+                        href: '/logout',
+                        isButton: true,
+                        variant: 'default',
+                    },
+                    {
+                        text: 'Profile',
+                        href: '/logout',
+                        isButton: true,
+                        variant: 'destructive',
+                    },
+                ];
+                break;
+
+            case 'customer':
+                actions = [
+                    {
+                        text: 'Logout',
+                        href: '/logout',
+                        isButton: true,
+                        variant: 'default',
+                    },
+                ];
+                break;
+        }
     } else {
         // Guest
         roleBasedLinks = [
@@ -150,7 +194,7 @@ export default function Navbar({
                             {logo}
                             {name}
                         </a>
-                        {showNavigation && (customNavigation || <Navigation links={roleBasedLinks} />)}
+                        {showNavigation && (customNavigation || <Navigation />)}
                     </NavbarLeft>
                     <NavbarRight>
                         {actions.map((action, index) =>
@@ -176,7 +220,7 @@ export default function Navbar({
                                 </Button>
                             </SheetTrigger>
                             <SheetContent side="right">
-                                <nav className="grid gap-6 text-lg font-medium">
+                                <nav className="grid gap-6 p-8 text-lg font-medium">
                                     <a href={homeUrl} className="flex items-center gap-2 text-xl font-bold">
                                         {name}
                                     </a>

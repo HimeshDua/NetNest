@@ -55,15 +55,8 @@ export default function VendorServiceGrid() {
     };
 
     return (
-        <div className="container mx-auto px-4 py-12">
-            <div className="mb-10 text-center">
-                <h2 className="mb-4 text-3xl font-bold tracking-tight">Top Vendor Services</h2>
-                <p className="mx-auto max-w-2xl text-muted-foreground">
-                    Explore high-speed internet, secure VPN, dedicated lines, and more. Curated for your business and home needs.
-                </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <>
+            <div className="grid grid-cols-1 gap-6 px-4 sm:grid-cols-2 lg:grid-cols-3">
                 {paginatedServices.map((service) => {
                     const highlight = getHighlightDetails(service.highlight);
 
@@ -165,6 +158,6 @@ export default function VendorServiceGrid() {
                     Next
                 </Button>
             </div>
-        </div>
+        </>
     );
 }

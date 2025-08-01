@@ -1,7 +1,7 @@
 import PricingCard from '@/components/plans/default';
 import { Typography } from '@/components/ui/typography';
 import { pricingTiers } from '@/data/pricingTiers';
-import Layout from '@/layouts/Layout';
+import Layout from '@/layouts/layout';
 
 function PricingsPage() {
     return (
