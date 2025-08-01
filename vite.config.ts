@@ -22,4 +22,8 @@ export default defineConfig({
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
         },
     },
+    build: {
+        outDir: 'public/build',
+        emptyOutDir: true,
+    },
 });
