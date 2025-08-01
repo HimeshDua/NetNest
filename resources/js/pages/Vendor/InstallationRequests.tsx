@@ -1,5 +1,7 @@
+import DashboardLayout from '@/layouts/dashboard-layout';
+
 function InstallationRequests() {
-    return <div>InstallationRequests</div>;
+    return <DashboardLayout title="Installation Requests">InstallationRequests</DashboardLayout>;
 }
 
 export default InstallationRequests;

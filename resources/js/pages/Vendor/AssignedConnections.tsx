@@ -1,5 +1,7 @@
+import DashboardLayout from '@/layouts/dashboard-layout';
+
 function AssignedConnections() {
-    return <div>AssignedConnections</div>;
+    return <DashboardLayout title="Assigned Connections">AssignedConnections</DashboardLayout>;
 }
 
 export default AssignedConnections;

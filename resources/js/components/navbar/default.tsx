@@ -128,13 +128,7 @@ export default function Navbar({
                 actions = [
                     {
                         text: 'Profile',
-                        href: '/logout',
-                        isButton: true,
-                        variant: 'outline',
-                    },
-                    {
-                        text: 'Profile',
-                        href: '/logout',
+                        href: '/settings/profile',
                         isButton: true,
                         variant: 'secondary',
                     },
