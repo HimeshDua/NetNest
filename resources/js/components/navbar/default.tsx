@@ -27,8 +27,42 @@ interface NavbarProps {
     logo?: ReactNode;
     name?: string;
     homeUrl?: string;
-    mobileLinks?: NavbarLink[];
+    auth?: {
+        user?: {
+            name: string;
+            role: 'admin' | 'vendor' | 'customer' | null;
+        } | null;
+    };
     actions?: NavbarActionProps[];
+    showNavigation?: boolean;
+    customNavigation?: ReactNode;
+    className?: string;
+}
+
+interface NavbarLink {
+    text: string;
+    href: string;
+}
+
+interface NavbarActionProps {
+    text: string;
+    href: string;
+    variant?: ButtonProps['variant'];
+    icon?: ReactNode;
+    iconRight?: ReactNode;
+    isButton?: boolean;
+}
+
+interface NavbarProps {
+    logo?: ReactNode;
+    name?: string;
+    homeUrl?: string;
+    auth?: {
+        user?: {
+            name: string;
+            role: 'admin' | 'vendor' | 'customer' | null;
+        } | null;
+    };
     showNavigation?: boolean;
     customNavigation?: ReactNode;
     className?: string;
@@ -38,26 +72,74 @@ export default function Navbar({
     logo = '',
     name = 'NetNest',
     homeUrl = siteConfig.url,
-    mobileLinks = [
-        { text: 'Home', href: '/' },
-        { text: 'Plans', href: '/plans' },
-        { text: 'Dashboard', href: '/dashboard' },
-        { text: 'Support', href: '/support' },
-        { text: 'Contact', href: '/contact' },
-    ],
-    actions = [
-        { text: 'Sign In', href: '/login', isButton: false },
-        {
-            text: 'Get Started',
-            href: '/register',
-            isButton: true,
-            variant: 'default',
-        },
-    ],
+    auth,
     showNavigation = true,
     customNavigation,
     className,
 }: NavbarProps) {
+    let roleBasedLinks: NavbarLink[] = [];
+    let actions: NavbarActionProps[] = [];
+
+    if (auth?.user) {
+        switch (auth.user.role) {
+            case 'admin':
+                roleBasedLinks = [
+                    { text: 'Dashboard', href: '/admin/dashboard' },
+                    { text: 'Users', href: '/admin/users' },
+                    { text: 'Plans', href: '/admin/plans' },
+                    { text: 'Billing', href: '/admin/billing' },
+                    { text: 'CMS', href: '/admin/cms' },
+                ];
+                break;
+
+            case 'vendor':
+                roleBasedLinks = [
+                    { text: 'Dashboard', href: '/vendor/dashboard' },
+                    { text: 'Assigned', href: '/vendor/assigned-connections' },
+                    { text: 'Requests', href: '/vendor/installation-requests' },
+                    { text: 'Support', href: '/vendor/support' },
+                ];
+                break;
+
+            case 'customer':
+                roleBasedLinks = [
+                    { text: 'Dashboard', href: '/customer/dashboard' },
+                    { text: 'My Plans', href: '/customer/plans' },
+                    { text: 'Billing', href: '/customer/billing' },
+                    { text: 'Support', href: '/customer/support' },
+                    { text: 'Vendors', href: '/vendors' }, // Customer view of vendors
+                ];
+                break;
+        }
+
+        actions = [
+            {
+                text: 'Logout',
+                href: '/logout',
+                isButton: true,
+                variant: 'default',
+            },
+        ];
+    } else {
+        // Guest
+        roleBasedLinks = [
+            { text: 'Home', href: '/' },
+            { text: 'Plans', href: '/plans' },
+            { text: 'Vendors', href: '/vendors' },
+            { text: 'Contact', href: '/contact' },
+        ];
+
+        actions = [
+            { text: 'Sign In', href: '/login', isButton: false },
+            {
+                text: 'Get Started',
+                href: '/register',
+                isButton: true,
+                variant: 'default',
+            },
+        ];
+    }
+
     return (
         <header className={cn('sticky top-0 z-50 -mb-4 px-4 pb-4', className)}>
             <div className="fade-bottom absolute left-0 h-24 w-full bg-background/15 backdrop-blur-lg"></div>
@@ -68,7 +150,7 @@ export default function Navbar({
                             {logo}
                             {name}
                         </a>
-                        {showNavigation && (customNavigation || <Navigation />)}
+                        {showNavigation && (customNavigation || <Navigation links={roleBasedLinks} />)}
                     </NavbarLeft>
                     <NavbarRight>
                         {actions.map((action, index) =>
@@ -96,9 +178,9 @@ export default function Navbar({
                             <SheetContent side="right">
                                 <nav className="grid gap-6 text-lg font-medium">
                                     <a href={homeUrl} className="flex items-center gap-2 text-xl font-bold">
-                                        <span>{name}</span>
+                                        {name}
                                     </a>
-                                    {mobileLinks.map((link, index) => (
+                                    {roleBasedLinks.map((link, index) => (
                                         <a key={index} href={link.href} className="text-muted-foreground hover:text-foreground">
                                             {link.text}
                                         </a>

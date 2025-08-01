@@ -1,15 +1,17 @@
 import FooterWithNewsletter from '@/components/footer/default';
-import { type ReactNode } from 'react';
+import { LayoutProps, PageProps } from '@/types';
+import { usePage } from '@inertiajs/react';
 import Navbar from '../components/navbar/default';
 
-interface LayoutProps {
-    children: ReactNode;
+function Layout({ children }: LayoutProps) {
+    const { auth } = usePage<PageProps>().props;
+    return (
+        <main className="mx-auto max-w-6xl">
+            <Navbar auth={auth} />
+            {children}
+            <FooterWithNewsletter />
+        </main>
+    );
 }
 
-export default ({ children }: LayoutProps) => (
-    <main className="mx-auto max-w-6xl">
-        <Navbar />
-        {children}
-        <FooterWithNewsletter />
-    </main>
-);
+export default Layout;

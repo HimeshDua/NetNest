@@ -1,5 +1,11 @@
+import { PageProps as InertiaPageProps } from '@inertiajs/inertia';
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
+
+//Layouts
+export interface LayoutProps {
+    children: ReactNode;
+}
 
 export interface Auth {
     user: User;
@@ -36,8 +42,33 @@ export interface User {
     name: string;
     email: string;
     avatar?: string;
+    role: 'admin' | 'vendor' | 'customer' | null;
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
+}
+
+export interface PageProps extends InertiaPageProps {
+    auth: {
+        user?: User | null;
+    };
+    [key: string]: any;
+}
+
+// Vendors
+export interface VendorService {
+    id: string;
+    title: string;
+    vendorName: string;
+    vendorLogo: string;
+    location: string;
+    connectionType: 'fiber' | 'dsl' | 'wireless';
+    serviceType: 'internet' | 'vpn' | 'dedicated-line' | 'hosting';
+    price: string;
+    postedDate: string;
+    description: string;
+    featured: boolean;
+    highlight: 'new' | 'trending' | 'reliable' | 'popular' | undefined;
+    features: string[];
 }

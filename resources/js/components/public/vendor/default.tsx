@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { services } from '@/data/vendorService';
-import { VendorService } from '@/interfaces/vendorService';
+import { VendorService } from '@/types/index';
 import { BarChartIcon, BookmarkIcon, CalendarIcon, DollarSignIcon, GlobeIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
 import { useState } from 'react';
 

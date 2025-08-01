@@ -1,4 +1,4 @@
-import { VendorService } from '@/interfaces/vendorService';
+import { VendorService } from '@/types';
 
 export const services: VendorService[] = [
     {
