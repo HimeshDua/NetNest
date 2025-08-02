@@ -53,7 +53,7 @@ function Navigation() {
     if (!userRole) {
         // Guest
         menuItems = [
-            { title: 'Home', isLink: true, href: '/' },
+            // { title: 'Home', isLink: true, href: '/' },
             { title: 'Plans', isLink: true, href: '/plans' },
             { title: 'Vendors', isLink: true, href: '/vendors' },
             { title: 'About', isLink: true, href: '/about' },

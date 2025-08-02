@@ -1,3 +1,4 @@
+import { IconBell, IconFileWord, IconHistoryToggle, IconMessageDots, IconPackage, IconReport, IconShare3 } from '@tabler/icons-react';
 import { BookOpen, FileCheck, Frame, Home, Map, PieChart, SquareTerminal, UserCircle2, Users } from 'lucide-react';
 
 export function getSidebarData(role: string | null) {
@@ -7,6 +8,29 @@ export function getSidebarData(role: string | null) {
             url: `/${role}/support`,
             icon: BookOpen,
             items: [{ title: 'Tickets', url: `/${role}/support` }],
+        },
+    ];
+
+    const navSecondary = [
+        {
+            title: 'Notifications',
+            url: '/notifications',
+            icon: IconBell,
+        },
+        {
+            title: 'Refer a Friend',
+            url: '/referral',
+            icon: IconShare3,
+        },
+        {
+            title: 'Changelog',
+            url: '/changelog',
+            icon: IconHistoryToggle,
+        },
+        {
+            title: 'Feedback',
+            url: '/feedback',
+            icon: IconMessageDots,
         },
     ];
 
@@ -48,8 +72,28 @@ export function getSidebarData(role: string | null) {
                 },
                 ...sharedItems,
             ],
+            userPages: [
+                {
+                    name: 'Home',
+                    url: '/',
+                    icon: IconReport,
+                },
+                {
+                    name: 'Plans',
+                    url: '/plans',
+                    icon: IconPackage,
+                },
+                {
+                    name: 'Word Assistant',
+                    url: '#',
+                    icon: IconFileWord,
+                },
+            ],
+            navSecondary,
         };
-    } else if (role === 'vendor') {
+    }
+
+    if (role === 'vendor') {
         return {
             navMain: [
                 {
@@ -69,8 +113,11 @@ export function getSidebarData(role: string | null) {
                 },
                 ...sharedItems,
             ],
+            navSecondary,
         };
-    } else if (role === 'customer') {
+    }
+
+    if (role === 'customer') {
         return {
             navMain: [
                 {
@@ -99,36 +146,38 @@ export function getSidebarData(role: string | null) {
                 },
                 ...sharedItems,
             ],
-        };
-    } else {
-        // Guest/default fallback
-        return {
-            navMain: [
-                {
-                    title: 'Home',
-                    url: '/',
-                    icon: Home,
-                    items: [{ title: 'Overview', url: '/' }],
-                },
-                {
-                    title: 'Plans',
-                    url: '/plans',
-                    icon: FileCheck,
-                    items: [{ title: 'All Plans', url: '/plans' }],
-                },
-                {
-                    title: 'Vendors',
-                    url: '/vendors',
-                    icon: Map,
-                    items: [{ title: 'View Vendors', url: '/vendors' }],
-                },
-                {
-                    title: 'Contact',
-                    url: '/contact',
-                    icon: UserCircle2,
-                    items: [{ title: 'Reach Out', url: '/contact' }],
-                },
-            ],
+            navSecondary,
         };
     }
+
+    // Guest/default fallback
+    return {
+        navMain: [
+            {
+                title: 'Home',
+                url: '/',
+                icon: Home,
+                items: [{ title: 'Overview', url: '/' }],
+            },
+            {
+                title: 'Plans',
+                url: '/plans',
+                icon: FileCheck,
+                items: [{ title: 'All Plans', url: '/plans' }],
+            },
+            {
+                title: 'Vendors',
+                url: '/vendors',
+                icon: Map,
+                items: [{ title: 'View Vendors', url: '/vendors' }],
+            },
+            {
+                title: 'Contact',
+                url: '/contact',
+                icon: UserCircle2,
+                items: [{ title: 'Reach Out', url: '/contact' }],
+            },
+        ],
+        navSecondary,
+    };
 }

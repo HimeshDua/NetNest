@@ -85,7 +85,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                 id="remember"
                                 name="remember"
                                 checked={data.remember}
-                                onCheckedChange={(checked) => setData('remember', checked as boolean)}
+                                onCheckedChange={(checked: any) => setData('remember', checked as boolean)}
                             />
                             <Label htmlFor="remember">Remember me</Label>
                         </div>
