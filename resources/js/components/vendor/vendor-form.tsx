@@ -35,7 +35,7 @@ export default function VendorForm() {
         .map((feature) => feature.trim())
         .filter((f) => f !== ""),
     };
-    router.post(route('update'), payload); // POST route to your store() method
+    router.post(route('submission.store'), payload); // POST route to your store() method
   };
 
   return (

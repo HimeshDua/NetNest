@@ -38,7 +38,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->gr
 // ---------------------------
 Route::middleware(['auth', 'verified', 'role:vendor'])->prefix('vendor')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index'])->name('vendor.dashboard');
-    Route::resource('/submission', \App\Http\Controllers\Vendor\Submission::class)->only(['index', 'show', 'update', 'destroy']); 
+    Route::resource('/submission', \App\Http\Controllers\Vendor\Submission::class)->only(['index','show','store', 'update', 'destroy']); 
     Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
     Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
     Route::get('/support', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'index'])->name('vendor.support');

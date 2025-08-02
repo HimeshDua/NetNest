@@ -40,11 +40,11 @@ class Submission extends Controller
         return redirect()->route('vendor')->with('success', 'Vendor added successfully.');
     }
 
-    public function show(string $id)
-    {
-        $vendor = Vendor::findOrFail($id);
-        return Inertia::render('Vendor/Submission/Show', compact('vendor'));
-    }
+    // public function show(string $id)
+    // {
+    //     $services = Vendor::paginate(6);
+    //     return Inertia::render('Vendor/Submission',['services' => $services]);
+    // }
 
     public function edit(string $id)
     {
