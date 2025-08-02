@@ -40,7 +40,7 @@ export default function PricingCard({ name, price, description, features, teamMe
                                 {price}
                             </Typography>
                             <Typography as="span" variant="sm/normal" className="text-muted-foreground">
-                                /month
+                                /6 months
                             </Typography>
                         </div>
                     </div>

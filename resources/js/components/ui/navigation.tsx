@@ -1,8 +1,10 @@
 'use client';
 
+import { cn } from '@/lib/utils';
+import { PageProps } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
 import * as React from 'react';
 import { ReactNode } from 'react';
-import { siteConfig } from '../../config/site';
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -12,9 +14,6 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from '../ui/navigation-menu';
-import { cn } from '@/lib/utils';
-import { usePage } from '@inertiajs/react';
-import { PageProps } from '@/types';
 
 interface ComponentItem {
     title: string;
@@ -44,7 +43,7 @@ interface NavigationProps {
 }
 
 function Navigation() {
-    const { auth } = usePage<PageProps>().props
+    const { auth } = usePage<PageProps>().props;
 
     const userRole = auth?.user?.role;
 
@@ -61,57 +60,37 @@ function Navigation() {
             { title: 'Contact', isLink: true, href: '/contact' },
         ];
     } else if (userRole === 'admin') {
-        menuItems = [{ title: 'Dashboard', content: 'dashboard' }];
-        components = [
-            {
-                title: 'User Management',
-                href: '/admin/users',
-                description: 'Manage user accounts on the platform.',
-            },
-            {
-                title: 'Plans',
-                href: '/admin/plans',
-                description: 'Create and update service plans.',
-            },
-            {
-                title: 'Billing',
-                href: '/admin/billing',
-                description: 'View customer invoices and payments.',
-            },
-            {
-                title: 'Support Tickets',
-                href: '/admin/support',
-                description: 'Respond to incoming support queries.',
-            },
-            {
-                title: 'CMS Manager',
-                href: '/admin/cms',
-                description: 'Edit homepage, about, and contact content.',
-            },
-            {
-                title: 'Analytics',
-                href: '/admin/analytics',
-                description: 'Monitor usage and performance insights.',
-            },
+        menuItems = [
+            // { title: 'Dashboard', content: 'dashboard' },
+            { title: 'Plans', isLink: true, href: '/plans' },
+            { title: 'Vendors', isLink: true, href: '/vendors' },
+            { title: 'About', isLink: true, href: '/about' },
+            { title: 'Contact', isLink: true, href: '/contact' },
         ];
     } else if (userRole === 'vendor') {
-        menuItems = [{ title: 'Dashboard', content: 'dashboard' }];
-        components = [
-            {
-                title: 'Assigned Connections',
-                href: '/vendor/assigned-connections',
-                description: 'View connection tasks assigned to you.',
-            },
-            {
-                title: 'Installation Requests',
-                href: '/vendor/installation-requests',
-                description: 'Manage incoming installation jobs.',
-            },
-            {
-                title: 'Support',
-                href: '/vendor/support',
-                description: 'Help customers resolve technical issues.',
-            },
+        menuItems = [
+            // {
+            //     title: 'Assigned Connections',
+            //     href: '/vendor/assigned-connections',
+            //      isLink: true,
+            //     // description: 'View connection tasks assigned to you.',
+            // },
+            // {
+            //     title: 'Assigned Connections',
+            //     href: '/vendor/assigned-connections', isLink: true,
+            //     // description: 'View connection tasks assigned to you.',
+            // },
+            // {
+            //     title: 'Installation Requests',
+            //     href: '/vendor/installation-requests', isLink: true,
+            //     // description: 'Manage incoming installation jobs.',
+            // },
+            // {
+            //     title: 'Support',
+            //     href: '/vendor/support',
+            //      isLink: true,
+            //     // description: 'Help customers resolve technical issues.',
+            // },
         ];
     } else if (userRole === 'customer') {
         menuItems = [{ title: 'Dashboard', content: 'dashboard' }];
@@ -146,7 +125,7 @@ function Navigation() {
                     <NavigationMenuItem key={index}>
                         {item.isLink ? (
                             <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                                <a href={item.href || ''}>{item.title}</a>
+                                <Link href={item.href || ''}>{item.title}</Link>
                             </NavigationMenuLink>
                         ) : (
                             <>
@@ -154,11 +133,7 @@ function Navigation() {
                                 <NavigationMenuContent>
                                     <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
                                         {components.map((component) => (
-                                            <ListItem
-                                                key={component.title}
-                                                title={component.title}
-                                                href={component.href}
-                                            >
+                                            <ListItem key={component.title} title={component.title} href={component.href}>
                                                 {component.description}
                                             </ListItem>
                                         ))}
@@ -173,12 +148,7 @@ function Navigation() {
     );
 }
 
-function ListItem({
-    className,
-    title,
-    children,
-    ...props
-}: React.ComponentProps<'a'> & { title: string }) {
+function ListItem({ className, title, children, ...props }: React.ComponentProps<'a'> & { title: string }) {
     return (
         <li>
             <NavigationMenuLink asChild>
@@ -189,7 +159,7 @@ function ListItem({
                     )}
                     {...props}
                 >
-                    <div className="text-sm font-medium leading-none">{title}</div>
+                    <div className="text-sm leading-none font-medium">{title}</div>
                     <p className="line-clamp-2 text-sm text-muted-foreground">{children}</p>
                 </a>
             </NavigationMenuLink>
@@ -197,5 +167,5 @@ function ListItem({
     );
 }
 
-export type { MenuItem, ComponentItem };
+export type { ComponentItem, MenuItem };
 export default Navigation;

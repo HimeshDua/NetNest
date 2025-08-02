@@ -1,3 +1,4 @@
+import ComparisonSection from '@/components/plans/comparison-section';
 import PricingCard from '@/components/plans/default';
 import { Typography } from '@/components/ui/typography';
 import { pricingTiers } from '@/data/pricingTiers';
@@ -17,12 +18,13 @@ function PricingsPage() {
                             Choose a plan that fits your needs. Get access to our team of designers and developers ready to help you grow.
                         </Typography>
                     </div>
-
                     <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                         {pricingTiers.map((tier: any) => (
                             <PricingCard key={tier.name} {...tier} />
                         ))}
                     </div>
+
+                    <ComparisonSection />
 
                     <div className="mt-16 text-center">
                         <Typography as="p" variant="sm/normal" className="text-muted-foreground">

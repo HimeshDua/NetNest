@@ -6,6 +6,8 @@ import { cn } from '../../lib/utils';
 import { Button, type ButtonProps } from '../ui/button';
 import { Navbar as NavbarComponent, NavbarLeft, NavbarRight } from '../ui/navbar';
 
+import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
+import { Link, router } from '@inertiajs/react';
 import Navigation from '../ui/navigation';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
 
@@ -50,6 +52,7 @@ interface NavbarActionProps {
     variant?: ButtonProps['variant'];
     icon?: ReactNode;
     iconRight?: ReactNode;
+    isForm?: boolean;
     isButton?: boolean;
 }
 
@@ -116,10 +119,17 @@ export default function Navbar({
             case 'admin':
                 actions = [
                     {
+                        text: 'Dashboard',
+                        href: '/dashboard',
+                        isButton: true,
+                        variant: 'secondary',
+                    },
+                    {
                         text: 'Logout',
                         href: '/logout',
+                        isForm: true,
                         isButton: true,
-                        variant: 'default',
+                        variant: 'destructive',
                     },
                 ];
                 break;
@@ -172,6 +182,12 @@ export default function Navbar({
         ];
     }
 
+    const cleanup = useMobileNavigation();
+    const handleLogout = () => {
+        cleanup();
+        router.flushAll();
+    };
+
     return (
         <header className={cn('sticky top-0 z-50 -mb-4 px-4 pb-4', className)}>
             <div className="fade-bottom absolute left-0 h-24 w-full bg-background/15 backdrop-blur-lg"></div>
@@ -186,18 +202,26 @@ export default function Navbar({
                     </NavbarLeft>
                     <NavbarRight>
                         {actions.map((action, index) =>
-                            action.isButton ? (
-                                <Button key={index} variant={action.variant || 'default'} asChild>
-                                    <a href={action.href}>
+                            action.isForm && action.isButton ? (
+                                <Button key={index} variant={action.variant || 'default'} className="text-center" asChild>
+                                    <Link className="block w-full" method="post" href={route('logout')} as="button" onClick={handleLogout}>
                                         {action.icon}
                                         {action.text}
                                         {action.iconRight}
-                                    </a>
+                                    </Link>
+                                </Button>
+                            ) : action.isButton ? (
+                                <Button key={index} variant={action.variant || 'default'} className="text-center" asChild>
+                                    <Link href={action.href}>
+                                        {action.icon}
+                                        {action.text}
+                                        {action.iconRight}
+                                    </Link>
                                 </Button>
                             ) : (
-                                <a key={index} href={action.href} className="hidden text-sm md:block">
+                                <Link key={index} href={action.href} className="hidden text-sm md:block">
                                     {action.text}
-                                </a>
+                                </Link>
                             ),
                         )}
                         <Sheet>
@@ -209,13 +233,13 @@ export default function Navbar({
                             </SheetTrigger>
                             <SheetContent side="right">
                                 <nav className="grid gap-6 p-8 text-lg font-medium">
-                                    <a href={homeUrl} className="flex items-center gap-2 text-xl font-bold">
+                                    <Link href={homeUrl} className="flex items-center gap-2 text-xl font-bold">
                                         {name}
-                                    </a>
+                                    </Link>
                                     {roleBasedLinks.map((link, index) => (
-                                        <a key={index} href={link.href} className="text-muted-foreground hover:text-foreground">
+                                        <Link key={index} href={link.href} className="text-muted-foreground hover:text-foreground">
                                             {link.text}
-                                        </a>
+                                        </Link>
                                     ))}
                                 </nav>
                             </SheetContent>

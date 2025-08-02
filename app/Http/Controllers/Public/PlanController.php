@@ -7,8 +7,8 @@ use Inertia\Inertia;
 
 class PlanController
 {
-   public function index(){
-      return Inertia::render('Public/Home');
+   public function index()
+   {
+      return Inertia::render('Public/Plans');
    }
- 
 }
