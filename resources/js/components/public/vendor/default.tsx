@@ -98,10 +98,6 @@ export default function VendorServiceGrid({ vendors, onPageChange }: Props) {
 
                             <CardContent className="flex flex-grow flex-col gap-3">
                                 <div className="space-y-2">
-                                    {/* <div className="flex items-center gap-2">
-                                        <ServerIcon className="h-4 w-4 text-muted-foreground" />
-                                        <span className="text-sm capitalize">{service.serviceType.replace('-', ' ')}</span>
-                                    </div> */}
                                     <div className="flex items-center gap-2">
                                         <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
                                         <span className="text-sm">{service.price}</span>
