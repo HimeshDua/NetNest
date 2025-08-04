@@ -2,188 +2,270 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-import { router } from '@inertiajs/react';
-import { useState } from 'react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../ui/select';
+import { useForm } from '@inertiajs/react';
 
 export default function VendorForm() {
-  const [formData, setFormData] = useState({
-    title: '',
-    vendorName: '',
-    vendorLogo: '',
-    location: '',
-    connectionType: 'fiber',
-    price: '',
-    billingCycle: '',
-    postedDate: '',
-    shortDescription: '',
-    fullDescription: '',
-    highlight: 'undefined',
-    features: '',
-    faqs: '',
-    images: '',
-  });
+    const { data, setData, post, processing, errors, reset } = useForm({
+        title: '',
+        slug: '',
+        vendor_name: '',
+        logo: '',
+        location: '',
+        connection_type: 'fiber',
+        price: '',
+        billing_cycle: 'Monthly',
+        posted_date: '',
+        short_description: '',
+        full_description: '',
+        highlight: 'undefined',
+        features: '',
+        faqs: '',
+        images: '',
+    });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const payload = {
-      ...formData,
-      features: formData.features
-        .split(',')
-        .map((f) => f.trim())
-        .filter((f) => f !== ''),
-      faqs: JSON.parse(formData.faqs || '[]'),
-      images: formData.images
-        .split(',')
-        .map((i) => i.trim())
-        .filter((i) => i !== ''),
+    const handleChange = (e: any) => {
+        const { name, value } = e.target;
+        setData(name, value);
     };
 
-    router.post(route('submission.store'), payload);
-  };
+    const handleSelectChange = (name, value) => {
+        setData(name, value);
+    };
 
-  return (
-    <div className="container mx-auto px-4 md:px-6 2xl:max-w-[1400px] py-10">
-      <Card>
-        <CardHeader>
-          <CardTitle>Create Vendor Service</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-8">
-              {/* Basic Info */}
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Service Title</Label>
-                  <Input id="title" name="title" value={formData.title} onChange={handleChange} placeholder="e.g. FastNet 100 Mbps Plan" />
-                </div>
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-                <div className="space-y-2">
-                  <Label htmlFor="vendorName">Vendor Name</Label>
-                  <Input id="vendorName" name="vendorName" value={formData.vendorName} onChange={handleChange} placeholder="e.g. FastNet" />
-                </div>
+        const payload = {
+            ...data,
+            features: data.features
+                .split(',')
+                .map((f) => f.trim())
+                .filter((f) => f !== ''),
+            faqs: data.faqs ? JSON.parse(data.faqs) : [],
+            images: data.images
+                .split(',')
+                .map((i) => i.trim())
+                .filter((i) => i !== ''),
+        };
 
-                <div className="space-y-2">
-                  <Label htmlFor="vendorLogo">Logo URL or Path</Label>
-                  <Input id="vendorLogo" name="vendorLogo" value={formData.vendorLogo} onChange={handleChange} placeholder="e.g. /storage/logos/logo.png" />
-                </div>
+        post(route('submission.store'), {
+            preserveScroll: true,
+            onSuccess: () => reset(),
+        });
+    };
 
-                <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
-                  <Input id="location" name="location" value={formData.location} onChange={handleChange} placeholder="e.g. Karachi" />
-                </div>
-              </div>
+    return (
+        <div className="container mx-auto px-4 py-10 md:px-6 2xl:max-w-[1400px]">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Create Vendor Service</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        {/* Basic Info */}
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="title">Service Title</Label>
+                                <Input
+                                    id="title"
+                                    name="title"
+                                    type="text"
+                                    value={data.title}
+                                    onChange={handleChange}
+                                    placeholder="FastNet 100 Mbps Plan"
+                                />
+                                {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="slug">Slug</Label>
+                                <Input
+                                    id="slug"
+                                    name="slug"
+                                    type="text"
+                                    value={data.slug}
+                                    onChange={handleChange}
+                                    placeholder="fastnet-100mbps-plan"
+                                />
+                                {errors.slug && <p className="text-sm text-red-500">{errors.slug}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="vendor_name">Vendor Name</Label>
+                                <Input
+                                    id="vendor_name"
+                                    name="vendor_name"
+                                    type="text"
+                                    value={data.vendor_name}
+                                    onChange={handleChange}
+                                    placeholder="FastNet"
+                                />
+                                {errors.vendor_name && <p className="text-sm text-red-500">{errors.vendor_name}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="logo">Logo URL or Path</Label>
+                                <Input
+                                    id="logo"
+                                    name="logo"
+                                    type="text"
+                                    value={data.logo}
+                                    onChange={handleChange}
+                                    placeholder="/storage/logos/logo.png"
+                                />
+                                {errors.logo && <p className="text-sm text-red-500">{errors.logo}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="location">Location</Label>
+                                <Input
+                                    id="location"
+                                    name="location"
+                                    type="text"
+                                    value={data.location}
+                                    onChange={handleChange}
+                                    placeholder="Karachi"
+                                />
+                                {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}
+                            </div>
+                        </div>
 
-              <Separator />
+                        <Separator />
 
-              {/* Technical Info */}
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="connectionType">Connection Type</Label>
-                  <Select value={formData.connectionType} onValueChange={(val) => handleSelectChange('connectionType', val)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Choose type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="fiber">Fiber</SelectItem>
-                      <SelectItem value="dsl">DSL</SelectItem>
-                      <SelectItem value="wireless">Wireless</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                        {/* Technical Info */}
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="connection_type">Connection Type</Label>
+                                <Select value={data.connection_type} onValueChange={(val) => handleSelectChange('connection_type', val)}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="fiber">Fiber</SelectItem>
+                                        <SelectItem value="dsl">DSL</SelectItem>
+                                        <SelectItem value="wireless">Wireless</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                {errors.connection_type && <p className="text-sm text-red-500">{errors.connection_type}</p>}
+                            </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="price">Price (PKR)</Label>
-                  <Input id="price" name="price" type="number" value={formData.price} onChange={handleChange} placeholder="e.g. 2500" />
-                </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="price">Price (PKR)</Label>
+                                <Input id="price" name="price" type="number" value={data.price} onChange={handleChange} placeholder="2500" />
+                                {errors.price && <p className="text-sm text-red-500">{errors.price}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="billing_cycle">Billing Cycle</Label>
+                                <Input
+                                    id="billing_cycle"
+                                    name="billing_cycle"
+                                    type="text"
+                                    value={data.billing_cycle}
+                                    onChange={handleChange}
+                                    placeholder="Monthly"
+                                />
+                                {errors.billing_cycle && <p className="text-sm text-red-500">{errors.billing_cycle}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="posted_date">Posted Date</Label>
+                                <Input id="posted_date" name="posted_date" type="date" value={data.posted_date} onChange={handleChange} />
+                                {errors.posted_date && <p className="text-sm text-red-500">{errors.posted_date}</p>}
+                            </div>
+                        </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="billingCycle">Billing Cycle</Label>
-                  <Input id="billingCycle" name="billingCycle" value={formData.billingCycle} onChange={handleChange} placeholder="e.g. Monthly" />
-                </div>
+                        <Separator />
 
-                <div className="space-y-2">
-                  <Label htmlFor="postedDate">Posted Date</Label>
-                  <Input id="postedDate" name="postedDate" type="date" value={formData.postedDate} onChange={handleChange} />
-                </div>
-              </div>
+                        {/* Descriptions */}
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="short_description">Short Description</Label>
+                                <Textarea
+                                    id="short_description"
+                                    name="short_description"
+                                    value={data.short_description}
+                                    onChange={handleChange}
+                                    placeholder="Affordable plan with no FUP."
+                                />
+                                {errors.short_description && <p className="text-sm text-red-500">{errors.short_description}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="full_description">Full Description</Label>
+                                <Textarea
+                                    id="full_description"
+                                    name="full_description"
+                                    value={data.full_description}
+                                    onChange={handleChange}
+                                    placeholder="Detailed overview..."
+                                    rows={5}
+                                />
+                                {errors.full_description && <p className="text-sm text-red-500">{errors.full_description}</p>}
+                            </div>
+                        </div>
 
-              <Separator />
+                        <Separator />
 
-              {/* Descriptions */}
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="shortDescription">Short Description</Label>
-                  <Textarea id="shortDescription" name="shortDescription" value={formData.shortDescription} onChange={handleChange} placeholder="e.g. Affordable fiber plan with no FUP." />
-                </div>
+                        {/* Extras */}
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="highlight">Highlight</Label>
+                                <Select value={data.highlight} onValueChange={(val) => handleSelectChange('highlight', val)}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Choose highlight" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="new">New</SelectItem>
+                                        <SelectItem value="trending">Trending</SelectItem>
+                                        <SelectItem value="reliable">Reliable</SelectItem>
+                                        <SelectItem value="popular">Popular</SelectItem>
+                                        <SelectItem value="undefined">Undefined</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                {errors.highlight && <p className="text-sm text-red-500">{errors.highlight}</p>}
+                            </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="fullDescription">Full Description</Label>
-                  <Textarea id="fullDescription" name="fullDescription" value={formData.fullDescription} onChange={handleChange} placeholder="Write a detailed overview of the service..." rows={5} />
-                </div>
-              </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="features">Features (comma separated)</Label>
+                                <Input
+                                    id="features"
+                                    name="features"
+                                    type="text"
+                                    value={data.features}
+                                    onChange={handleChange}
+                                    placeholder="Unlimited Data, Free Router"
+                                />
+                                {errors.features && <p className="text-sm text-red-500">{errors.features}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="faqs">FAQs (JSON format)</Label>
+                                <Textarea
+                                    id="faqs"
+                                    name="faqs"
+                                    value={data.faqs}
+                                    onChange={handleChange}
+                                    placeholder='[{"question": "Is it unlimited?", "answer": "Yes."}]'
+                                />
+                                {errors.faqs && <p className="text-sm text-red-500">{errors.faqs}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="images">Images (comma separated URLs)</Label>
+                                <Textarea
+                                    id="images"
+                                    name="images"
+                                    value={data.images}
+                                    onChange={handleChange}
+                                    placeholder="/img/1.jpg, /img/2.jpg"
+                                />
+                                {errors.images && <p className="text-sm text-red-500">{errors.images}</p>}
+                            </div>
+                        </div>
 
-              <Separator />
-
-              {/* Extras */}
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="highlight">Highlight</Label>
-                  <Select value={formData.highlight} onValueChange={(val) => handleSelectChange('highlight', val)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Choose highlight" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="new">New</SelectItem>
-                      <SelectItem value="trending">Trending</SelectItem>
-                      <SelectItem value="reliable">Reliable</SelectItem>
-                      <SelectItem value="popular">Popular</SelectItem>
-                      <SelectItem value="undefined">Undefined</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="features">Features (comma separated)</Label>
-                  <Input id="features" name="features" value={formData.features} onChange={handleChange} placeholder="e.g. Unlimited Data, Free Router, 24/7 Support" />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="faqs">FAQs (JSON format)</Label>
-                  <Textarea id="faqs" name="faqs" value={formData.faqs} onChange={handleChange} placeholder='e.g. [{"question": "Is it unlimited?", "answer": "Yes, truly unlimited."}]' />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="images">Images (comma separated URLs)</Label>
-                  <Textarea id="images" name="images" value={formData.images} onChange={handleChange} placeholder="e.g. /images/1.jpg, /images/2.jpg" />
-                </div>
-              </div>
-
-              <div className="flex justify-end pt-4">
-                <Button type="submit">Submit Service</Button>
-              </div>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
-  );
+                        <div className="flex justify-end pt-4">
+                            <Button type="submit" disabled={processing}>
+                                Submit Service
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
+        </div>
+    );
 }

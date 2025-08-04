@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('vendor_services', function (Blueprint $table) {
+        Schema::create('vendor_services', function (Blueprint $table) {
             $table->id();
-           // Foreign key to users table
+            // Foreign key to users table
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('title');                             // Name of the service

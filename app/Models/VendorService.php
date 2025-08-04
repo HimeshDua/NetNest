@@ -12,10 +12,10 @@ class VendorService extends Model
     /** @use HasFactory<\Database\Factories\VendorServiceFactory> */
     use HasFactory;
 
-    
+
     protected $table = 'vendor_services';
-    
-   protected $fillable = [
+
+    protected $fillable = [
         'user_id',
         'title',
         'slug',
