@@ -103,6 +103,15 @@ export function getSidebarData(role: string | null) {
                     items: [{ title: 'Overview', url: '/vendor/dashboard' }],
                 },
                 {
+                    title: 'Operations',
+                    url: '/vendor/assigned-connections',
+                    icon: Map,
+                    items: [
+                        { title: 'Package Upload', url: '/vendor/submission' },
+                        { title: 'Package Edit', url: '/vendor/submission/edit' },
+                    ],
+                },
+                {
                     title: 'Connections',
                     url: '/vendor/assigned-connections',
                     icon: Map,

@@ -1,6 +1,6 @@
 import { VendorService } from '@/types';
 
-export const services: VendorService[] = [
+const services: VendorService[] = [
     {
         id: 'fiber-home-50mb',
         title: 'Fiber Home 50 Mbps',
@@ -8,7 +8,6 @@ export const services: VendorService[] = [
         vendorLogo: 'https://cdn.worldvectorlogo.com/logos/aws-2.svg',
         location: 'Karachi',
         connectionType: 'fiber',
-        serviceType: 'internet',
         price: 'Rs. 2,000 / month',
         postedDate: '2025-07-28',
         description: 'High-speed home fiber connection with low latency and free installation.',

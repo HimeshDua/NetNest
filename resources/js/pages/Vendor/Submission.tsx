@@ -1,17 +1,12 @@
-import VendorForm from '@/components/vendor/vendor-form'
-import DashboardLayout from '@/layouts/dashboard-layout'
-import Layout from '@/layouts/layout'
-import React from 'react'
+import VendorForm from '@/components/vendor/vendor-form';
+import DashboardLayout from '@/layouts/dashboard-layout';
 
 function Submission() {
-  return (
-    <DashboardLayout title='vendor form'>
-        <div>
-        <VendorForm/>
-        </div>
-    </DashboardLayout>
-  
-  )
+    return (
+        <DashboardLayout title="Vendor Submission">
+            <VendorForm />
+        </DashboardLayout>
+    );
 }
 
-export default Submission
+export default Submission;
