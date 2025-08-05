@@ -55,7 +55,7 @@ function Navigation() {
         menuItems = [
             // { title: 'Home', isLink: true, href: '/' },
             { title: 'Plans', isLink: true, href: '/plans' },
-            { title: 'Vendors', isLink: true, href: '/vendors' },
+            { title: 'Services', isLink: true, href: '/services' },
             { title: 'About', isLink: true, href: '/about' },
             { title: 'Contact', isLink: true, href: '/contact' },
         ];
@@ -63,7 +63,7 @@ function Navigation() {
         menuItems = [
             // { title: 'Dashboard', content: 'dashboard' },
             { title: 'Plans', isLink: true, href: '/plans' },
-            { title: 'Vendors', isLink: true, href: '/vendors' },
+            { title: 'Services', isLink: true, href: '/services' },
             { title: 'About', isLink: true, href: '/about' },
             { title: 'Contact', isLink: true, href: '/contact' },
         ];

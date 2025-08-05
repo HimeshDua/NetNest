@@ -13,7 +13,8 @@ Route::get('/contact', fn() => Inertia::render('Public/Contact'))->name('contact
 Route::get('/plans', [\App\Http\Controllers\Public\PlanController::class, 'index'])->name('plans');
 // Route::get('/vendors', fn() => Inertia::render('Public/Vendors'))->name('vendors');
 
-Route::get('/vendors', [\App\Http\Controllers\Public\VendorController::class, 'index'])->name('vendors');
+Route::get('/services', [\App\Http\Controllers\Public\ServicesController::class, 'index'])->name('services.index');
+Route::get('/services/{slug}', [\App\Http\Controllers\Public\ServicesController::class, 'show'])->name('services.show');
 
 // Auth routes (already in `auth.php`) 
 
@@ -39,7 +40,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->gr
 // ---------------------------
 Route::middleware(['auth', 'verified', 'role:vendor'])->prefix('vendor')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index'])->name('vendor.dashboard');
-    Route::resource('/submission', \App\Http\Controllers\Vendor\Submission::class)->only(['index', 'store', 'edit', 'update']);
+    Route::resource('/submission', \App\Http\Controllers\Vendor\SubmissionController::class)->only(['index', 'store', 'edit', 'update']);
     Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
     Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
     Route::get('/support', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'index'])->name('vendor.support');

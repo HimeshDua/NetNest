@@ -57,16 +57,47 @@ export interface PageProps extends InertiaPageProps {
 }
 
 // Vendors
+export type ConnectionType = 'fiber' | 'dsl' | 'wireless';
+export type BillingCycle = 'Monthly' | 'Quarterly' | 'Yearly';
+export type HighlightType = 'new' | 'trending' | 'reliable' | 'popular' | 'undefined';
+
+export interface Vendor {
+    question: string;
+    answer: string;
+}
+export interface VendorFAQ {
+    question: string;
+    answer: string;
+}
+
 export interface VendorService {
-    id: string;
+    id: number;
+    user_id: number;
+    FAQ;
+
     title: string;
-    vendorName: string;
-    vendorLogo: string;
+    slug: string;
+    vendor_name: string;
+    logo: string | null;
     location: string;
-    connectionType: 'fiber' | 'dsl' | 'wireless';
-    price: string;
-    postedDate: string;
-    description: string;
-    highlight: 'new' | 'trending' | 'reliable' | 'popular' | undefined;
+
+    connection_type: ConnectionType;
+    price: string; // or number if parsed
+    billing_cycle: BillingCycle;
+
+    posted_date: string;
+    highlight: HighlightType;
+
+    short_description: string;
+    full_description: string;
+
     features: string[];
+    faqs: VendorFAQ[];
+    images: string[];
+
+    created_at: string;
+    updated_at: string;
+
+    // optional frontend-only field
+    vendorLogo?: string;
 }

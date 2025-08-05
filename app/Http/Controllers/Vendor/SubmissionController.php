@@ -8,7 +8,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Str;
 use App\Models\VendorService;
 
-class Submission extends Controller
+class SubmissionController extends Controller
 {
     public function index()
     {
@@ -19,35 +19,49 @@ class Submission extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|unique:vendor_services,slug',
             'vendor_name' => 'required|string|max:255',
-            'logo' => 'nullable|image|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
             'location' => 'required|string|max:255',
             'connection_type' => 'required|in:fiber,dsl,wireless',
-            'price' => 'required|numeric',
-            'billing_cycle' => 'required|string',
-            'posted_date' => 'nullable|date',
+            'price' => 'required|numeric|min:0',
+            'billing_cycle' => 'required|in:Monthly,Quarterly,Yearly',
             'short_description' => 'required|string|max:500',
             'full_description' => 'required|string',
             'highlight' => 'nullable|in:new,trending,reliable,popular,undefined',
-            'features' => 'nullable|array',
-            'features.*' => 'string',
-            'faqs' => 'nullable|array',
-            'faqs.*.question' => 'required_with:faqs|string',
-            'faqs.*.answer' => 'required_with:faqs|string',
-            'images' => 'nullable|array',
-            'images.*' => 'string', // or file validation if you're uploading
+            'features' => 'nullable|string', // comma separated
+            'faqs' => 'nullable|json',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $validated['user_id'] = auth()->id();
-        $validated['slug'] = Str::slug($validated['slug']); // optionally normalize slug
 
+        if ($request->hasFile('logo')) {
+            $validated['logo'] = $request->file('logo')->store('logos', 'public');
+        }
 
+        if ($request->hasFile('images')) {
+            $validated['images'] = [];
+            foreach ($request->file('images') as $img) {
+                $validated['images'][] = $img->store('services', 'public');
+            }
+        } else {
+            $validated['images'] = [];
+        }
+
+        // Parse comma features
+        $validated['features'] = isset($validated['features'])
+            ? array_map('trim', explode(',', $validated['features']))
+            : [];
+
+        // Parse JSON FAQs
+        $validated['faqs'] = isset($validated['faqs']) ? json_decode($validated['faqs'], true) : [];
 
         VendorService::create($validated);
 
-        return redirect()->route('vendors')->with('success', 'Vendor added successfully.');
+        return redirect()->route('services.index')->with('success', 'Vendor service added successfully.');
     }
+
+
 
     public function edit(string $id) //get 
     {
