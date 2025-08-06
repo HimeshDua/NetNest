@@ -32,18 +32,19 @@ class DashboardController
     $totalRevenue = $activeCustomers * $service->price;
 
     // Recent 5 subscribers
-    // $recentSubscribers = CustomerSubscription::with('user')->where('vendor_service_id', $service->id)
-    //   ->latest()
-    //   ->take(5)
-    //   ->get()->map(function ($sub) {
-    //     return [
-    //       'customer_name' => $sub->user->name,
-    //       'customer_email' => $sub->user->email,
-    //       'subscribed_at' => $sub->subscribed_at->toDateString(),
-    //       'next_billing_date' => $sub->next_billing_date->toDateString(),
-    //       'status' => $sub->status,
-    //     ];
-    //   });
+    $recentSubscribers = CustomerSubscription::with('customer')->where('vendor_service_id', $service->id)
+      ->latest()
+      ->take(5)
+      ->get()
+      ->map(function ($sub) {
+        return [
+          'customer_name' => $sub->customer->name,
+          'customer_email' => $sub->customer->email,
+          'subscribed_at' => $sub->subscribed_at->toDateString(),
+          'next_billing_date' => $sub->next_billing_date->toDateString(),
+          'status' => $sub->status,
+        ];
+      });
 
     return Inertia::render('Vendor/Dashboard', [
       'vendorData' => [
@@ -53,7 +54,7 @@ class DashboardController
         'activeCustomers' => $activeCustomers,
         'cancelledCustomers' => $cancelledCustomers,
         'expiredCustomers' => $expiredCustomers,
-        // 'recentSubscribers' => $recentSubscribers,
+        'recentSubscribers' => $recentSubscribers,
       ]
     ]);
   }
