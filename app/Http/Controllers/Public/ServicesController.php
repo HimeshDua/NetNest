@@ -11,8 +11,8 @@ class ServicesController
 {
     public function index()
     {
-        $vendors = VendorService::orderBy('created_at', 'desc')->paginate(1);
-        return Inertia::render('Public/Vendors', compact('vendors'));
+        $services = VendorService::orderBy('created_at', 'desc')->paginate(6);
+        return Inertia::render('Public/Services', compact('services'));
     }
     public function show($slug)
     {

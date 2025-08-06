@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Factories;
 
 use App\Models\VendorService;
@@ -10,37 +11,38 @@ class VendorServiceFactory extends Factory
 {
     protected $model = VendorService::class;
 
-    public function definition()
+    public function definition(): array
     {
-        $title = $this->faker->company . ' Internet Package';
+        $title = $this->faker->unique()->words(3, true);
         return [
-            'user_id' => User::factory(),
+            'user_id' => User::inRandomOrder()->first()->id ?? User::factory(),
             'title' => $title,
-            'slug' => Str::slug($title) . '-' . Str::random(5),
+            'slug' => Str::slug($title),
             'vendor_name' => $this->faker->company,
-            'logo' => $this->faker->imageUrl(200, 100, 'business', true, 'logo'),
+            'logo' => 'logos/' . $this->faker->image('public/storage/logos', 100, 100, null, false),
             'location' => $this->faker->city,
             'connection_type' => $this->faker->randomElement(['fiber', 'dsl', 'wireless']),
-            'price' => $this->faker->randomFloat(2, 20, 100),
+            'price' => $this->faker->randomFloat(2, 1000, 5000),
             'billing_cycle' => $this->faker->randomElement(['Monthly', 'Quarterly', 'Yearly']),
-            'posted_date' => $this->faker->date(),
-            'short_description' => $this->faker->sentence(10),
-            'full_description' => $this->faker->paragraph(4),
+            'posted_date' => now(),
             'highlight' => $this->faker->randomElement(['new', 'trending', 'reliable', 'popular', 'undefined']),
-            'features' => json_encode([
-                'Unlimited data',
-                '24/7 support',
-                'Free router',
-                'High-speed connection'
-            ]),
-            'faqs' => json_encode([
-                ['question' => 'Is installation free?', 'answer' => 'Yes, installation is free.'],
-                ['question' => 'How long is the contract?', 'answer' => 'No contract required.']
-            ]),
-            'images' => json_encode([
-                $this->faker->imageUrl(640, 480, 'tech'),
-                $this->faker->imageUrl(640, 480, 'tech')
-            ]),
+            'short_description' => $this->faker->sentence(),
+            'full_description' => $this->faker->paragraph(4),
+            'features' => $this->faker->randomElements([
+                'Unlimited Data',
+                'Free Router',
+                '24/7 Support',
+                'Free Installation',
+                'No FUP'
+            ], rand(2, 5)),
+            'faqs' => [
+                ['question' => 'Is it unlimited?', 'answer' => 'Yes, it is.'],
+                ['question' => 'Can I upgrade?', 'answer' => 'Yes, any time.'],
+            ],
+            'images' => [
+                'services/sample1.jpg',
+                'services/sample2.jpg',
+            ],
         ];
     }
 }

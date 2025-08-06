@@ -4,7 +4,7 @@ import Layout from '@/layouts/layout';
 import { router, usePage } from '@inertiajs/react';
 
 function Vendors() {
-    const { vendors } = usePage<any>().props;
+    const { services } = usePage<any>().props;
 
     const handlePageChange = (url: string | null) => {
         if (url) router.get(url);
@@ -19,7 +19,7 @@ function Vendors() {
                 </p>
             </div>
             <HorizontalFilters />
-            <VendorServiceGrid vendors={vendors} onPageChange={handlePageChange} />
+            <VendorServiceGrid services={services} onPageChange={handlePageChange} />
         </Layout>
     );
 }

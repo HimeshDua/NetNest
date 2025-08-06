@@ -8,7 +8,7 @@ import { Link } from '@inertiajs/react';
 import { BarChartIcon, BookmarkIcon, CalendarIcon, DollarSignIcon, GlobeIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
 
 type Props = {
-    vendors: {
+    services: {
         data: VendorService[];
         links: {
             url: string | null;
@@ -19,7 +19,7 @@ type Props = {
     onPageChange: (url: string | null) => void;
 };
 
-export default function VendorServiceGrid({ vendors, onPageChange }: Props) {
+export default function VendorServiceGrid({ services, onPageChange }: Props) {
     const getDaysAgo = (dateString: string) => {
         const postDate = new Date(dateString);
         const today = new Date();
@@ -62,7 +62,7 @@ export default function VendorServiceGrid({ vendors, onPageChange }: Props) {
     return (
         <>
             <div className="grid grid-cols-1 gap-6 px-4 sm:grid-cols-2 lg:grid-cols-3">
-                {vendors.data.map((service) => {
+                {services.data.map((service) => {
                     const highlight = getHighlightDetails(service.highlight);
                     return (
                         <Link href={route('services.show', service.slug)} className="block">
@@ -146,7 +146,7 @@ export default function VendorServiceGrid({ vendors, onPageChange }: Props) {
 
             {/* Pagination */}
             <div className="mt-6 flex flex-wrap justify-center gap-2 px-4">
-                {vendors.links.map((link, index) => (
+                {services.links.map((link, index) => (
                     <button
                         key={index}
                         dangerouslySetInnerHTML={{ __html: link.label }}
