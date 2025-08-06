@@ -46,6 +46,23 @@ class DashboardController
         ];
       });
 
+    $monthlyRevenue = CustomerSubscription::selectRaw('MONTH(subscribed_at) as month, YEAR(subscribed_at) as year, COUNT(*) as subscriptions')
+      ->where('vendor_service_id', $service->id)
+      ->where('status', 'active')
+      ->where('subscribed_at', '>=', now()->subYear())
+      ->groupBy('year', 'month')
+      ->orderBy('year', 'asc')
+      ->orderBy('month', 'asc')
+      ->get();
+
+    // Map the query result to the format needed for the chart
+    $chartData = $monthlyRevenue->map(function ($item) use ($service) {
+      return [
+        'name' => \DateTime::createFromFormat('!m', $item->month)->format('M'),
+        'total' => $item->subscriptions * $service->price,
+      ];
+    })->values();
+
     return Inertia::render('Vendor/Dashboard', [
       'vendorData' => [
         'service' => $service,
@@ -55,6 +72,7 @@ class DashboardController
         'cancelledCustomers' => $cancelledCustomers,
         'expiredCustomers' => $expiredCustomers,
         'recentSubscribers' => $recentSubscribers,
+        'chartData' => $chartData,
       ]
     ]);
   }
