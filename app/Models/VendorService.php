@@ -1,7 +1,5 @@
 <?php
 
-// app/Models/VendorService.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,23 +37,32 @@ class VendorService extends Model
         'price' => 'decimal:2',
     ];
 
+    // === Relationships ===
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-
-    public static function booted()
+    public function subscriptions()
     {
-        parent::booted();
+        return $this->hasMany(CustomerSubscription::class);
+    }
 
-        static::creating(function ($VendorService) {
-            $VendorService->slug = Str::slug($VendorService->title);
-            $VendorService->posted_date = now();
+    // 1 service 
+    // many customer many user  
+
+    // === Boot: auto set slug and posted_date ===
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->slug = Str::slug($model->title);
+            $model->posted_date = now();
         });
 
-        static::updating(function ($VendorService) {
-            $VendorService->slug =  Str::slug($VendorService->title);
+        static::updating(function ($model) {
+            $model->slug = Str::slug($model->title);
         });
     }
 }

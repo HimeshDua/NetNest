@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('vendor_services', function (Blueprint $table) {
             $table->id();
+            // user blonging
+            // user hasMany vendorsevices
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
             $table->string('title');

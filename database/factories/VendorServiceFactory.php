@@ -11,38 +11,39 @@ class VendorServiceFactory extends Factory
 {
     protected $model = VendorService::class;
 
+
     public function definition(): array
     {
-        $title = $this->faker->unique()->words(3, true);
+        $title = fake()->company . ' Internet Service';
         return [
-            'user_id' => User::inRandomOrder()->first()->id ?? User::factory(),
+            'user_id' => User::factory()->create(['role' => 'vendor'])->id,
             'title' => $title,
             'slug' => Str::slug($title),
-            'vendor_name' => $this->faker->company,
-            'logo' => 'logos/' . $this->faker->image('public/storage/logos', 100, 100, null, false),
-            'location' => $this->faker->city,
-            'connection_type' => $this->faker->randomElement(['fiber', 'dsl', 'wireless']),
-            'price' => $this->faker->randomFloat(2, 1000, 5000),
-            'billing_cycle' => $this->faker->randomElement(['Monthly', 'Quarterly', 'Yearly']),
+            'vendor_name' => fake()->company(),
+            'logo' => null,
+            'location' => fake()->city(),
+            'connection_type' => fake()->randomElement(['fiber', 'dsl', 'wireless']),
+            'price' => fake()->randomFloat(2, 500, 5000),
+            'billing_cycle' => fake()->randomElement(['Monthly', 'Quarterly', 'Yearly']),
             'posted_date' => now(),
-            'highlight' => $this->faker->randomElement(['new', 'trending', 'reliable', 'popular', 'undefined']),
-            'short_description' => $this->faker->sentence(),
-            'full_description' => $this->faker->paragraph(4),
-            'features' => $this->faker->randomElements([
+            'highlight' => fake()->randomElement(['new', 'trending', 'reliable', 'popular', 'undefined']),
+            'short_description' => fake()->text(150),
+            'full_description' => fake()->paragraph(10),
+            'features' => fake()->randomElements([
                 'Unlimited Data',
                 'Free Router',
                 '24/7 Support',
-                'Free Installation',
-                'No FUP'
-            ], rand(2, 5)),
+                'No Installation Fee',
+                'Low Latency',
+                'High Speed',
+                'Flexible Plan',
+                'Parental Control'
+            ], rand(3, 6)),
             'faqs' => [
-                ['question' => 'Is it unlimited?', 'answer' => 'Yes, it is.'],
-                ['question' => 'Can I upgrade?', 'answer' => 'Yes, any time.'],
+                ['question' => 'How do I upgrade?', 'answer' => 'Contact our support team.'],
+                ['question' => 'What is the refund policy?', 'answer' => 'Refunds are given under certain conditions.']
             ],
-            'images' => [
-                'services/sample1.jpg',
-                'services/sample2.jpg',
-            ],
+            'images' => [],
         ];
     }
 }

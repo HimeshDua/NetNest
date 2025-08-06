@@ -9,7 +9,7 @@ import { BarChartIcon, CalendarIcon, DollarSignIcon, GlobeIcon, ServerIcon, Star
 interface Props extends PageProps {
     vendor: VendorService;
 }
-
+    
 export default function DetailedVendorServices() {
     const { vendor } = usePage<Props>().props;
 

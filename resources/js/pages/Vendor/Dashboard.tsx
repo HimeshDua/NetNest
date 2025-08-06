@@ -10,7 +10,7 @@ import { usePage } from '@inertiajs/react';
 import ServerError from '../Errors/ServerError';
 
 export default function Dashboard() {
-    const { auth } = usePage<{ auth: { user: { role: 'admin' | 'vendor' | 'customer' | undefined } } }>().props;
+    const { auth, vendorData } = usePage<{ auth: { user: { role: 'admin' | 'vendor' | 'customer' | undefined } } }>().props;
 
     if (!auth) {
         return <ServerError />;
@@ -64,7 +64,7 @@ export default function Dashboard() {
                                         </svg>
                                     </CardHeader>
                                     <CardContent>
-                                        <div className="text-2xl font-bold">$45,231.89</div>
+                                        <div className="text-2xl font-bold">{vendorData.totalRevenue} PKR</div>
                                         <p className="text-xs text-muted-foreground">+20.1% from last month</p>
                                     </CardContent>
                                 </Card>
@@ -87,7 +87,7 @@ export default function Dashboard() {
                                         </svg>
                                     </CardHeader>
                                     <CardContent>
-                                        <div className="text-2xl font-bold">+2350</div>
+                                        <div className="text-2xl font-bold">{vendorData.totalCustomers}</div>
                                         <p className="text-xs text-muted-foreground">+180.1% from last month</p>
                                     </CardContent>
                                 </Card>

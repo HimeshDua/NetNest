@@ -2,15 +2,59 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Models\Vendor;
+use App\Models\CustomerSubscription;
+use App\Models\VendorService;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController
 {
   public function index()
   {
-    // $isEditable = Vendor::
-    return Inertia::render('Vendor/Dashboard');
+    $vendorId = Auth::id();
+    $service = VendorService::where('user_id', $vendorId)->first();
+    $subscriptions = CustomerSubscription::where('vendor_service_id', $service->id)->get();
+
+    if (!$service) {
+      return Inertia::render('Vendor/Dashboard', [
+        'error' => 'No service found for this vendor.'
+      ]);
+    }
+
+    $totalCustomers = $subscriptions->count();
+    $activeCustomers = $subscriptions->where('status', 'active')->count();
+    $cancelledCustomers = $subscriptions->where('status', 'cancelled')->count();
+    $expiredCustomers = $subscriptions->where('status', 'expired')->count();
+
+    // revenue
+    $totalRevenue = $activeCustomers * $service->price;
+
+    // Recent 5 subscribers
+    // $recentSubscribers = CustomerSubscription::with('user')->where('vendor_service_id', $service->id)
+    //   ->latest()
+    //   ->take(5)
+    //   ->get()->map(function ($sub) {
+    //     return [
+    //       'customer_name' => $sub->user->name,
+    //       'customer_email' => $sub->user->email,
+    //       'subscribed_at' => $sub->subscribed_at->toDateString(),
+    //       'next_billing_date' => $sub->next_billing_date->toDateString(),
+    //       'status' => $sub->status,
+    //     ];
+    //   });
+
+    return Inertia::render('Vendor/Dashboard', [
+      'vendorData' => [
+        'service' => $service,
+        'totalRevenue' => $totalRevenue,
+        'totalCustomers' => $totalCustomers,
+        'activeCustomers' => $activeCustomers,
+        'cancelledCustomers' => $cancelledCustomers,
+        'expiredCustomers' => $expiredCustomers,
+        // 'recentSubscribers' => $recentSubscribers,
+      ]
+    ]);
   }
 }
