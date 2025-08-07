@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import '../../resources/js//css/styles/utils.css';
+@import './styles/utils.css';
 
 @plugin 'tailwindcss-animate';
 

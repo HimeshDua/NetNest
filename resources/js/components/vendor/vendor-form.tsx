@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { useForm } from '@inertiajs/react';
 import React from 'react';
-import { Preview } from '../wow/rich-editor';
+import { RichEditor } from '../editor/rich-editor';
 
 export default function VendorForm() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -148,7 +148,7 @@ export default function VendorForm() {
                                 {errors.short_description && <p className="text-sm text-red-500">{errors.short_description}</p>}
                             </div>
 
-                            <div className="space-y-2">
+                            {/* <div className="space-y-2">
                                 <Label htmlFor="full_description">Full Description</Label>
                                 <Textarea
                                     id="full_description"
@@ -158,10 +158,13 @@ export default function VendorForm() {
                                     rows={5}
                                 />
                                 {errors.full_description && <p className="text-sm text-red-500">{errors.full_description}</p>}
-                            </div>
+                            </div> */}
                         </div>
+
                         <Separator />
-                        <Preview />
+
+                        <RichEditor value={data.full_description} onChange={(html) => setData('full_description', html)} />
+
                         <Separator />
                         {/* Extras */}
                         <div className="space-y-6">

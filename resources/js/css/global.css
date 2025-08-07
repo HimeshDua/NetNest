@@ -175,7 +175,7 @@
     }
 }
 
-:root {
+/* :root {
     --background: oklch(0.9777 0.0041 301.4256);
     --foreground: oklch(0.3651 0.0325 287.0807);
     --background: oklch(0.9777 0.0041 301.4256);
@@ -372,7 +372,7 @@
     --shadow-lg: var(--shadow-lg);
     --shadow-xl: var(--shadow-xl);
     --shadow-2xl: var(--shadow-2xl);
-}
+} */
 
 :root {
     --background: oklch(0.9777 0.0041 301.4256);
