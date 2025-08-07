@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { useForm } from '@inertiajs/react';
 import React from 'react';
+import { Preview } from '../wow/rich-editor';
 
 export default function VendorForm() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -94,9 +95,7 @@ export default function VendorForm() {
                                 {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}
                             </div>
                         </div>
-
                         <Separator />
-
                         {/* Technical Info */}
                         <div className="space-y-6">
                             <div className="space-y-2">
@@ -135,9 +134,7 @@ export default function VendorForm() {
                                 {errors.billing_cycle && <p className="text-sm text-red-500">{errors.billing_cycle}</p>}
                             </div>
                         </div>
-
                         <Separator />
-
                         {/* Descriptions */}
                         <div className="space-y-6">
                             <div className="space-y-2">
@@ -163,9 +160,9 @@ export default function VendorForm() {
                                 {errors.full_description && <p className="text-sm text-red-500">{errors.full_description}</p>}
                             </div>
                         </div>
-
                         <Separator />
-
+                        <Preview />
+                        <Separator />
                         {/* Extras */}
                         <div className="space-y-6">
                             <div className="space-y-2">
@@ -209,7 +206,6 @@ export default function VendorForm() {
                                 {errors.images && <p className="text-sm text-red-500">{errors.images}</p>}
                             </div>
                         </div>
-
                         <div className="flex justify-end pt-4">
                             <Button type="submit" disabled={processing}>
                                 Submit Service

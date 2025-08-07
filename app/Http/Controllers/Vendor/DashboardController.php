@@ -70,9 +70,9 @@ class DashboardController
         'totalCustomers' => $totalCustomers,
         'activeCustomers' => $activeCustomers,
         'cancelledCustomers' => $cancelledCustomers,
-        'expiredCustomers' => $expiredCustomers,
         'recentSubscribers' => $recentSubscribers,
         'chartData' => $chartData,
+        'service' => $service
       ]
     ]);
   }
