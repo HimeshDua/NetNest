@@ -1,8 +1,8 @@
 'use client';
 
-import HyperHtml from '@/components/service/hyperhtml';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import Layout from '@/layouts/layout';
 import { PageProps, VendorService } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { BarChartIcon, CalendarIcon, DollarSignIcon, GlobeIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
@@ -33,7 +33,7 @@ export default function DetailedVendorServices() {
     const highlight = getHighlight(vendor.highlight);
 
     return (
-        <>
+        <Layout>
             <Head title={vendor.title} />
             <div className="mx-auto max-w-4xl px-4 py-12">
                 <div className="flex items-start gap-6">
@@ -96,11 +96,13 @@ export default function DetailedVendorServices() {
                 <div className="mt-10 space-y-6">
                     <div className="mt-10 space-y-6">
                         <h2 className="text-lg font-semibold">Full Description</h2>
-                        <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: vendor.full_description }} />
+                        <div
+                            className="prose tiptap prose-sm dark:prose-invert m-0! max-w-none! border-none! bg-background! p-0! shadow-none!"
+                            dangerouslySetInnerHTML={{ __html: vendor.full_description }}
+                        />
                     </div>
                 </div>
 
-                <HyperHtml description={vendor.full_description} />
                 {vendor.faqs?.length > 0 && (
                     <div className="mt-10">
                         <h2 className="mb-4 text-lg font-semibold">FAQs</h2>
@@ -129,6 +131,6 @@ export default function DetailedVendorServices() {
                     <Button>Subscribe Now</Button>
                 </div>
             </div>
-        </>
+        </Layout>
     );
 }
