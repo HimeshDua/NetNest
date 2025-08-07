@@ -28,7 +28,7 @@ class SubmissionController extends Controller
             'short_description' => 'required|string|max:500',
             'full_description' => 'required|string',
             'highlight' => 'nullable|in:new,trending,reliable,popular,undefined',
-            'features' => 'nullable|string', // comma separated
+            'features' => 'nullable|string', // comma-separated
             'faqs' => 'nullable|json',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -40,26 +40,28 @@ class SubmissionController extends Controller
         }
 
         if ($request->hasFile('images')) {
-            $validated['images'] = [];
+            $imagePaths = [];
             foreach ($request->file('images') as $img) {
-                $validated['images'][] = $img->store('services', 'public');
+                $imagePaths[] = $img->store('services', 'public');
             }
+            $validated['images'] = $imagePaths;
         } else {
             $validated['images'] = [];
         }
 
-        // Parse comma features
         $validated['features'] = isset($validated['features'])
-            ? array_map('trim', explode(',', $validated['features']))
+            ? array_filter(array_map('trim', explode(',', $validated['features'])))
             : [];
 
-        // Parse JSON FAQs
-        $validated['faqs'] = isset($validated['faqs']) ? json_decode($validated['faqs'], true) : [];
+        $validated['faqs'] = isset($validated['faqs'])
+            ? json_decode($validated['faqs'], true)
+            : [];
 
         VendorService::create($validated);
 
         return redirect()->route('services.index')->with('success', 'Vendor service added successfully.');
     }
+
 
 
 

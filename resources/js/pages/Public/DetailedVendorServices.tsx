@@ -1,15 +1,17 @@
 'use client';
 
+import HyperHtml from '@/components/service/hyperhtml';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PageProps, VendorService } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { BarChartIcon, CalendarIcon, DollarSignIcon, GlobeIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
+import '../../css/styles/tiptap.scss';
 
 interface Props extends PageProps {
     vendor: VendorService;
 }
-    
+
 export default function DetailedVendorServices() {
     const { vendor } = usePage<Props>().props;
 
@@ -36,7 +38,11 @@ export default function DetailedVendorServices() {
             <div className="mx-auto max-w-4xl px-4 py-12">
                 <div className="flex items-start gap-6">
                     {vendor.logo ? (
-                        <img src={vendor.logo} alt={vendor.vendor_name} className="h-20 w-20 rounded-md border bg-white object-contain p-1" />
+                        <img
+                            src={`/storage/${vendor.logo}`}
+                            alt={vendor.vendor_name}
+                            className="h-20 w-20 rounded-md border bg-white object-contain p-1"
+                        />
                     ) : (
                         <div className="flex h-20 w-20 items-center justify-center rounded-md border bg-muted">
                             <ServerIcon className="h-8 w-8 text-muted-foreground" />
@@ -57,7 +63,6 @@ export default function DetailedVendorServices() {
                         )}
                     </div>
                 </div>
-
                 <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
                     <div className="space-y-4">
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -88,12 +93,14 @@ export default function DetailedVendorServices() {
                         </div>
                     </div>
                 </div>
-
                 <div className="mt-10 space-y-6">
-                    <h2 className="text-lg font-semibold">Full Description</h2>
-                    <p className="text-sm leading-relaxed whitespace-pre-line text-muted-foreground">{vendor.full_description}</p>
+                    <div className="mt-10 space-y-6">
+                        <h2 className="text-lg font-semibold">Full Description</h2>
+                        <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: vendor.full_description }} />
+                    </div>
                 </div>
 
+                <HyperHtml description={vendor.full_description} />
                 {vendor.faqs?.length > 0 && (
                     <div className="mt-10">
                         <h2 className="mb-4 text-lg font-semibold">FAQs</h2>
@@ -113,12 +120,11 @@ export default function DetailedVendorServices() {
                         <h2 className="mb-4 text-lg font-semibold">Gallery</h2>
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                             {vendor.images.map((src, i) => (
-                                <img key={i} src={src} alt={`Image ${i + 1}`} className="rounded-md border object-cover" />
+                                <img key={i} src={`/storage/${src}`} alt={`Image ${i + 1}`} className="rounded-md border object-cover" />
                             ))}
                         </div>
                     </div>
                 )}
-
                 <div className="mt-10 flex justify-end">
                     <Button>Subscribe Now</Button>
                 </div>
