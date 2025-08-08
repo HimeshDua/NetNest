@@ -13,29 +13,29 @@ return new class extends Migration
     {
         Schema::create('vendor_services', function (Blueprint $table) {
             $table->id();
-            // user blonging
-            // user hasMany vendorsevices
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            // One-to-one: each user has one vendor service
+            $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete();
 
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('vendor_name');
-            $table->string('logo')->nullable();
             $table->string('location');
 
             $table->enum('connection_type', ['fiber', 'dsl', 'wireless'])->default('fiber');
-            $table->decimal('price', 10, 2);
-            $table->enum('billing_cycle', ['Monthly', 'Quarterly', 'Yearly'])->default('Monthly');
-
-            $table->date('posted_date')->nullable();
             $table->enum('highlight', ['new', 'trending', 'reliable', 'popular', 'undefined'])->nullable();
 
             $table->text('short_description');
             $table->longText('full_description');
 
-            $table->json('features')->nullable();
-            $table->json('faqs')->nullable();
-            $table->json('images')->nullable();
+            // JSON columns reflecting structured frontend types
+            $table->json('packages');          // array of VendorServicePackage[]
+            $table->json('features')->nullable();    // array of string
+            $table->json('faqs')->nullable();        // array of { question, answer }
+            $table->json('images')->nullable();      // array of image paths
+            $table->json('speed_details')->nullable(); // array of string (or convert to structured JSON later)
+
+            $table->string('coverage_area');
+            $table->boolean('is_active')->default(true);
 
             $table->timestamps();
         });

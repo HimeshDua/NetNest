@@ -8,7 +8,7 @@ function Layout({ children }: LayoutProps) {
     return (
         <main className="mx-auto max-w-6xl">
             <Navbar auth={auth} />
-            {children}
+            <section className="min-h-[64vh]">{children}</section>
             <FooterWithNewsletter />
         </main>
     );

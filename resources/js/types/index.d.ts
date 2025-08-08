@@ -70,34 +70,40 @@ export interface VendorFAQ {
     answer: string;
 }
 
+export interface VendorServicePackage {
+    name: 'Basic' | 'Standard' | 'Premium';
+    price: number;
+    billing_cycle: BillingCycle;
+    speed_label?: string; // "100 Mbps", optional
+    features: string[];
+    description?: string;
+    is_popular?: boolean;
+}
+
 export interface VendorService {
     id: number;
     user_id: number;
-    FAQ;
 
     title: string;
     slug: string;
-    vendor_name: string;
-    logo: string | null;
     location: string;
 
     connection_type: ConnectionType;
-    price: string; // or number if parsed
-    billing_cycle: BillingCycle;
-
-    posted_date: string;
     highlight: HighlightType;
 
     short_description: string;
     full_description: string;
 
+    packages: VendorServicePackage[];
+
     features: string[];
     faqs: VendorFAQ[];
     images: string[];
 
+    speed_details: string[];
+    coverage_area: string;
+    is_active: boolean;
+
     created_at: string;
     updated_at: string;
-
-    // optional frontend-only field
-    vendorLogo?: string;
 }

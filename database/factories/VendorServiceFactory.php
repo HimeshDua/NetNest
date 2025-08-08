@@ -19,7 +19,6 @@ class VendorServiceFactory extends Factory
             'user_id' => User::factory()->create(['role' => 'vendor'])->id,
             'title' => $title,
             'slug' => Str::slug($title),
-            'vendor_name' => fake()->company(),
             'logo' => null,
             'location' => fake()->city(),
             'connection_type' => fake()->randomElement(['fiber', 'dsl', 'wireless']),

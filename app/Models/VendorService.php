@@ -10,12 +10,12 @@ class VendorService extends Model
 {
     use HasFactory;
 
+    protected $table = 'vendor_services';
+
     protected $fillable = [
         'user_id',
         'title',
         'slug',
-        'vendor_name',
-        'logo',
         'location',
         'connection_type',
         'price',
@@ -33,7 +33,7 @@ class VendorService extends Model
         'features' => 'array',
         'faqs' => 'array',
         'images' => 'array',
-        'posted_date' => 'date',
+        'posted_date' => 'datetime',
         'price' => 'decimal:2',
     ];
 
