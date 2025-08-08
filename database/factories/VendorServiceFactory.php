@@ -15,6 +15,7 @@ class VendorServiceFactory extends Factory
     public function definition(): array
     {
         $title = fake()->company . ' Internet Service';
+
         return [
             'user_id' => User::factory()->create(['role' => 'vendor'])->id,
             'title' => $title,
@@ -22,8 +23,6 @@ class VendorServiceFactory extends Factory
             'logo' => null,
             'location' => fake()->city(),
             'connection_type' => fake()->randomElement(['fiber', 'dsl', 'wireless']),
-            'price' => fake()->randomFloat(2, 500, 5000),
-            'billing_cycle' => fake()->randomElement(['Monthly', 'Quarterly', 'Yearly']),
             'posted_date' => now(),
             'highlight' => fake()->randomElement(['new', 'trending', 'reliable', 'popular', 'undefined']),
             'short_description' => fake()->text(150),
@@ -38,6 +37,14 @@ class VendorServiceFactory extends Factory
                 'Flexible Plan',
                 'Parental Control'
             ], rand(3, 6)),
+            'speed_details' => fake()->randomElements([
+                '10 Mbps Download',
+                '2 Mbps Upload',
+                'Low Ping',
+                'Consistent Speeds',
+                'Burst Speed up to 50 Mbps'
+            ], rand(2, 4)),
+            'coverage_area' => fake()->city() . ', ' . fake()->state(),
             'faqs' => [
                 ['question' => 'How do I upgrade?', 'answer' => 'Contact our support team.'],
                 ['question' => 'What is the refund policy?', 'answer' => 'Refunds are given under certain conditions.']
