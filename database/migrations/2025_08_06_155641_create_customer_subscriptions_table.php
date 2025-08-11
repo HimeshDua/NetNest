@@ -13,16 +13,11 @@ return new class extends Migration
     {
         Schema::create('customer_subscriptions', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('user_id')->constrained()->cascadeOnDelete(); // must be customer role
-
             $table->foreignId('vendor_service_id')->constrained()->cascadeOnDelete();
-
-            // Billing
             $table->date('subscribed_at');
             $table->date('next_billing_date');
             $table->enum('status', ['active', 'cancelled', 'expired'])->default('active');
-
             $table->timestamps();
         });
     }

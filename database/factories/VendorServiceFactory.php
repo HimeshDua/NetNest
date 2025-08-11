@@ -9,47 +9,71 @@ use Illuminate\Support\Str;
 
 class VendorServiceFactory extends Factory
 {
-    protected $model = VendorService::class;
-
-
     public function definition(): array
     {
         $title = fake()->company . ' Internet Service';
 
+        // Common pools
+        $globalFeatures = [
+            'Unlimited Data',
+            'Free Router',
+            '24/7 Support',
+            'No Installation Fee',
+            'Low Latency',
+            'High Speed',
+            'Flexible Plan',
+            'Parental Control',
+            'Static IP',
+            'Free Installation'
+        ];
+
+        $speedLabels = ['10 Mbps', '20 Mbps', '50 Mbps', '100 Mbps', '200 Mbps'];
+
+        // Generate 1-3 packages (Basic / Standard / Premium)
+        $packageNames = ['Basic', 'Standard', 'Premium'];
+        $numPackages = rand(1, 3);
+
+        $packages = [];
+        for ($i = 0; $i < $numPackages; $i++) {
+            $packages[] = [
+                'name' => $packageNames[$i],
+                'price' => fake()->randomFloat(2, 300, 6000),
+                'billing_cycle' => fake()->randomElement(['Monthly', 'Quarterly', 'Yearly']),
+                'speed_label' => fake()->randomElement($speedLabels),
+                'features' => fake()->randomElements($globalFeatures, rand(2, 5)),
+                'description' => fake()->sentence(12),
+                'is_popular' => $i === 1 ? true : fake()->boolean(20), // mark Standard popular if exists
+            ];
+        }
+
         return [
             'user_id' => User::factory()->create(['role' => 'vendor'])->id,
             'title' => $title,
-            'slug' => Str::slug($title),
-            'logo' => null,
+            'slug' => Str::slug($title) . '-' . fake()->unique()->numberBetween(1, 9999),
             'location' => fake()->city(),
             'connection_type' => fake()->randomElement(['fiber', 'dsl', 'wireless']),
-            'posted_date' => now(),
             'highlight' => fake()->randomElement(['new', 'trending', 'reliable', 'popular', 'undefined']),
             'short_description' => fake()->text(150),
             'full_description' => fake()->paragraph(10),
-            'features' => fake()->randomElements([
-                'Unlimited Data',
-                'Free Router',
-                '24/7 Support',
-                'No Installation Fee',
-                'Low Latency',
-                'High Speed',
-                'Flexible Plan',
-                'Parental Control'
-            ], rand(3, 6)),
+            'packages' => $packages,               // <-- IMPORTANT: structured packages array
+            'features' => fake()->randomElements($globalFeatures, rand(3, 6)),
+            'faqs' => [
+                ['question' => 'How do I upgrade?', 'answer' => 'Contact our support team.'],
+                ['question' => 'What is the refund policy?', 'answer' => 'Refunds are given under certain conditions.'],
+            ],
+            'images' => [
+                fake()->imageUrl(800, 600, 'technology', true, 'service'),
+                fake()->imageUrl(800, 600, 'technology', true, 'service'),
+            ],
             'speed_details' => fake()->randomElements([
                 '10 Mbps Download',
                 '2 Mbps Upload',
                 'Low Ping',
-                'Consistent Speeds',
-                'Burst Speed up to 50 Mbps'
-            ], rand(2, 4)),
+                'Burst up to 50 Mbps',
+                'Consistent Speed'
+            ], rand(1, 3)),
             'coverage_area' => fake()->city() . ', ' . fake()->state(),
-            'faqs' => [
-                ['question' => 'How do I upgrade?', 'answer' => 'Contact our support team.'],
-                ['question' => 'What is the refund policy?', 'answer' => 'Refunds are given under certain conditions.']
-            ],
-            'images' => [],
+            'is_active' => true,
         ];
     }
 }

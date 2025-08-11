@@ -9,11 +9,55 @@ import { Typography } from '@/components/ui/typography';
 import { Head, usePage } from '@inertiajs/react';
 
 import Layout from '@/layouts/layout';
-import { PageProps, VendorService } from '@/types';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PageProps } from '@/types';
 import { BarChartIcon, MapPinIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
 
 interface Props extends PageProps {
     vendor: VendorService;
+}
+interface VendorFAQ {
+    question: string;
+    answer: string;
+}
+type HighlightType = 'new' | 'trending' | 'reliable' | 'popular' | 'undefined';
+type BillingCycle = 'Monthly' | 'Quarterly' | 'Yearly';
+type ConnectionType = 'fiber' | 'dsl' | 'wireless';
+interface VendorService {
+    id: number;
+    user_id: number;
+
+    title: string;
+    slug: string;
+    location: string;
+
+    connection_type: ConnectionType;
+    highlight: HighlightType;
+
+    short_description: string;
+    full_description: string;
+
+    packages: {
+        name: 'Basic' | 'Standard' | 'Premium';
+        price: number;
+        billing_cycle: BillingCycle;
+        speed_label?: string; // "100 Mbps", optional
+        features: string[];
+        description?: string;
+        is_popular?: boolean;
+    }[];
+
+    features: string[];
+    faqs: VendorFAQ[];
+    images: string[];
+
+    speed_details: string[];
+    coverage_area: string;
+    is_active: boolean;
+
+    created_at: string;
+    updated_at: string;
 }
 
 const getHighlight = (highlight: VendorService['highlight']) => {
@@ -57,7 +101,7 @@ export default function DetailedVendorServices() {
                                 <MapPinIcon className="h-4 w-4" />
                                 {vendor.location}
                             </div>
-                            <div className="ml-2 text-sm text-muted-foreground">by {vendor.vendor_name}</div>
+                            {/* <div className="ml-2 text-sm text-muted-foreground">by {vendor.vendor_name}</div> */}
                         </div>
                     </div>
 
@@ -102,28 +146,71 @@ export default function DetailedVendorServices() {
                 </div>
 
                 {/* Right Column (Sticky Pricing Card) */}
-                <div className="relative space-y-4 lg:col-span-4">
-                    <div className="sticky top-24">
-                        <Card className="overflow-hidden p-0">
-                            <CardHeader className="p-0">
-                                {vendor.images?.length > 0 ? (
-                                    <img src={`/storage/${vendor.images[0]}`} alt={vendor.title} className="h-48 w-full object-cover" />
-                                ) : (
-                                    <div className="flex h-48 w-full items-center justify-center bg-muted">
-                                        <ServerIcon className="h-12 w-12 text-muted-foreground" />
-                                    </div>
-                                )}
-                            </CardHeader>
-                            <CardContent className="space-y-4 p-5">
-                                <div className="text-2xl font-bold">{vendor.price} PKR</div>
-                                <Typography variant="sm/normal" className="text-muted-foreground">
-                                    {vendor.billing_cycle} billing
-                                </Typography>
-                                <Button className="w-full">Subscribe Now</Button>
-                            </CardContent>
-                        </Card>
-                    </div>
-                </div>
+                {/* Right Column (Sticky Pricing Card) */}
+<div className="relative space-y-4 lg:col-span-4">
+  <div className="sticky top-24">
+    <Card className="overflow-hidden p-0">
+      <CardHeader className="p-0">
+        {vendor.images?.length > 0 ? (
+          <img
+            src={`/storage/${vendor.images[0]}`}
+            alt={vendor.title}
+            className="h-48 w-full object-cover"
+          />
+        ) : (
+          <div className="flex h-48 w-full items-center justify-center bg-muted">
+            <ServerIcon className="h-12 w-12 text-muted-foreground" />
+          </div>
+        )}
+      </CardHeader>
+
+      <CardContent className="space-y-4 p-5">
+        <Tabs defaultValue={vendor.packages[0]?.name.toLowerCase()} className="w-full">
+          
+          {/* Tab Buttons */}
+          <TabsList className="grid grid-cols-3 w-full border rounded-md mb-4">
+            {vendor.packages.map((pkg) => (
+              <TabsTrigger 
+                key={pkg.name}
+                value={pkg.name.toLowerCase()}
+                className="capitalize"
+              >
+                <Button variant={'outline'}>                  
+                {pkg.name}
+                </Button>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          {/* Tab Contents */}
+          {vendor.packages.map((pkg) => (
+            <TabsContent key={pkg.name} value={pkg.name.toLowerCase()}>
+              <Card>
+                <CardHeader>
+                  <Typography variant="xl/bold">{pkg.name} Package</Typography>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="text-xl font-bold">{pkg.price} PKR</div>
+                  <Typography variant="sm/normal" className="text-muted-foreground">
+                    {pkg.billing_cycle} billing
+                  </Typography>
+                  {pkg.speed_label && <Typography>{pkg.speed_label}</Typography>}
+                  <ul className="list-disc pl-5 text-muted-foreground">
+                    {pkg.features.map((feature, i) => (
+                      <li key={i}>{feature}</li>
+                    ))}
+                  </ul>
+                  <Button className="w-full">Subscribe Now</Button>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          ))}
+          
+        </Tabs>
+      </CardContent>
+    </Card>
+  </div>
+</div>
             </div>
         </Layout>
     );

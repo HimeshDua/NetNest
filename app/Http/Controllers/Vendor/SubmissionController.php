@@ -19,8 +19,8 @@ class SubmissionController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'vendor_name' => 'required|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
+            // 'vendor_name' => 'required|string|max:255',
+          
             'location' => 'required|string|max:255',
             'connection_type' => 'required|in:fiber,dsl,wireless',
             'price' => 'required|numeric|min:0',
@@ -35,9 +35,7 @@ class SubmissionController extends Controller
 
         $validated['user_id'] = auth()->id();
 
-        if ($request->hasFile('logo')) {
-            $validated['logo'] = $request->file('logo')->store('logos', 'public');
-        }
+       
 
         if ($request->hasFile('images')) {
             $imagePaths = [];
@@ -78,7 +76,6 @@ class SubmissionController extends Controller
         $validated = $request->validate([
             'title' => 'required|string',
             'vendorName' => 'required|string',
-            'vendorLogo' => 'required|string',
             'location' => 'required|string',
             'connectionType' => 'required|in:fiber,dsl,wireless',
             'price' => 'required|string',

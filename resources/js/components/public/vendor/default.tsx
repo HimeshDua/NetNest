@@ -68,32 +68,12 @@ export default function VendorServiceGrid({ services, onPageChange }: Props) {
                         <Link href={route('services.show', service.slug)} className="block">
                             <Card key={service.id} className="flex h-full flex-col">
                                 <CardHeader className="pb-2">
-                                    <div className="flex items-start justify-between">
-                                        <div className="relative flex h-12 w-12 items-center justify-center rounded-md border bg-card">
-                                            {service.vendorLogo ? (
-                                                <img
-                                                    src={service.vendorLogo}
-                                                    alt={service.vendor_name}
-                                                    width={48}
-                                                    height={48}
-                                                    className="h-12 w-12 object-contain"
-                                                />
-                                            ) : (
-                                                <ServerIcon className="h-6 w-6 text-muted-foreground" />
-                                            )}
-                                        </div>
-                                        {highlight && (
-                                            <Badge variant="secondary" className={`flex items-center gap-1 ${highlight.color}`}>
-                                                {highlight.icon}
-                                                {highlight.label}
-                                            </Badge>
-                                        )}
-                                    </div>
+                                   
                                     <div className="mt-3">
                                         <CardTitle>{service.title}</CardTitle>
                                         <div className="mt-1 flex items-center gap-1">
                                             <GlobeIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                                            <CardDescription className="!mt-0">{service.vendor_name}</CardDescription>
+                                            <CardDescription className="!mt-0">{service.title}</CardDescription>
                                         </div>
                                     </div>
                                 </CardHeader>
@@ -102,7 +82,7 @@ export default function VendorServiceGrid({ services, onPageChange }: Props) {
                                     <div className="space-y-2">
                                         <div className="flex items-center gap-2">
                                             <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
-                                            <span className="text-sm">{service.price}</span>
+                                            <span className="text-sm">{service.packages[0].price}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <CalendarIcon className="h-4 w-4 text-muted-foreground" />

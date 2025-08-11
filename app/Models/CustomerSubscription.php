@@ -25,15 +25,19 @@ class CustomerSubscription extends Model
     // === Relationships ===
 
     // The customer who subscribed
-    public function customer()
+   public function customer()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // The vendor's service being subscribed to
     public function vendorService()
     {
-        return $this->belongsTo(VendorService::class);
+        return $this->belongsTo(VendorService::class, 'vendor_service_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(CustomerTransaction::class, 'customer_subscription_id');
     }
 
     // === Scopes and Helpers ===

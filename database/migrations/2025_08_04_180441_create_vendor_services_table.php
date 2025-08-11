@@ -16,7 +16,6 @@ return new class extends Migration
 
             // One-to-one: each user has one vendor service
             $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete();
-
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('location');
@@ -29,11 +28,11 @@ return new class extends Migration
 
             // JSON columns reflecting structured frontend types
             $table->json('packages');          // array of VendorServicePackage[]
+            $table->date('posted_date')->nullable();
             $table->json('features')->nullable();    // array of string
             $table->json('faqs')->nullable();        // array of { question, answer }
             $table->json('images')->nullable();      // array of image paths
             $table->json('speed_details')->nullable(); // array of string (or convert to structured JSON later)
-
             $table->string('coverage_area');
             $table->boolean('is_active')->default(true);
 

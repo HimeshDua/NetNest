@@ -1,13 +1,13 @@
 export const siteConfig = {
     name: 'NetNest',
-    url: 'https://netnest.vercel.app',
-    getStartedUrl: 'https://netnest.vercel.app/get-started',
-    ogImage: 'https://netnest.vercel.app/og.jpg',
+    url: '/',
+    getStartedUrl: '/',
+    ogImage: '/',
     description: 'NetNest is a modern ISP management system offering dashboards, billing, support, and CMS tools for growing internet providers.',
     links: {
-        twitter: 'https://twitter.com/netnestISP',
+        twitter: '/',
         github: 'https://github.com/HimeshDua/NetNest-Laravel.12-React',
-        email: 'mailto:support@netnest.io',
+        email: '/',
     },
     pricing: {
         pro: 'https://netnest.lemonsqueezy.com/buy/pro-plan',
