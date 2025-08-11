@@ -48,7 +48,7 @@ class VendorService extends Model
     */
 
     // VendorService belongs to a User (vendor)
-     public function vendor()
+    public function vendor()
     {
         return $this->belongsTo(User::class, 'user_id');
     }

@@ -87,22 +87,22 @@ export interface VendorService {
     title: string;
     slug: string;
     location: string;
-    posted_date : string ;
+    posted_date: string;
     connection_type: ConnectionType;
     highlight: HighlightType;
 
     short_description: string;
     full_description: string;
 
-    packages:  {
-    name: 'Basic' | 'Standard' | 'Premium';
-    price: number;
-    billing_cycle: BillingCycle;
-    speed_label?: string; // "100 Mbps", optional
-    features: string[];
-    description?: string;
-    is_popular?: boolean;
-}[];
+    packages: {
+        name: 'Basic' | 'Standard' | 'Premium';
+        price: number;
+        billing_cycle: BillingCycle;
+        speed_label?: string; // "100 Mbps", optional
+        features: string[];
+        description?: string;
+        is_popular?: boolean;
+    }[];
 
     features: string[];
     faqs: VendorFAQ[];

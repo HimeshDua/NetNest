@@ -1,10 +1,10 @@
-import HorizontalFilters from '@/components/filters/default';
+import ServiceFilters from '@/components/filters/better';
 import VendorServiceGrid from '@/components/public/vendor/default';
 import Layout from '@/layouts/layout';
 import { router, usePage } from '@inertiajs/react';
 
 function Vendors() {
-    const { services } = usePage<any>().props;
+    const { services, filters } = usePage<any>().props;
 
     const handlePageChange = (url: string | null) => {
         if (url) router.get(url);
@@ -18,7 +18,8 @@ function Vendors() {
                     Explore high-speed internet, secure VPN, dedicated lines, and more. Curated for your business and home needs.
                 </p>
             </div>
-            <HorizontalFilters />
+            <ServiceFilters filters={filters} />
+            {/* <HorizontalFilters /> */}
             <VendorServiceGrid services={services} onPageChange={handlePageChange} />
         </Layout>
     );
