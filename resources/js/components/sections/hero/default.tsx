@@ -35,12 +35,12 @@ export default function HeroPage({
     ),
     buttons = [
         {
-            href: 'https://www.launchuicomponents.com/',
+            href: '/services',
             text: 'Get Started',
             variant: 'default',
         },
         {
-            href: 'https://www.launchuicomponents.com/',
+            href: 'https://github.com/HimeshDua/NetNest',
             text: 'Github',
             variant: 'glow',
             icon: <Github className="mr-2 size-4" />,

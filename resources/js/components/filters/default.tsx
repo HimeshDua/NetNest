@@ -37,7 +37,7 @@ interface HorizontalFiltersProps {
 }
 
 interface FilterState {
-    categories: string[];
+    highlights: string[];
     priceRange: [number, number];
     brands: string[];
     colors: string[];
@@ -47,7 +47,7 @@ interface FilterState {
 
 export default function HorizontalFilters({ className, onFilterChange }: HorizontalFiltersProps) {
     const [filters, setFilters] = useState<FilterState>({
-        categories: [],
+        highlights: [],
         priceRange: [0, 500],
         brands: [],
         colors: [],
@@ -64,7 +64,7 @@ export default function HorizontalFilters({ className, onFilterChange }: Horizon
 
         // Count active filters
         let count = 0;
-        if (updated.categories.length) count += updated.categories.length;
+        if (updated.highlights.length) count += updated.highlights.length;
         if (updated.brands.length) count += updated.brands.length;
         if (updated.colors.length) count += updated.colors.length;
         if (updated.sizes.length) count += updated.sizes.length;
@@ -88,7 +88,7 @@ export default function HorizontalFilters({ className, onFilterChange }: Horizon
 
     const clearFilters = () => {
         setFilters({
-            categories: [],
+            highlights: [],
             priceRange: [0, 500],
             brands: [],
             colors: [],
@@ -97,7 +97,7 @@ export default function HorizontalFilters({ className, onFilterChange }: Horizon
         });
         setActiveFiltersCount(0);
         onFilterChange?.({
-            categories: [],
+            highlights: [],
             priceRange: [0, 500],
             brands: [],
             colors: [],
@@ -106,7 +106,7 @@ export default function HorizontalFilters({ className, onFilterChange }: Horizon
         });
     };
 
-    const categories = ['Clothing', 'Shoes', 'Accessories', 'Sportswear', 'Outerwear'];
+    const highlights = ['New', 'Trending', 'Reliable', 'Popular'];
 
     const brands = ['Nike', 'Adidas', 'Puma', 'Under Armour', 'New Balance'];
 
@@ -131,8 +131,7 @@ export default function HorizontalFilters({ className, onFilterChange }: Horizon
 
     const ActiveFilterBadges = () => {
         const activeFilters = [
-            ...filters.categories.map((cat) => ({ type: 'categories', value: cat })),
-            ...filters.brands.map((brand) => ({ type: 'brands', value: brand })),
+            ...filters.highlights.map((cat) => ({ type: 'highlights', value: cat })),
             ...filters.colors.map((color) => ({ type: 'colors', value: color })),
             ...filters.sizes.map((size) => ({ type: 'sizes', value: size })),
             ...(filters.priceRange[0] > 0 || filters.priceRange[1] < 500
@@ -177,30 +176,30 @@ export default function HorizontalFilters({ className, onFilterChange }: Horizon
             <div className={cn('w-full p-6', className)}>
                 <div className="mb-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                     <div className="flex flex-wrap items-center gap-2">
-                        {/* Category Filter */}
+                        {/* Highlights Filter */}
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button variant="outline" size="sm" className="h-8">
-                                    Category
+                                    Highlight
                                     <ChevronDown className="ml-1 h-3 w-3" />
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-56 p-3">
                                 <div className="space-y-2">
-                                    {categories.map((category) => (
-                                        <div key={category} className="flex items-center">
+                                    {highlights.map((highlight) => (
+                                        <div key={highlight} className="flex items-center">
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
                                                 className={cn(
                                                     'w-full justify-start font-normal',
-                                                    filters.categories.includes(category) && 'font-medium',
+                                                    filters.highlights.includes(highlight) && 'font-medium',
                                                 )}
-                                                onClick={() => toggleFilter('categories', category)}
+                                                onClick={() => toggleFilter('highlights', highlight)}
                                             >
                                                 <div className="flex w-full items-center justify-between">
-                                                    {category}
-                                                    {filters.categories.includes(category) && <Check className="h-4 w-4" />}
+                                                    {highlight}
+                                                    {filters.highlights.includes(highlight) && <Check className="h-4 w-4" />}
                                                 </div>
                                             </Button>
                                         </div>
@@ -380,24 +379,24 @@ export default function HorizontalFilters({ className, onFilterChange }: Horizon
 
                             <ScrollArea className="h-[calc(100vh-8rem)]">
                                 <div className="space-y-6 pr-4">
-                                    {/* Categories */}
+                                    {/* Highlights */}
                                     <div className="space-y-3">
-                                        <h3 className="text-sm font-medium">Categories</h3>
+                                        <h3 className="text-sm font-medium">Highlights</h3>
                                         <div className="space-y-2">
-                                            {categories.map((category) => (
+                                            {highlights.map((highlight) => (
                                                 <Button
-                                                    key={category}
+                                                    key={highlight}
                                                     variant="ghost"
                                                     size="sm"
                                                     className={cn(
                                                         'w-full justify-start font-normal',
-                                                        filters.categories.includes(category) && 'font-medium',
+                                                        filters.highlights.includes(highlight) && 'font-medium',
                                                     )}
-                                                    onClick={() => toggleFilter('categories', category)}
+                                                    onClick={() => toggleFilter('highlights', highlight)}
                                                 >
                                                     <div className="flex w-full items-center justify-between">
-                                                        {category}
-                                                        {filters.categories.includes(category) && <Check className="h-4 w-4" />}
+                                                        {highlight}
+                                                        {filters.highlights.includes(highlight) && <Check className="h-4 w-4" />}
                                                     </div>
                                                 </Button>
                                             ))}

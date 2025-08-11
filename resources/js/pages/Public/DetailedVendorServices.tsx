@@ -3,7 +3,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Typography } from '@/components/ui/typography';
 import { Head, usePage } from '@inertiajs/react';
@@ -11,7 +11,6 @@ import { Head, usePage } from '@inertiajs/react';
 import Layout from '@/layouts/layout';
 
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageProps } from '@/types';
 import { BarChartIcon, MapPinIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
@@ -84,7 +83,7 @@ export default function DetailedVendorServices() {
     return (
         <Layout>
             <Head title={vendor.title} />
-            <div className="container mt-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
+            <div className="container mt-12 grid grid-cols-1 gap-8 px-3 lg:grid-cols-12">
                 {/* Left Column */}
                 <div className="space-y-6 lg:col-span-8">
                     <div>
@@ -103,7 +102,7 @@ export default function DetailedVendorServices() {
                                 <MapPinIcon className="h-4 w-4" />
                                 {vendor.location}
                             </div>
-                            {/* <div className="ml-2 text-sm text-muted-foreground">by {vendor.vendor_name}</div> */}
+                            {/* <div className="ml-2 text-sm text-muted-foreground">by {}</div> */}
                         </div>
                     </div>
 
@@ -148,19 +147,19 @@ export default function DetailedVendorServices() {
                 </div>
 
                 {/* Right Column (Sticky Pricing Card) */}
-                <div className="relative space-y-4 lg:col-span-4">
-                    <div className="sticky top-24">
+                <div className="relative space-y-3 lg:col-span-4">
+                    <div className="sticky top-20">
                         <Card className="overflow-hidden p-0">
                             <CardHeader className="p-0">
                                 {vendor.images?.length > 0 ? (
                                     <Carousel className="relative">
-                                        <CarouselContent>
+                                        <CarouselContent className="sm:64 h-96 md:h-96 lg:h-48">
                                             {vendor.images.map((image, index) => (
                                                 <CarouselItem key={index}>
                                                     <img
                                                         src={`/storage/${image}`}
                                                         alt={vendor.title}
-                                                        className="h-48 w-full rounded-t-md object-cover"
+                                                        className="h-full w-full rounded-t-md object-cover"
                                                         draggable={false}
                                                     />
                                                 </CarouselItem>
@@ -177,9 +176,9 @@ export default function DetailedVendorServices() {
                                 )}
                             </CardHeader>
 
+                            {/* Packages */}
                             <CardContent className="space-y-4 p-5">
-                                {/* Desktop Tabs */}
-                                <Tabs defaultValue={vendor.packages[0]?.name.toLowerCase()} className="hidden w-full md:block">
+                                <Tabs defaultValue={vendor.packages[0]?.name.toLowerCase()} className="w-full md:block">
                                     <TabsList className="mb-4 w-full">
                                         {vendor.packages.map((pkg) => (
                                             <TabsTrigger key={pkg.name} value={pkg.name.toLowerCase()} className="w-full capitalize">
@@ -189,53 +188,22 @@ export default function DetailedVendorServices() {
                                     </TabsList>
 
                                     {vendor.packages.map((pkg) => (
-                                        <TabsContent key={pkg.name} value={pkg.name.toLowerCase()}>
-                                            <Card>
-                                                <CardHeader>
-                                                    <CardTitle>{pkg.name} Package</CardTitle>
-                                                </CardHeader>
-                                                <CardContent className="space-y-2">
-                                                    <div className="text-xl font-bold">{pkg.price} PKR</div>
-                                                    <p className="text-sm text-muted-foreground">{pkg.billing_cycle} billing</p>
-                                                    {pkg.speed_label && <p>{pkg.speed_label}</p>}
-                                                    <ul className="list-disc pl-5 text-muted-foreground">
-                                                        {pkg.features.map((feature, i) => (
-                                                            <li key={i}>{feature}</li>
-                                                        ))}
-                                                    </ul>
-                                                    <Button className="w-full">Subscribe Now</Button>
-                                                </CardContent>
-                                            </Card>
+                                        <TabsContent key={pkg.name} value={pkg.name.toLowerCase()} className="mt-3">
+                                            <div className="space-y-2">
+                                                <h3 className="text-lg font-semibold">{pkg.name} Package</h3>
+                                                <div className="text-xl font-bold">{pkg.price} PKR</div>
+                                                <p className="text-sm text-muted-foreground">{pkg.billing_cycle} billing</p>
+                                                {pkg.speed_label && <p>{pkg.speed_label}</p>}
+                                                <ul className="list-disc pl-5 text-sm text-muted-foreground">
+                                                    {pkg.features.map((feature, i) => (
+                                                        <li key={i}>{feature}</li>
+                                                    ))}
+                                                </ul>
+                                                <Button className="w-full">Subscribe Now</Button>
+                                            </div>
                                         </TabsContent>
                                     ))}
                                 </Tabs>
-
-                                {/* Mobile Select */}
-                                <div className="space-y-4 md:hidden">
-                                    <Select
-                                        defaultValue={vendor.packages[0]?.name.toLowerCase()}
-                                        onValueChange={(value) => {
-                                            const pkg = vendor.packages.find((p) => p.name.toLowerCase() === value);
-                                            if (pkg) {
-                                                // handle select change
-                                            }
-                                        }}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select a package" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {vendor.packages.map((pkg) => (
-                                                <SelectItem key={pkg.name} value={pkg.name.toLowerCase()} className="capitalize">
-                                                    {pkg.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-
-                                    {/* Show selected package details */}
-                                    {/* You could replicate the Card UI here dynamically */}
-                                </div>
                             </CardContent>
                         </Card>
                     </div>

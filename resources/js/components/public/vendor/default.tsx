@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { VendorService } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BarChartIcon, BookmarkIcon, CalendarIcon, DollarSignIcon, GlobeIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
+import { BarChartIcon, BookmarkIcon, CalendarIcon, DollarSignIcon, GlobeIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
 
 type Props = {
     services: {
@@ -68,7 +68,6 @@ export default function VendorServiceGrid({ services, onPageChange }: Props) {
                         <Link href={route('services.show', service.slug)} className="block">
                             <Card key={service.id} className="flex h-full flex-col">
                                 <CardHeader className="pb-2">
-                                   
                                     <div className="mt-3">
                                         <CardTitle>{service.title}</CardTitle>
                                         <div className="mt-1 flex items-center gap-1">
