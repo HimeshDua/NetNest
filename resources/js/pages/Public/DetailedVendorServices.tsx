@@ -3,13 +3,15 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Typography } from '@/components/ui/typography';
 import { Head, usePage } from '@inertiajs/react';
 
 import Layout from '@/layouts/layout';
 
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageProps } from '@/types';
 import { BarChartIcon, MapPinIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
@@ -146,71 +148,98 @@ export default function DetailedVendorServices() {
                 </div>
 
                 {/* Right Column (Sticky Pricing Card) */}
-                {/* Right Column (Sticky Pricing Card) */}
-<div className="relative space-y-4 lg:col-span-4">
-  <div className="sticky top-24">
-    <Card className="overflow-hidden p-0">
-      <CardHeader className="p-0">
-        {vendor.images?.length > 0 ? (
-          <img
-            src={`/storage/${vendor.images[0]}`}
-            alt={vendor.title}
-            className="h-48 w-full object-cover"
-          />
-        ) : (
-          <div className="flex h-48 w-full items-center justify-center bg-muted">
-            <ServerIcon className="h-12 w-12 text-muted-foreground" />
-          </div>
-        )}
-      </CardHeader>
+                <div className="relative space-y-4 lg:col-span-4">
+                    <div className="sticky top-24">
+                        <Card className="overflow-hidden p-0">
+                            <CardHeader className="p-0">
+                                {vendor.images?.length > 0 ? (
+                                    <Carousel className="relative">
+                                        <CarouselContent>
+                                            {vendor.images.map((image, index) => (
+                                                <CarouselItem key={index}>
+                                                    <img
+                                                        src={`/storage/${image}`}
+                                                        alt={vendor.title}
+                                                        className="h-48 w-full rounded-t-md object-cover"
+                                                        draggable={false}
+                                                    />
+                                                </CarouselItem>
+                                            ))}
+                                        </CarouselContent>
 
-      <CardContent className="space-y-4 p-5">
-        <Tabs defaultValue={vendor.packages[0]?.name.toLowerCase()} className="w-full">
-          
-          {/* Tab Buttons */}
-          <TabsList className="grid grid-cols-3 w-full border rounded-md mb-4">
-            {vendor.packages.map((pkg) => (
-              <TabsTrigger 
-                key={pkg.name}
-                value={pkg.name.toLowerCase()}
-                className="capitalize"
-              >
-                <Button variant={'outline'}>                  
-                {pkg.name}
-                </Button>
-              </TabsTrigger>
-            ))}
-          </TabsList>
+                                        <CarouselPrevious className="absolute top-1/2 left-2 -translate-y-1/2 bg-background/60 backdrop-blur-sm hover:bg-background" />
+                                        <CarouselNext className="absolute top-1/2 right-2 -translate-y-1/2 bg-background/60 backdrop-blur-sm hover:bg-background" />
+                                    </Carousel>
+                                ) : (
+                                    <div className="flex h-48 w-full items-center justify-center rounded-t-md bg-muted">
+                                        <ServerIcon className="h-12 w-12 text-muted-foreground" />
+                                    </div>
+                                )}
+                            </CardHeader>
 
-          {/* Tab Contents */}
-          {vendor.packages.map((pkg) => (
-            <TabsContent key={pkg.name} value={pkg.name.toLowerCase()}>
-              <Card>
-                <CardHeader>
-                  <Typography variant="xl/bold">{pkg.name} Package</Typography>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="text-xl font-bold">{pkg.price} PKR</div>
-                  <Typography variant="sm/normal" className="text-muted-foreground">
-                    {pkg.billing_cycle} billing
-                  </Typography>
-                  {pkg.speed_label && <Typography>{pkg.speed_label}</Typography>}
-                  <ul className="list-disc pl-5 text-muted-foreground">
-                    {pkg.features.map((feature, i) => (
-                      <li key={i}>{feature}</li>
-                    ))}
-                  </ul>
-                  <Button className="w-full">Subscribe Now</Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          ))}
-          
-        </Tabs>
-      </CardContent>
-    </Card>
-  </div>
-</div>
+                            <CardContent className="space-y-4 p-5">
+                                {/* Desktop Tabs */}
+                                <Tabs defaultValue={vendor.packages[0]?.name.toLowerCase()} className="hidden w-full md:block">
+                                    <TabsList className="mb-4 w-full">
+                                        {vendor.packages.map((pkg) => (
+                                            <TabsTrigger key={pkg.name} value={pkg.name.toLowerCase()} className="w-full capitalize">
+                                                {pkg.name}
+                                            </TabsTrigger>
+                                        ))}
+                                    </TabsList>
+
+                                    {vendor.packages.map((pkg) => (
+                                        <TabsContent key={pkg.name} value={pkg.name.toLowerCase()}>
+                                            <Card>
+                                                <CardHeader>
+                                                    <CardTitle>{pkg.name} Package</CardTitle>
+                                                </CardHeader>
+                                                <CardContent className="space-y-2">
+                                                    <div className="text-xl font-bold">{pkg.price} PKR</div>
+                                                    <p className="text-sm text-muted-foreground">{pkg.billing_cycle} billing</p>
+                                                    {pkg.speed_label && <p>{pkg.speed_label}</p>}
+                                                    <ul className="list-disc pl-5 text-muted-foreground">
+                                                        {pkg.features.map((feature, i) => (
+                                                            <li key={i}>{feature}</li>
+                                                        ))}
+                                                    </ul>
+                                                    <Button className="w-full">Subscribe Now</Button>
+                                                </CardContent>
+                                            </Card>
+                                        </TabsContent>
+                                    ))}
+                                </Tabs>
+
+                                {/* Mobile Select */}
+                                <div className="space-y-4 md:hidden">
+                                    <Select
+                                        defaultValue={vendor.packages[0]?.name.toLowerCase()}
+                                        onValueChange={(value) => {
+                                            const pkg = vendor.packages.find((p) => p.name.toLowerCase() === value);
+                                            if (pkg) {
+                                                // handle select change
+                                            }
+                                        }}
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select a package" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {vendor.packages.map((pkg) => (
+                                                <SelectItem key={pkg.name} value={pkg.name.toLowerCase()} className="capitalize">
+                                                    {pkg.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+
+                                    {/* Show selected package details */}
+                                    {/* You could replicate the Card UI here dynamically */}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
             </div>
         </Layout>
     );

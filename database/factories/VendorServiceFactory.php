@@ -62,8 +62,8 @@ class VendorServiceFactory extends Factory
                 ['question' => 'What is the refund policy?', 'answer' => 'Refunds are given under certain conditions.'],
             ],
             'images' => [
-                fake()->imageUrl(800, 600, 'technology', true, 'service'),
-                fake()->imageUrl(800, 600, 'technology', true, 'service'),
+                'services/wow.jpg',
+                'services/wow2.png',
             ],
             'speed_details' => fake()->randomElements([
                 '10 Mbps Download',
