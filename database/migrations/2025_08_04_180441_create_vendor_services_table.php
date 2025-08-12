@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('location');
+            $table->string('city');
 
             $table->enum('connection_type', ['fiber', 'dsl', 'wireless'])->default('fiber');
             $table->enum('highlight', ['new', 'trending', 'reliable', 'popular', 'undefined'])->nullable();

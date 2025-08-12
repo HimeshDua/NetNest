@@ -9,6 +9,8 @@ class CustomerSubscription extends Model
 {
     use HasFactory;
 
+
+    // Customer Hbilling histo
     protected $fillable = [
         'user_id',
         'vendor_service_id',
@@ -25,7 +27,7 @@ class CustomerSubscription extends Model
     // === Relationships ===
 
     // The customer who subscribed
-   public function customer()
+    public function customer()
     {
         return $this->belongsTo(User::class, 'user_id');
     }

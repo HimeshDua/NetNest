@@ -65,8 +65,8 @@ export default function VendorServiceGrid({ services, onPageChange }: Props) {
                 {services.data.map((service) => {
                     const highlight = getHighlightDetails(service.highlight);
                     return (
-                        <Link href={route('services.show', service.slug)} className="block">
-                            <Card key={service.id} className="flex h-full flex-col">
+                        <Link key={service.id} href={route('services.show', service.slug)} className="block">
+                            <Card className="flex h-full flex-col">
                                 <CardHeader className="pb-2">
                                     <div className="mt-3">
                                         <CardTitle>{service.title}</CardTitle>

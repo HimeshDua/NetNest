@@ -51,6 +51,7 @@ class VendorServiceFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title) . '-' . fake()->unique()->numberBetween(1, 9999),
             'location' => fake()->city(),
+            'city' => fake()->randomElement(['karachi', 'lahore', 'Islamabad', 'Thathe', 'Hydrabad', 'Multan', 'Bhawalpur', 'Rawalpindi']),
             'connection_type' => fake()->randomElement(['fiber', 'dsl', 'wireless']),
             'highlight' => fake()->randomElement(['new', 'trending', 'reliable', 'popular', 'undefined']),
             'short_description' => fake()->text(150),

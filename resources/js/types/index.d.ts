@@ -86,6 +86,7 @@ export interface VendorService {
 
     title: string;
     slug: string;
+    city: string;
     location: string;
     posted_date: string;
     connection_type: ConnectionType;

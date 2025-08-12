@@ -9,6 +9,7 @@ class CustomerTransaction extends Model
 {
     use HasFactory;
 
+    // Customer BIlling History
     protected $fillable = [
         'customer_subscription_id',
         'amount',
@@ -30,5 +31,3 @@ class CustomerTransaction extends Model
         return $this->belongsTo(CustomerSubscription::class, 'customer_subscription_id');
     }
 }
-
-

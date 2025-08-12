@@ -16,6 +16,7 @@ class VendorService extends Model
         'user_id',
         'title',
         'slug',
+        'city',
         'location',
         'connection_type',
         'highlight',
