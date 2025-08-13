@@ -24,7 +24,6 @@ export default function Dashboard() {
                 short_description: string;
                 highlight: string | null;
                 posted_date: string | null;
-                
             };
             totalRevenue: number;
             totalCustomers: number;

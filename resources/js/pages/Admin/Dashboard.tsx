@@ -1,24 +1,24 @@
+import { CustomerRequest } from '@/components/admin/CustomerRequest';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { Typography } from '@/components/ui/typography';
 import DashboardLayout from '@/layouts/dashboard-layout';
 import { Main } from '@/layouts/main';
 import { PageProps } from '@/types';
-import { usePage  } from '@inertiajs/react';
-import { Props } from 'recharts/types/container/Surface';
+import { router, usePage } from '@inertiajs/react';
 
 export default function AdminDashboardPage() {
-    const { user } = usePage<PageProps<{ user:{totalUser: number} }>>().props;
-const cardsData = [
+    const { user, customerRequests, auth } = usePage<PageProps>().props;
+    const cardsData = [
         {
             label: 'Total Revenue',
-            value: `${user.totalRevenue*300}  PKR`,
+            value: `${user.totalRevenue * 300}  PKR`,
             change: '+20.1%',
             iconColor: 'text-green-500',
             icon: <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />,
         },
         {
             label: 'Total Vendors',
-            value: user.totalvendor,
+            value: user.totalVendor,
             change: '+180.1%',
             iconColor: 'text-blue-500',
             icon: (
@@ -40,18 +40,27 @@ const cardsData = [
                 </>
             ),
         },
-        
     ];
+
+    const handlePageChange = (url: string | null) => {
+        if (url) router.get(url);
+    };
+
+    const name = auth.user?.name;
 
     return (
         <DashboardLayout title="Admin Dashboard">
-            <Main>
-           <div className="mb-8">
-                    <h1 className="text-3xl font-bold tracking-tight">Hi, {}! 👋</h1>
-                    <p className="text-muted-foreground">Here’s what’s happening with your service today.</p>
-                </div>
+            <Main className="grid space-y-6">
+                <header className="ps-2">
+                    <Typography variant="3xl/bold" className="tracking-tight" as="h1">
+                        Hi, {name}! 👋
+                    </Typography>
+                    <Typography variant="lg/normal" as="p">
+                        Here’s what’s happening with your service today.
+                    </Typography>
+                </header>
 
-                 <div className="grid gap-6 lg:grid-cols-4">
+                <section className="grid grid-cols-1 justify-evenly gap-6 md:grid-cols-3">
                     {cardsData.map((stat, index) => (
                         <Card className="gap-y-4 py-4" key={index}>
                             <CardHeader className="flex flex-row items-center justify-between py-0">
@@ -73,6 +82,15 @@ const cardsData = [
                             </CardContent>
                         </Card>
                     ))}
+                </section>
+
+                <div className="grid justify-between gap-4 md:grid-cols-7">
+                    <div className="col-span-3 bg-blue-300 md:col-span-4 lg:col-span-4">wow</div>
+                    <CustomerRequest
+                        classname="col-span-3 md:col-span-3 lg:col-span-3"
+                        customerRequest={customerRequests}
+                        onPageChange={handlePageChange}
+                    />
                 </div>
             </Main>
         </DashboardLayout>

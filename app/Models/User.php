@@ -35,13 +35,19 @@ class User extends Authenticatable
     // Vendor has many services
     public function vendorServices()
     {
-        return $this->hasMany(VendorService::class);
+        return $this->hasOne(VendorService::class);
     }
 
     // Customer has many subscriptions
     public function subscriptions()
     {
         return $this->hasMany(CustomerSubscription::class, 'user_id');
+    }
+
+    // Customer has many 
+    public function customerRequest()
+    {
+        return $this->hasOne(customerRequest::class, 'user_id');
     }
 
     // === Role Helpers ===

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\CustomerRequest;
 use App\Models\User;
 use App\Models\VendorService;
 use App\Models\CustomerSubscription;
@@ -34,6 +35,10 @@ class DatabaseSeeder extends Seeder
                 // Attach 3 transactions to the subscription
                 CustomerTransaction::factory(3)->create([
                     'customer_subscription_id' => $subscription->id,
+                ]);
+
+                CustomerRequest::factory(rand(1, 3))->create([
+                    'user_id' => $customer->id,
                 ]);
             });
     }

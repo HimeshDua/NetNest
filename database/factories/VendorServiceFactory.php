@@ -13,7 +13,6 @@ class VendorServiceFactory extends Factory
     {
         $title = fake()->company . ' Internet Service';
 
-        // Common pools
         $globalFeatures = [
             'Unlimited Data',
             'Free Router',
@@ -29,7 +28,6 @@ class VendorServiceFactory extends Factory
 
         $speedLabels = ['10 Mbps', '20 Mbps', '50 Mbps', '100 Mbps', '200 Mbps'];
 
-        // Generate 1-3 packages (Basic / Standard / Premium)
         $packageNames = ['Basic', 'Standard', 'Premium'];
         $numPackages = rand(1, 3);
 
@@ -41,7 +39,7 @@ class VendorServiceFactory extends Factory
                 'billing_cycle' => fake()->randomElement(['Monthly', 'Quarterly', 'Yearly']),
                 'speed_label' => fake()->randomElement($speedLabels),
                 'features' => fake()->randomElements($globalFeatures, rand(2, 5)),
-                'description' => fake()->sentence(12),
+                'description' => fake()->sentence(rand(12, 19)),
                 'is_popular' => $i === 1 ? true : fake()->boolean(20), // mark Standard popular if exists
             ];
         }
@@ -51,7 +49,7 @@ class VendorServiceFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title) . '-' . fake()->unique()->numberBetween(1, 9999),
             'location' => fake()->city(),
-            'city' => fake()->randomElement(['karachi', 'lahore', 'Islamabad', 'Thathe', 'Hydrabad', 'Multan', 'Bhawalpur', 'Rawalpindi']),
+            'city' => fake()->randomElement(['Karachi', 'Lahore', 'Islamabad', 'Thathe', 'Hydrabad', 'Multan', 'Bhawalpur', 'Rawalpindi']),
             'connection_type' => fake()->randomElement(['fiber', 'dsl', 'wireless']),
             'highlight' => fake()->randomElement(['new', 'trending', 'reliable', 'popular', 'undefined']),
             'short_description' => fake()->text(150),

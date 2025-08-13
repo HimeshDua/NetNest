@@ -26,7 +26,7 @@ class DashboardController
     $totalCustomers = $subscriptions->count();
     $activeCustomers = $subscriptions->where('status', 'active')->count();
     $cancelledCustomers = $subscriptions->where('status', 'cancelled')->count();
-    $expiredCustomers = $subscriptions->where('status', 'expired')->count();
+    // $expiredCustomers = $subscriptions->where('status', 'expired')->count();
 
     // revenue
     $totalRevenue = $activeCustomers * $service->price;

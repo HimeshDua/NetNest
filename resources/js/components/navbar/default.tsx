@@ -156,6 +156,7 @@ export default function Navbar({
                     {
                         text: 'Logout',
                         href: '/logout',
+                        isForm: true,
                         isButton: true,
                         variant: 'default',
                     },

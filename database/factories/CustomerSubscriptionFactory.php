@@ -8,9 +8,6 @@ use App\Models\VendorService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CustomerSubscription>
- */
 class CustomerSubscriptionFactory extends Factory
 {
     protected $model = CustomerSubscription::class;
@@ -18,7 +15,11 @@ class CustomerSubscriptionFactory extends Factory
     public function definition(): array
     {
         $vendorService = VendorService::inRandomOrder()->first() ?? VendorService::factory()->create();
-        $billingCycle = $vendorService->billing_cycle;
+
+        // Get billing_cycle from first package (default to Monthly)
+        $firstPackage = $vendorService->packages[0] ?? ['billing_cycle' => 'Monthly'];
+        $billingCycle = $firstPackage['billing_cycle'] ?? 'Monthly';
+
         $start = Carbon::now();
         $nextBilling = match ($billingCycle) {
             'Quarterly' => $start->copy()->addMonths(3),
