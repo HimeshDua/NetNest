@@ -13,11 +13,6 @@ Route::get('/contact', fn() => Inertia::render('Public/Contact'))->name('contact
 Route::get('/plans', [\App\Http\Controllers\Public\PlanController::class, 'index'])->name('plans');
 // Route::get('/vendors', fn() => Inertia::render('Public/Vendors'))->name('vendors');
 
-
-// Route::patch('/role/update', [\App\Http\Controllers\Admin\DashboardController::class, 'updateCustomerRole'])
-//     ->name('admin.role.update');
-
-
 Route::get('/services', [\App\Http\Controllers\Public\ServicesController::class, 'index'])->name('services.index');
 Route::get('/services/{slug}', [\App\Http\Controllers\Public\ServicesController::class, 'show'])->name('services.show');
 
@@ -57,9 +52,6 @@ Route::middleware(['auth', 'verified', 'role:vendor'])->prefix('vendor')->group(
 // ---------------------------
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
-
-    Route::patch('/role/update', [\App\Http\Controllers\Admin\DashboardController::class, 'updateCustomerRole'])
-        ->name('admin.role.update');
 
     Route::resource('/users', \App\Http\Controllers\Admin\UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
     Route::resource('/plans', \App\Http\Controllers\Admin\PlanManagementController::class)->except(['edit', 'create']);

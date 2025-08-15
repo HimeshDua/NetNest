@@ -1,4 +1,4 @@
-import { CustomerRequest } from '@/components/admin/CustomerRequest';
+import { CustomerRequest } from '@/components/admin/requesthandle';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Typography } from '@/components/ui/typography';
 import DashboardLayout from '@/layouts/dashboard-layout';

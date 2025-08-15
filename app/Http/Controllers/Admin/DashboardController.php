@@ -23,4 +23,18 @@ class DashboardController
 
         return Inertia::render('Admin/Dashboard',  ['user' => $user, 'customerRequests' => $customerRequests]);
     }
+
+    public function updateCustomerRole(Request $request) // params
+    {
+        $validated = $request->validate([
+            'role' => 'required|in:customer,vendor,admin',
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        $user = User::findOrFail($validated['user_id']);
+        $user->role = $validated['role'];
+        $user->save();
+
+        return back()->with('success', 'Role updated successfully.');
+    }
 }
