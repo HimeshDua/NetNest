@@ -9,6 +9,7 @@ class CustomerSubscription extends Model
 {
     use HasFactory;
 
+    /// For Vendor Dashboard Stats
 
     // Customer Hbilling histo
     protected $fillable = [

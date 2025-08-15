@@ -9,7 +9,7 @@ class CustomerTransaction extends Model
 {
     use HasFactory;
 
-    // Customer BIlling History
+    // Customer Billing History
     protected $fillable = [
         'customer_subscription_id',
         'amount',

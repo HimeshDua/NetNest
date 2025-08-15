@@ -77,6 +77,7 @@ export interface VendorServicePackage {
     speed_label?: string; // "100 Mbps", optional
     features: string[];
     description?: string;
+    currency: string;
     is_popular?: boolean;
 }
 
@@ -112,6 +113,21 @@ export interface VendorService {
     speed_details: string[];
     coverage_area: string;
     is_active: boolean;
+
+    created_at: string;
+    updated_at: string;
+}
+
+// User Transactions
+
+export interface UserTransaction {
+    customer_subscription_id: string;
+    amount: number;
+    currency: string;
+    payment_date: Date;
+    payment_method?: string;
+    transaction_reference?: string;
+    status: 'pending' | 'completed' | 'failed' | 'refunded';
 
     created_at: string;
     updated_at: string;

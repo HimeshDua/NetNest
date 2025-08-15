@@ -24,7 +24,7 @@ return new class extends Migration
 
             $table->dateTime('payment_date');
             $table->string('payment_method')->nullable(); // e.g., 'credit_card', 'paypal'
-            $table->string('transaction_reference')->nullable(); // from payment gateway
+            $table->string('transaction_reference')->nullable(); // from payment gateway // paypal
 
             $table->enum('status', ['pending', 'completed', 'failed', 'refunded'])->default('pending');
 
