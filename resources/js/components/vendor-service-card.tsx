@@ -1,66 +1,211 @@
-// components/vendor-service-card.tsx
+'use client';
 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Typography } from '@/components/ui/typography';
+import { CheckCircle, Globe, HelpCircle, MapPin, Package, Rocket } from 'lucide-react';
+
+interface Props {}
+
+export type ConnectionType = 'fiber' | 'dsl' | 'wireless';
+export type BillingCycle = 'Monthly' | 'Quarterly' | 'Yearly';
+export type HighlightType = 'new' | 'trending' | 'reliable' | 'popular' | 'undefined';
+
+export interface VendorFAQ {
+    question: string;
+    answer: string;
+}
+
+export interface VendorService {
+    id: number;
+    user_id: number;
+    title: string;
+    slug: string;
+    city: string;
+    location: string;
+    posted_date: string;
+    connection_type: ConnectionType;
+    highlight: HighlightType;
+    short_description: string;
+    full_description: string;
+    packages: {
+        name: 'Basic' | 'Standard' | 'Premium';
+        price: number;
+        billing_cycle: BillingCycle;
+        speed_label?: string;
+        features: string[];
+        description?: string;
+        is_popular?: boolean;
+    }[];
+    features: string[];
+    faqs: VendorFAQ[];
+    images: string[];
+    speed_details: string[];
+    coverage_area: string;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+}
 
 interface VendorServiceCardProps {
-    service: {
-        title: string;
-        vendor_name: string;
-        location: string;
-        connection_type: string;
-        billing_cycle: string;
-        price: number;
-        short_description: string;
-        highlight: string | null;
-        posted_date: string | null;
-    };
+    service: VendorService;
 }
 
 export function VendorServiceCard({ service }: VendorServiceCardProps) {
     return (
-        <Card className="transition-shadow duration-200 hover:shadow-md">
-            <CardHeader className="flex flex-col gap-2">
-                <div className="flex items-start justify-between">
-                    <CardTitle>
-                        <Typography variant="xl/semibold" as="h3">
-                            {service.title}
-                        </Typography>
-                    </CardTitle>
+        <Card className="my-8 w-full max-w-4xl overflow-hidden shadow-lg">
+            <CardHeader className="p-6 md:p-8">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <CardTitle className="flex-1 text-3xl font-bold tracking-tight md:text-4xl">{service.title}</CardTitle>
                     {service.highlight && (
-                        <Badge variant="outline" className="text-xs font-medium">
+                        <Badge variant="secondary" className="text-xs font-medium uppercase">
                             {service.highlight}
                         </Badge>
                     )}
                 </div>
-                <CardDescription>
-                    <Typography variant="sm/normal">{service.short_description}</Typography>
+                <CardDescription className="mt-2 text-sm text-muted-foreground">
+                    Posted on {new Date(service.posted_date).toLocaleDateString()}
                 </CardDescription>
             </CardHeader>
-
             <Separator />
-
-            <CardContent className="mt-4 space-y-2">
-                <DetailRow label="Vendor" value={service.vendor_name} />
-                <DetailRow label="Location" value={service.location} />
-                <DetailRow label="Connection Type" value={service.connection_type} />
-                <DetailRow label="Billing Cycle" value={service.billing_cycle} />
-                <DetailRow label="Price" value={`${service.price} PKR`} />
-                {service.posted_date && <DetailRow label="Posted On" value={new Date(service.posted_date).toDateString()} />}
+            <CardContent className="space-y-8 p-6 md:p-8">
+                {/* General Information */}
+                <section>
+                    <Typography as="h2" variant="xl/bold" className="mb-4">
+                        Overview
+                    </Typography>
+                    <div className="space-y-4">
+                        <Typography variant="lg/normal">{service.short_description}</Typography>
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <DetailItem icon={<MapPin className="h-4 w-4 text-primary" />} label="Location" value={service.location} />
+                            <DetailItem icon={<Globe className="h-4 w-4 text-primary" />} label="Connection Type" value={service.connection_type} />
+                        </div>
+                    </div>
+                </section>
+                <Separator />
+                {/* Packages Section */}
+                {service.packages && service.packages.length > 0 && (
+                    <section>
+                        <Typography as="h2" variant="md/bold" className="mb-4 flex items-center gap-2">
+                            <Package className="h-6 w-6" />
+                            Packages
+                        </Typography>
+                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                            {service.packages.map((pkg, index) => (
+                                <Card
+                                    key={index}
+                                    className={`relative p-6 transition-transform hover:scale-[1.02] ${
+                                        pkg.is_popular ? 'border-primary shadow-lg' : ''
+                                    }`}
+                                >
+                                    {pkg.is_popular && (
+                                        <Badge
+                                            variant="secondary"
+                                            className="absolute top-2 right-2 bg-primary text-xs font-semibold text-primary-foreground uppercase"
+                                        >
+                                            Most Popular
+                                        </Badge>
+                                    )}
+                                    <div className="space-y-4">
+                                        <Typography as="h4" variant="2xl/bold">
+                                            {pkg.name}
+                                        </Typography>
+                                        <Typography variant="2xl/bold" className="text-primary">
+                                            ${pkg.price}
+                                            <span className="text-sm font-medium text-muted-foreground"> / {pkg.billing_cycle}</span>
+                                        </Typography>
+                                        {pkg.speed_label && (
+                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                <Rocket className="h-4 w-4" />
+                                                <Typography variant="sm/normal">{pkg.speed_label}</Typography>
+                                            </div>
+                                        )}
+                                        {pkg.description && (
+                                            <Typography variant="sm/normal" className="text-muted-foreground">
+                                                {pkg.description}
+                                            </Typography>
+                                        )}
+                                        <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+                                            {pkg.features.map((feature, i) => (
+                                                <li key={i} className="flex items-center gap-2">
+                                                    <CheckCircle className="h-4 w-4 shrink-0 text-green-500" />
+                                                    <Typography variant="sm/normal">{feature}</Typography>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </Card>
+                            ))}
+                        </div>
+                    </section>
+                )}
+                <Separator />
+                {/* Features and FAQ */}
+                <section className="grid gap-8 md:grid-cols-2">
+                    <div>
+                        <Typography as="h2" variant="xl/bold" className="mb-4">
+                            Features
+                        </Typography>
+                        {service.features && service.features.length > 0 ? (
+                            <ul className="space-y-2">
+                                {service.features.map((feature, index) => (
+                                    <li key={index} className="flex items-start gap-2">
+                                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-primary" />
+                                        <Typography variant="sm/normal">{feature}</Typography>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <Typography variant="sm/normal" className="text-muted-foreground">
+                                No features listed.
+                            </Typography>
+                        )}
+                    </div>
+                    <div>
+                        <Typography as="h2" variant="xl/bold" className="mb-4 flex items-center gap-2">
+                            <HelpCircle className="h-6 w-6" />
+                            FAQs
+                        </Typography>
+                        {service.faqs && service.faqs.length > 0 ? (
+                            <Accordion type="single" collapsible className="w-full">
+                                {service.faqs.map((faq, index) => (
+                                    <AccordionItem key={index} value={`faq-${index}`}>
+                                        <AccordionTrigger>
+                                            <Typography variant="sm/medium">{faq.question}</Typography>
+                                        </AccordionTrigger>
+                                        <AccordionContent>
+                                            <Typography variant="sm/normal" className="text-muted-foreground">
+                                                {faq.answer}
+                                            </Typography>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                ))}
+                            </Accordion>
+                        ) : (
+                            <Typography variant="sm/normal" className="text-muted-foreground">
+                                No FAQs available.
+                            </Typography>
+                        )}
+                    </div>
+                </section>
             </CardContent>
         </Card>
     );
 }
 
-function DetailRow({ label, value }: { label: string; value: string | number }) {
+// Helper component for detail rows with icons
+function DetailItem({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
     return (
-        <div className="flex justify-between">
-            <Typography variant="sm/normal" className="text-muted-foreground">
-                {label}
-            </Typography>
-            <Typography variant="sm/medium">{value}</Typography>
+        <div className="flex items-center gap-2 rounded-md p-2 transition-colors">
+            {icon}
+            <div className="flex-1">
+                <Typography variant="sm/normal" className="text-muted-foreground">
+                    {label}
+                </Typography>
+                <Typography variant="sm/medium">{value}</Typography>
+            </div>
         </div>
     );
 }

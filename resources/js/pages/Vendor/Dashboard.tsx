@@ -7,24 +7,16 @@ import { Separator } from '@/components/ui/separator';
 import { VendorServiceCard } from '@/components/vendor-service-card';
 import DashboardLayout from '@/layouts/dashboard-layout';
 import { Main } from '@/layouts/main';
+import { VendorService } from '@/types';
 import { usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
 import ServerError from '../Errors/ServerError';
 
 export default function Dashboard() {
     const { auth, vendorData } = usePage<{
         auth: { user: { role: 'admin' | 'vendor' | 'customer' | undefined; name: string } };
         vendorData: {
-            service: {
-                title: string;
-                vendor_name: string;
-                location: string;
-                connection_type: string;
-                billing_cycle: string;
-                price: number;
-                short_description: string;
-                highlight: string | null;
-                posted_date: string | null;
-            };
+            service: VendorService;
             totalRevenue: number;
             totalCustomers: number;
             activeCustomers: number;
@@ -88,6 +80,9 @@ export default function Dashboard() {
         },
     ];
 
+    useEffect(() => {
+        console.log(vendorData.service);
+    }, []);
     return (
         <DashboardLayout title="Vendor Dashboard">
             <Main>
