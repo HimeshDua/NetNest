@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Customer;
 
 use Illuminate\Http\Request;
-use Inertia\Inertia; 
+use Inertia\Inertia;
 
 class ConnectionController
 {
-    public function myPlans(){
-        return Inertia::render('Customer/MyPlans');
+    public function services()
+    {
+        return Inertia::render('Customer/Services');
     }
-    public function status(){
-        return ;
+    public function status()
+    {
+        return;
     }
 }

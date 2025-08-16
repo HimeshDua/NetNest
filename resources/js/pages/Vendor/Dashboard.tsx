@@ -143,10 +143,7 @@ export default function Dashboard() {
 
                 <Separator className="my-8" />
 
-                <div className="grid">
-                    <h2 className="mb-4 text-xl font-semibold tracking-tight">Your Active Service</h2>
-                    <VendorServiceCard service={vendorData.service} />
-                </div>
+                <VendorServiceCard service={vendorData.service} />
             </Main>
         </DashboardLayout>
     );

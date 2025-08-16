@@ -136,10 +136,10 @@ export function getSidebarData(role: string | null) {
                     items: [{ title: 'Overview', url: '/customer/dashboard' }],
                 },
                 {
-                    title: 'Plans',
-                    url: '/customer/plans',
+                    title: 'Services',
+                    url: '/customer/services',
                     icon: FileCheck,
-                    items: [{ title: 'My Plans', url: '/customer/plans' }],
+                    items: [{ title: 'Services', url: '/customer/services' }],
                 },
                 {
                     title: 'Billing',

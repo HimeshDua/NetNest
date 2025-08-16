@@ -54,7 +54,7 @@ function Navigation() {
         // Guest
         menuItems = [
             // { title: 'Home', isLink: true, href: '/' },
-            { title: 'Plans', isLink: true, href: '/plans' },
+            // { title: 'Plans', isLink: true, href: '/plans' },
             { title: 'Services', isLink: true, href: '/services' },
             { title: 'About', isLink: true, href: '/about' },
             { title: 'Contact', isLink: true, href: '/contact' },
@@ -95,6 +95,11 @@ function Navigation() {
     } else if (userRole === 'customer') {
         menuItems = [{ title: 'Dashboard', content: 'dashboard' }];
         components = [
+            {
+                title: 'Services',
+                href: '/customer/services',
+                description: 'See current available services.',
+            },
             {
                 title: 'My Plans',
                 href: '/customer/plans',

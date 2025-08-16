@@ -55,7 +55,7 @@ interface VendorServiceCardProps {
 
 export function VendorServiceCard({ service }: VendorServiceCardProps) {
     return (
-        <Card className="my-8 w-full max-w-4xl overflow-hidden shadow-lg">
+        <Card className="max-w-8xl my-8 w-full overflow-hidden shadow-lg">
             <CardHeader className="p-6 md:p-8">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                     <CardTitle className="flex-1 text-3xl font-bold tracking-tight md:text-4xl">{service.title}</CardTitle>
@@ -92,41 +92,47 @@ export function VendorServiceCard({ service }: VendorServiceCardProps) {
                             <Package className="h-6 w-6" />
                             Packages
                         </Typography>
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <div className={`grid gap-6 md:grid-cols-2 lg:grid-cols-${service.packages.length}`}>
                             {service.packages.map((pkg, index) => (
                                 <Card
                                     key={index}
-                                    className={`relative p-6 transition-transform hover:scale-[1.02] ${
-                                        pkg.is_popular ? 'border-primary shadow-lg' : ''
-                                    }`}
+                                    className={`relative border hover:border-primary ${pkg.is_popular && 'border-primary/90 shadow-lg'}`}
                                 >
-                                    {pkg.is_popular && (
-                                        <Badge
-                                            variant="secondary"
-                                            className="absolute top-2 right-2 bg-primary text-xs font-semibold text-primary-foreground uppercase"
-                                        >
-                                            Most Popular
-                                        </Badge>
-                                    )}
-                                    <div className="space-y-4">
-                                        <Typography as="h4" variant="2xl/bold">
-                                            {pkg.name}
-                                        </Typography>
+                                    <CardHeader>
+                                        {pkg.is_popular && (
+                                            <Badge
+                                                variant="secondary"
+                                                className="absolute top-4 right-4 bg-primary text-xs font-semibold text-primary-foreground uppercase"
+                                            >
+                                                Most Popular
+                                            </Badge>
+                                        )}
+                                        <CardTitle>
+                                            <Typography as="h4" variant="2xl/bold">
+                                                {pkg.name}
+                                            </Typography>
+                                        </CardTitle>
+
                                         <Typography variant="2xl/bold" className="text-primary">
                                             ${pkg.price}
                                             <span className="text-sm font-medium text-muted-foreground"> / {pkg.billing_cycle}</span>
                                         </Typography>
-                                        {pkg.speed_label && (
-                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                <Rocket className="h-4 w-4" />
-                                                <Typography variant="sm/normal">{pkg.speed_label}</Typography>
-                                            </div>
-                                        )}
-                                        {pkg.description && (
-                                            <Typography variant="sm/normal" className="text-muted-foreground">
-                                                {pkg.description}
-                                            </Typography>
-                                        )}
+                                    </CardHeader>
+                                    <CardContent>
+                                        <CardDescription>
+                                            {pkg.speed_label && (
+                                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                    <Rocket className="h-4 w-4" />
+                                                    <Typography variant="sm/normal">{pkg.speed_label}</Typography>
+                                                </div>
+                                            )}
+                                            {pkg.description && (
+                                                <Typography variant="sm/normal" className="text-muted-foreground">
+                                                    {pkg.description}
+                                                </Typography>
+                                            )}
+                                        </CardDescription>
+
                                         <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                                             {pkg.features.map((feature, i) => (
                                                 <li key={i} className="flex items-center gap-2">
@@ -135,7 +141,7 @@ export function VendorServiceCard({ service }: VendorServiceCardProps) {
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </CardContent>
                                 </Card>
                             ))}
                         </div>

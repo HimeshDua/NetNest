@@ -32,11 +32,13 @@ Route::middleware(['auth', 'redirect.role'])->get('/dashboard', fn() => null)->n
 Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
 
-    Route::get('/plans', [\App\Http\Controllers\Customer\ConnectionController::class, 'myPlans'])->name('customer.plans');
+    Route::get('/services', [\App\Http\Controllers\Customer\ConnectionController::class, 'services'])->name('customer.services');
     Route::get('/billing', [\App\Http\Controllers\Customer\BillingController::class, 'index'])->name('customer.billing');
     Route::get('/support', [\App\Http\Controllers\Customer\SupportTicketController::class, 'index'])->name('customer.support');
     Route::post('/support', [\App\Http\Controllers\Customer\SupportTicketController::class, 'store']);
     Route::get('/connection-status', [\App\Http\Controllers\Customer\ConnectionController::class, 'status'])->name('customer.connection.status');
+
+    Route::post('/Request', [\App\Http\Controllers\Customer\ProfileController::class, 'VendorRequest'])->name('customer.request');
     Route::get('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'index'])->name('customer.profile');
 });
 
