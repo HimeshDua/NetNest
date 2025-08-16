@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 import Github from '@/components/logos/github';
-import { Button, type ButtonProps } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import Glow from '@/components/ui/glow';
 import { Mockup, MockupFrame } from '@/components/ui/mockup';
 import Screenshot from '@/components/ui/screenshot';
@@ -12,7 +12,7 @@ import { Section } from '@/components/ui/section';
 interface HeroButtonProps {
     href: string;
     text: string;
-    variant?: ButtonProps['variant'];
+    variant?: 'default' | 'outline' | 'destructive' | 'secondary' | 'ghost' | 'link';
     icon?: ReactNode;
     iconRight?: ReactNode;
 }
@@ -42,7 +42,7 @@ export default function HeroPage({
         {
             href: 'https://github.com/HimeshDua/NetNest',
             text: 'Github',
-            variant: 'glow',
+            variant: 'outline',
             icon: <Github className="mr-2 size-4" />,
         },
     ],

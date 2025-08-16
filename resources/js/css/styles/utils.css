@@ -1,5 +1,4 @@
-/* Glass effects */
-.glass-1 {
+Glass effects .glass-1 {
     border-width: 1px;
     border-color: var(--border);
     background-image: linear-gradient(to bottom, var(--card, #fff) 80%, var(--card, #fff) 40%);

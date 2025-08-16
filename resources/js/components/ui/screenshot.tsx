@@ -1,9 +1,6 @@
-'use client';
-
-import { useAppearance } from '@/hooks/use-appearance';
-
 import { useEffect, useState } from 'react';
 
+import { useAppearance } from '@/hooks/use-appearance';
 import { cn } from '../../lib/utils';
 
 interface ScreenshotProps {
@@ -16,14 +13,14 @@ interface ScreenshotProps {
 }
 
 export default function Screenshot({ srcLight, srcDark, alt, width, height, className }: ScreenshotProps) {
-    const { appearance } = useAppearance();
     const [src, setSrc] = useState<string | null>(null);
+    const { resolvedAppearance } = useAppearance();
 
     useEffect(() => {
-        if (appearance) {
-            setSrc(appearance === 'light' ? srcLight : srcDark || srcLight);
+        if (resolvedAppearance) {
+            setSrc(resolvedAppearance === 'light' ? srcLight : srcDark || srcLight);
         }
-    }, [appearance, srcLight, srcDark]);
+    }, [resolvedAppearance, srcLight, srcDark]);
 
     if (!src) {
         return <div style={{ width, height }} className={cn('bg-muted', className)} aria-label={alt} />;
