@@ -1,7 +1,6 @@
 import { Main } from '@/layouts/main';
 import { UserTransaction, VendorServicePackage } from '@/types';
 import { Download, FileText, Settings } from 'lucide-react';
-import { useEffect } from 'react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
@@ -13,10 +12,10 @@ interface billingData {
 export default function UserBilling({ billingData }: { billingData: billingData }) {
     const { transactions, customerServices } = billingData;
 
-    useEffect(() => {
-        console.log('transactions', transactions);
-        console.log('customerSubscription', customerServices);
-    }, [transactions, customerServices]);
+    // useEffect(() => {
+    //     console.log('transactions', transactions);
+    //     console.log('customerSubscription', customerServices);
+    // }, [transactions, customerServices]);
 
     return (
         <Main>

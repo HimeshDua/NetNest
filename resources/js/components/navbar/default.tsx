@@ -54,6 +54,7 @@ interface NavbarActionProps {
     icon?: ReactNode;
     iconRight?: ReactNode;
     isForm?: boolean;
+    isProfile?: boolean;
     isButton?: boolean;
 }
 
@@ -74,7 +75,7 @@ interface NavbarProps {
 
 export default function Navbar({
     logo = '',
-    name = 'NetNest',
+    name = 'NetNessst',
     homeUrl = siteConfig.url,
     auth,
     showNavigation = true,
@@ -155,9 +156,9 @@ export default function Navbar({
             case 'customer':
                 actions = [
                     {
-                        text: 'Logout',
-                        href: '/logout',
-                        isForm: true,
+                        text: 'Profile',
+                        href: '/settings/profile',
+                        isProfile: true,
                         isButton: true,
                         variant: 'default',
                     },
@@ -205,12 +206,24 @@ export default function Navbar({
                     </NavbarLeft>
                     <NavbarRight>
                         {actions.map((action, index) =>
-                            action.isForm && action.isButton ? (
-                                <form action={route('logout')} onClick={handleLogout} method="post">
-                                    <Button key={index} variant={action.variant || 'default'} className="text-center">
-                                        {action.text}
-                                    </Button>
-                                </form>
+                            action.isProfile && action.isButton ? (
+                                <Button key={index} variant={action.variant || 'default'} className="text-center" asChild>
+                                    <Link href={action.href}>{action.text}</Link>
+                                </Button>
+                            ) : action.isForm && action.isButton ? (
+                                <Link
+                                    className={cn(
+                                        "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+                                        'h-9 px-4 py-2 has-[>svg]:px-3',
+                                        'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
+                                    )}
+                                    method="post"
+                                    href={route('logout')}
+                                    as="button"
+                                    onClick={handleLogout}
+                                >
+                                    Log out
+                                </Link>
                             ) : action.isButton ? (
                                 <Button key={index} variant={action.variant || 'default'} className="text-center" asChild>
                                     <Link href={action.href}>
