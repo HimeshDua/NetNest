@@ -1,6 +1,6 @@
-import { type BreadcrumbItem, type SharedData } from '@/types';
+import { BreadcrumbItem, type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -9,12 +9,17 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import DeleteUser from '@/components/delete-user';
 import HeadingSmall from '@/components/heading-small';
 import InputError from '@/components/input-error';
+import ConditionalLayout from '@/components/layout/conditionalLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+
+type ProfileForm = {
+    name: string;
+    email: string;
+};
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -22,11 +27,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/settings/profile',
     },
 ];
-
-type ProfileForm = {
-    name: string;
-    email: string;
-};
 
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
@@ -50,14 +50,10 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Profile settings" />
-
+        <ConditionalLayout breadcrumbs={breadcrumbs} title="Profile settings">
             <SettingsLayout>
                 <div className="space-y-6">
                     <HeadingSmall title="Profile information" description="Update your name and email address" />
-
-                    <Separator />
 
                     <form onSubmit={submit} className="space-y-6">
                         <div className="grid gap-2">
@@ -183,6 +179,6 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
                 <DeleteUser />
             </SettingsLayout>
-        </AppLayout>
+        </ConditionalLayout>
     );
 }

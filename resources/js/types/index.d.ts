@@ -6,6 +6,15 @@ import type { Config } from 'ziggy-js';
 export interface LayoutProps {
     children: ReactNode;
     title: string;
+    // role?: 'customer' | 'vendor' | 'admin' | null;
+    breadcrumbs?: BreadcrumbItem[];
+    [type: string]: value;
+}
+
+export interface AppLayoutProps {
+    children: ReactNode;
+    title?: string;
+    breadcrumbs?: BreadcrumbItem[];
 }
 
 export interface Auth {

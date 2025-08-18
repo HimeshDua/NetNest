@@ -148,8 +148,8 @@ export function getSidebarData(role: string | null) {
                     items: [{ title: 'My Invoices', url: '/customer/billing' }],
                 },
                 {
-                    title: 'Connection Status',
-                    url: '/customer/connection-status',
+                    title: 'Subscription Management',
+                    url: '/customer/subscription-management',
                     icon: Map,
                     items: [{ title: 'Status', url: '/customer/connection-status' }],
                 },

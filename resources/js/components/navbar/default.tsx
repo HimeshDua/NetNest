@@ -75,7 +75,7 @@ interface NavbarProps {
 
 export default function Navbar({
     logo = '',
-    name = 'NetNessst',
+    name = 'NetNest',
     homeUrl = siteConfig.url,
     auth,
     showNavigation = true,
@@ -111,7 +111,7 @@ export default function Navbar({
                     { text: 'Dashboard', href: '/customer/dashboard' },
                     { text: 'Services', href: '/services' },
                     { text: 'Billings', href: '/customer/billing' },
-                    { text: 'Connection Status', href: '/customer/connection-status' },
+                    { text: 'Subscription ', href: '/customer/subscription-management' },
                     // { text: 'Support', href: '/customer/support' },
                 ];
                 break;

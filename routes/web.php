@@ -30,16 +30,20 @@ Route::middleware(['auth', 'redirect.role'])->get('/dashboard', fn() => null)->n
 // ---------------------------
 
 Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
+    // Route::get('/dashboard', [\App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
 
-    Route::get('/services', [\App\Http\Controllers\Customer\ConnectionController::class, 'services'])->name('customer.services');
+    // Route::get('/services', [\App\Http\Controllers\Customer\ConnectionController::class, 'services'])->name('customer.services');
     Route::get('/billing', [\App\Http\Controllers\Customer\BillingController::class, 'index'])->name('customer.billing');
+    // support is in-app chat with vendors
     Route::get('/support', [\App\Http\Controllers\Customer\SupportTicketController::class, 'index'])->name('customer.support');
     Route::post('/support', [\App\Http\Controllers\Customer\SupportTicketController::class, 'store']);
-    Route::get('/connection-status', [\App\Http\Controllers\Customer\ConnectionController::class, 'status'])->name('customer.connection.status');
+    // Route::get('/connection-status', [\App\Http\Controllers\Customer\ConnectionController::class, 'status'])->name('customer.connection.status');
 
-    Route::post('/Request', [\App\Http\Controllers\Customer\ProfileController::class, 'VendorRequest'])->name('customer.request');
-    Route::get('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'index'])->name('customer.profile');
+    // previous and current subscriptions management
+    Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
+
+    // Route::post('/Request', [\App\Http\Controllers\Customer\ProfileController::class, 'VendorRequest'])->name('customer.request');
+    // Route::get('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'index'])->name('customer.profile');
 });
 
 // ---------------------------
@@ -51,7 +55,7 @@ Route::middleware(['auth', 'verified', 'role:vendor'])->prefix('vendor')->group(
     Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
     Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
     Route::get('/support', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'index'])->name('vendor.support');
-    Route::get('/profile', [\App\Http\Controllers\Vendor\ProfileController::class, 'index'])->name('vendor.profile');
+    // Route::get('/profile', [\App\Http\Controllers\Vendor\ProfileController::class, 'index'])->name('vendor.profile');
 });
 
 // ---------------------------

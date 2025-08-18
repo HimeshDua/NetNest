@@ -138,28 +138,6 @@ function Navigation() {
                 {/* Customer */}
                 {userRole === 'customer' && (
                     <>
-                        {/* <NavigationMenuItem>
-                            <NavigationMenuTrigger>My Account</NavigationMenuTrigger>
-                            <NavigationMenuContent>
-                                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
-                                    <ListItem href="/customer/services" title="Services">
-                                        Browse and subscribe to internet services.
-                                    </ListItem>
-                                    <ListItem href="/customer/plans" title="My Plans">
-                                        View and manage your active plans.
-                                    </ListItem>
-                                    <ListItem href="/customer/billing" title="Billing">
-                                        See invoices and make payments.
-                                    </ListItem>
-                                    <ListItem href="/customer/connection-status" title="Connection Status">
-                                        Track installation and service progress.
-                                    </ListItem>
-                                    <ListItem href="/customer/support" title="Support">
-                                        Get help and open support tickets.
-                                    </ListItem>
-                                </ul>
-                            </NavigationMenuContent>
-                        </NavigationMenuItem> */}
                         <NavigationMenuItem>
                             <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
                                 <Link href="/services">Services</Link>
@@ -172,7 +150,7 @@ function Navigation() {
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                                <Link href="/customer/connection-status">Connection Status</Link>
+                                <Link href="/customer/subscription">Subscriptions</Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                     </>
