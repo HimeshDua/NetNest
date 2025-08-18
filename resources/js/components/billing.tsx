@@ -1,3 +1,4 @@
+import { Main } from '@/layouts/main';
 import { UserTransaction, VendorServicePackage } from '@/types';
 import { Download, FileText, Settings } from 'lucide-react';
 import { useEffect } from 'react';
@@ -18,37 +19,36 @@ export default function UserBilling({ billingData }: { billingData: billingData 
     }, [transactions, customerServices]);
 
     return (
-        <div className="container mx-auto px-4 py-6 md:px-6 2xl:max-w-[1400px]">
-            <div className="mx-auto max-w-4xl">
-                {/* Header */}
-                <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row">
-                    <div>
-                        <h1 className="text-2xl font-semibold">Billing & Subscription</h1>
-                        <p className="text-sm text-muted-foreground">Manage your subscription and billing details</p>
-                    </div>
-                    <Button variant="outline">
-                        <Settings className="mr-2 size-4" />
-                        Billing Settings
-                    </Button>
+        <Main>
+            {/* Header */}
+            <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row">
+                <div>
+                    <h1 className="text-2xl font-semibold">Billing & Subscription</h1>
+                    <p className="text-sm text-muted-foreground">Manage your subscription and billing details</p>
                 </div>
+                <Button variant="outline">
+                    <Settings className="mr-2 size-4" />
+                    Billing Settings
+                </Button>
+            </div>
 
-                {/* Current Plan */}
-                <Card className="mb-8 p-0">
-                    <CardContent className="space-y-4 p-6">
-                        {customerServices.map((pkg, idx) => (
-                            <div key={idx} className="rounded-lg border p-4">
-                                <h3 className="text-lg font-semibold">{pkg.name}</h3>
-                                <p className="line-clamp-2 text-sm text-muted-foreground">{pkg.description}</p>
-                                <p className="mt-2 font-medium">
-                                    {pkg.currency ?? 'PKR'} {Number(pkg.price).toFixed(2)}
-                                </p>
-                            </div>
-                        ))}
-                    </CardContent>
-                </Card>
+            {/* Current Plan */}
+            <Card className="mb-8 p-0">
+                <CardContent className="space-y-4 p-6">
+                    {customerServices.map((pkg, idx) => (
+                        <div key={idx} className="rounded-lg border p-4">
+                            <h3 className="text-lg font-semibold">{pkg.name}</h3>
+                            <p className="line-clamp-2 text-sm text-muted-foreground">{pkg.description}</p>
+                            <p className="mt-2 font-medium">
+                                {pkg.currency ?? 'PKR'} {Number(pkg.price).toFixed(2)}
+                            </p>
+                        </div>
+                    ))}
+                </CardContent>
+            </Card>
 
-                {/* Payment Method */}
-                {/* <Card className="mb-8 p-0">
+            {/* Payment Method */}
+            {/* <Card className="mb-8 p-0">
                     <CardContent className="p-6">
                         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
                             <div className="space-y-1">
@@ -63,57 +63,54 @@ export default function UserBilling({ billingData }: { billingData: billingData 
                     </CardContent>
                 </Card> */}
 
-                {/* Billing History */}
-                <Card className="p-0">
-                    <CardContent className="p-6">
-                        <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row">
-                            <h2 className="text-lg font-semibold">Billing History</h2>
-                            <Button variant="outline" size="sm">
-                                <Download className="mr-2 size-4" />
-                                Download All
-                            </Button>
-                        </div>
+            {/* Billing History */}
+            <Card className="p-0">
+                <CardContent className="p-6">
+                    <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row">
+                        <h2 className="text-lg font-semibold">Billing History</h2>
+                        <Button variant="outline" size="sm">
+                            <Download className="mr-2 size-4" />
+                            Download All
+                        </Button>
+                    </div>
 
-                        <div className="space-y-4">
-                            {transactions.length > 0 ? (
-                                transactions.map((tx) => (
-                                    <div
-                                        key={tx.transaction_reference || tx.customer_subscription_id}
-                                        className="flex flex-col items-start justify-between gap-3 border-b py-3 last:border-0 sm:flex-row sm:items-center"
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className="rounded-md bg-muted p-2">
-                                                <FileText className="size-4 text-muted-foreground" />
-                                            </div>
-                                            <div>
-                                                <p className="font-medium">{tx.transaction_reference || 'No reference'}</p>
-                                                <p className="text-sm text-muted-foreground">{new Date(tx.payment_date).toLocaleDateString()}</p>
-                                            </div>
+                    <div className="space-y-4">
+                        {transactions.length > 0 ? (
+                            transactions.map((tx) => (
+                                <div
+                                    key={tx.transaction_reference || tx.customer_subscription_id}
+                                    className="flex flex-col items-start justify-between gap-3 border-b py-3 last:border-0 sm:flex-row sm:items-center"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className="rounded-md bg-muted p-2">
+                                            <FileText className="size-4 text-muted-foreground" />
                                         </div>
-                                        <div className="flex items-center gap-4">
-                                            <Badge
-                                                variant={
-                                                    tx.status === 'completed' ? 'default' : tx.status === 'pending' ? 'secondary' : 'destructive'
-                                                }
-                                            >
-                                                {tx.status}
-                                            </Badge>
-                                            <span className="font-medium">
-                                                {tx.currency.toUpperCase()} {Number(tx.amount).toFixed(2)}
-                                            </span>
-                                            <Button variant="ghost" size="sm">
-                                                <Download className="size-4" />
-                                            </Button>
+                                        <div>
+                                            <p className="font-medium">{tx.transaction_reference || 'No reference'}</p>
+                                            <p className="text-sm text-muted-foreground">{new Date(tx.payment_date).toLocaleDateString()}</p>
                                         </div>
                                     </div>
-                                ))
-                            ) : (
-                                <p className="text-sm text-muted-foreground">No billing history found.</p>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
+                                    <div className="flex items-center gap-4">
+                                        <Badge
+                                            variant={tx.status === 'completed' ? 'default' : tx.status === 'pending' ? 'secondary' : 'destructive'}
+                                        >
+                                            {tx.status}
+                                        </Badge>
+                                        <span className="font-medium">
+                                            {tx.currency.toUpperCase()} {Number(tx.amount).toFixed(2)}
+                                        </span>
+                                        <Button variant="ghost" size="sm">
+                                            <Download className="size-4" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-sm text-muted-foreground">No billing history found.</p>
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
+        </Main>
     );
 }

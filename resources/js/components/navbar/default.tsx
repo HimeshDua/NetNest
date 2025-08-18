@@ -3,10 +3,11 @@ import { ReactNode } from 'react';
 
 import { siteConfig } from '../../config/site';
 import { cn } from '../../lib/utils';
-import { Button, type ButtonProps } from '../ui/button';
+import { Button } from '../ui/button';
 import { Navbar as NavbarComponent, NavbarLeft, NavbarRight } from '../ui/navbar';
 
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
+import { ButtonVariants } from '@/types';
 import { Link, router } from '@inertiajs/react';
 import Navigation from '../ui/navigation';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
@@ -19,7 +20,7 @@ interface NavbarLink {
 interface NavbarActionProps {
     text: string;
     href: string;
-    variant?: ButtonProps['variant'];
+    variant?: ButtonVariants;
     icon?: ReactNode;
     iconRight?: ReactNode;
     isButton?: boolean;
@@ -49,7 +50,7 @@ interface NavbarLink {
 interface NavbarActionProps {
     text: string;
     href: string;
-    variant?: ButtonProps['variant'];
+    variant?: ButtonVariants;
     icon?: ReactNode;
     iconRight?: ReactNode;
     isForm?: boolean;
@@ -89,7 +90,7 @@ export default function Navbar({
                 roleBasedLinks = [
                     { text: 'Dashboard', href: '/admin/dashboard' },
                     { text: 'Users', href: '/admin/users' },
-                    { text: 'Plans', href: '/admin/plans' },
+                    // { text: 'Plans', href: '/admin/plans' },
                     { text: 'Billing', href: '/admin/billing' },
                     { text: 'CMS', href: '/admin/cms' },
                 ];
@@ -107,10 +108,10 @@ export default function Navbar({
             case 'customer':
                 roleBasedLinks = [
                     { text: 'Dashboard', href: '/customer/dashboard' },
-                    { text: 'My Plans', href: '/customer/plans' },
-                    { text: 'Billing', href: '/customer/billing' },
-                    { text: 'Support', href: '/customer/support' },
-                    { text: 'Vendors', href: '/vendors' }, // Customer view of vendors
+                    { text: 'Services', href: '/services' },
+                    { text: 'Billings', href: '/customer/billing' },
+                    { text: 'Connection Status', href: '/customer/connection-status' },
+                    // { text: 'Support', href: '/customer/support' },
                 ];
                 break;
         }
@@ -167,8 +168,9 @@ export default function Navbar({
         // Guest
         roleBasedLinks = [
             { text: 'Home', href: '/' },
-            { text: 'Plans', href: '/plans' },
-            { text: 'Vendors', href: '/vendors' },
+            // { text: 'Plans', href: '/plans' },
+            { text: 'Services', href: '/services' },
+            { text: 'About', href: '/about' },
             { text: 'Contact', href: '/contact' },
         ];
 
@@ -204,13 +206,11 @@ export default function Navbar({
                     <NavbarRight>
                         {actions.map((action, index) =>
                             action.isForm && action.isButton ? (
-                                <Button key={index} variant={action.variant || 'default'} className="text-center" asChild>
-                                    <Link className="block w-full" method="post" href={route('logout')} as="button" onClick={handleLogout}>
-                                        {action.icon}
+                                <form action={route('logout')} onClick={handleLogout} method="post">
+                                    <Button key={index} variant={action.variant || 'default'} className="text-center">
                                         {action.text}
-                                        {action.iconRight}
-                                    </Link>
-                                </Button>
+                                    </Button>
+                                </form>
                             ) : action.isButton ? (
                                 <Button key={index} variant={action.variant || 'default'} className="text-center" asChild>
                                     <Link href={action.href}>

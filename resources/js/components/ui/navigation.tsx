@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 import { PageProps } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import * as React from 'react';
-import { ReactNode } from 'react';
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -15,144 +14,7 @@ import {
     navigationMenuTriggerStyle,
 } from '../ui/navigation-menu';
 
-interface ComponentItem {
-    title: string;
-    href: string;
-    description: string;
-}
-
-interface MenuItem {
-    title: string;
-    href?: string;
-    isLink?: boolean;
-    content?: ReactNode;
-}
-
-interface NavigationProps {
-    menuItems?: MenuItem[];
-    components?: ComponentItem[];
-    logo?: ReactNode;
-    logoTitle?: string;
-    logoDescription?: string;
-    logoHref?: string;
-    introItems?: {
-        title: string;
-        href: string;
-        description: string;
-    }[];
-}
-
-function Navigation() {
-    const { auth } = usePage<PageProps>().props;
-
-    const userRole = auth?.user?.role;
-
-    let menuItems: MenuItem[] = [];
-    let components: ComponentItem[] = [];
-
-    if (!userRole) {
-        // Guest
-        menuItems = [
-            // { title: 'Home', isLink: true, href: '/' },
-            // { title: 'Plans', isLink: true, href: '/plans' },
-            { title: 'Services', isLink: true, href: '/services' },
-            { title: 'About', isLink: true, href: '/about' },
-            { title: 'Contact', isLink: true, href: '/contact' },
-        ];
-    } else if (userRole === 'admin') {
-        menuItems = [
-            // { title: 'Dashboard', content: 'dashboard' },
-            { title: 'Plans', isLink: true, href: '/plans' },
-            { title: 'Services', isLink: true, href: '/services' },
-            { title: 'About', isLink: true, href: '/about' },
-            { title: 'Contact', isLink: true, href: '/contact' },
-        ];
-    } else if (userRole === 'vendor') {
-        menuItems = [
-            // {
-            //     title: 'Assigned Connections',
-            //     href: '/vendor/assigned-connections',
-            //      isLink: true,
-            //     // description: 'View connection tasks assigned to you.',
-            // },
-            // {
-            //     title: 'Assigned Connections',
-            //     href: '/vendor/assigned-connections', isLink: true,
-            //     // description: 'View connection tasks assigned to you.',
-            // },
-            // {
-            //     title: 'Installation Requests',
-            //     href: '/vendor/installation-requests', isLink: true,
-            //     // description: 'Manage incoming installation jobs.',
-            // },
-            // {
-            //     title: 'Support',
-            //     href: '/vendor/support',
-            //      isLink: true,
-            //     // description: 'Help customers resolve technical issues.',
-            // },
-        ];
-    } else if (userRole === 'customer') {
-        menuItems = [{ title: 'Dashboard', content: 'dashboard' }];
-        components = [
-            {
-                title: 'Services',
-                href: '/customer/services',
-                description: 'See current available services.',
-            },
-            {
-                title: 'My Plans',
-                href: '/customer/plans',
-                description: 'See your current active internet plans.',
-            },
-            {
-                title: 'Billing',
-                href: '/customer/billing',
-                description: 'View your invoices and make payments.',
-            },
-            {
-                title: 'Connection Status',
-                href: '/customer/connection-status',
-                description: 'Track your installation or service status.',
-            },
-            {
-                title: 'Support',
-                href: '/customer/support',
-                description: 'Open and track support tickets.',
-            },
-        ];
-    }
-
-    return (
-        <NavigationMenu className="hidden md:flex">
-            <NavigationMenuList>
-                {menuItems.map((item, index) => (
-                    <NavigationMenuItem key={index}>
-                        {item.isLink ? (
-                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                                <Link href={item.href || ''}>{item.title}</Link>
-                            </NavigationMenuLink>
-                        ) : (
-                            <>
-                                <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-                                <NavigationMenuContent>
-                                    <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
-                                        {components.map((component) => (
-                                            <ListItem key={component.title} title={component.title} href={component.href}>
-                                                {component.description}
-                                            </ListItem>
-                                        ))}
-                                    </ul>
-                                </NavigationMenuContent>
-                            </>
-                        )}
-                    </NavigationMenuItem>
-                ))}
-            </NavigationMenuList>
-        </NavigationMenu>
-    );
-}
-
+// Define reusable ListItem
 function ListItem({ className, title, children, ...props }: React.ComponentProps<'a'> & { title: string }) {
     return (
         <li>
@@ -165,12 +27,159 @@ function ListItem({ className, title, children, ...props }: React.ComponentProps
                     {...props}
                 >
                     <div className="text-sm leading-none font-medium">{title}</div>
-                    <p className="line-clamp-2 text-sm text-muted-foreground">{children}</p>
+                    {children && <p className="line-clamp-2 text-sm text-muted-foreground">{children}</p>}
                 </a>
             </NavigationMenuLink>
         </li>
     );
 }
 
-export type { ComponentItem, MenuItem };
+function Navigation() {
+    const { auth } = usePage<PageProps>().props;
+    const userRole = auth?.user?.role;
+
+    return (
+        <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList>
+                {/* Guest */}
+                {!userRole && (
+                    <>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/">Home</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/services">Services</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/about">About</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/contact">Contact</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </>
+                )}
+
+                {/* Admin */}
+                {userRole === 'admin' && (
+                    <>
+                        {/* <NavigationMenuItem>
+                            <NavigationMenuTrigger>Admin Panel</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
+                                    <ListItem href="/plans" title="Plans">
+                                        Manage and configure internet plans.
+                                    </ListItem>
+                                    <ListItem href="/services" title="Services">
+                                        Oversee and approve vendor services.
+                                    </ListItem>
+                                    <ListItem href="/users" title="Users">
+                                        Manage customer and vendor accounts.
+                                    </ListItem>
+                                    <ListItem href="/reports" title="Reports">
+                                        View overall platform statistics.
+                                    </ListItem>
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem> */}
+
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/services">Services</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/about">About</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/contact">Contact</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </>
+                )}
+
+                {/* Vendor */}
+                {userRole === 'vendor' && (
+                    <>
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>Vendor Dashboard</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
+                                    <ListItem href="/vendor/assigned-connections" title="Assigned Connections">
+                                        View and manage your assigned customer connections.
+                                    </ListItem>
+                                    <ListItem href="/vendor/services" title="My Services">
+                                        Manage your published internet services.
+                                    </ListItem>
+                                    <ListItem href="/vendor/requests" title="Requests">
+                                        See and respond to customer installation requests.
+                                    </ListItem>
+                                    <ListItem href="/vendor/support" title="Support">
+                                        Assist customers and resolve issues.
+                                    </ListItem>
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+                    </>
+                )}
+
+                {/* Customer */}
+                {userRole === 'customer' && (
+                    <>
+                        {/* <NavigationMenuItem>
+                            <NavigationMenuTrigger>My Account</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
+                                    <ListItem href="/customer/services" title="Services">
+                                        Browse and subscribe to internet services.
+                                    </ListItem>
+                                    <ListItem href="/customer/plans" title="My Plans">
+                                        View and manage your active plans.
+                                    </ListItem>
+                                    <ListItem href="/customer/billing" title="Billing">
+                                        See invoices and make payments.
+                                    </ListItem>
+                                    <ListItem href="/customer/connection-status" title="Connection Status">
+                                        Track installation and service progress.
+                                    </ListItem>
+                                    <ListItem href="/customer/support" title="Support">
+                                        Get help and open support tickets.
+                                    </ListItem>
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem> */}
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/services">Services</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/customer/billing">Billings</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/customer/connection-status">Connection Status</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </>
+                )}
+            </NavigationMenuList>
+        </NavigationMenu>
+    );
+}
+
 export default Navigation;

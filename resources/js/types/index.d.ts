@@ -132,3 +132,6 @@ export interface UserTransaction {
     created_at: string;
     updated_at: string;
 }
+
+// Button varaints
+export type ButtonVariants = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
