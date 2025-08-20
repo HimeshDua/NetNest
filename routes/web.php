@@ -41,6 +41,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->gr
 
     // previous and current subscriptions management
     Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
+    Route::get('/transaction', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
 
     // Route::post('/Request', [\App\Http\Controllers\Customer\ProfileController::class, 'VendorRequest'])->name('customer.request');
     // Route::get('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'index'])->name('customer.profile');

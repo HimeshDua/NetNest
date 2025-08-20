@@ -1,4 +1,4 @@
-import UserBilling from '@/components/billing';
+import UserBilling from '@/components/customer/billings/default';
 import Layout from '@/layouts/layout';
 import { PageProps } from '@/types';
 import { usePage } from '@inertiajs/react';

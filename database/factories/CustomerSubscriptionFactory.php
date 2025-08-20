@@ -32,6 +32,7 @@ class CustomerSubscriptionFactory extends Factory
             'vendor_service_id' => $vendorService->id,
             'subscribed_at' => $start,
             'next_billing_date' => $nextBilling,
+            'package_name' => fake()->randomElement(['Basic', 'Standard', 'Premium']),
             'status' => fake()->randomElement(['active', 'cancelled', 'expired']),
         ];
     }

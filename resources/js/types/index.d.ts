@@ -63,13 +63,12 @@ export interface PageProps extends InertiaPageProps {
     auth: {
         user?: User | null;
     };
+    customerServices: VendorService[];
+    subsByService: CustomerSubscription[];
     [key: string]: any;
 }
 
 // Vendors
-export type ConnectionType = 'fiber' | 'dsl' | 'wireless';
-export type BillingCycle = 'Monthly' | 'Quarterly' | 'Yearly';
-export type HighlightType = 'new' | 'trending' | 'reliable' | 'popular' | 'undefined';
 
 export interface Vendor {
     question: string;
@@ -79,6 +78,10 @@ export interface VendorFAQ {
     question: string;
     answer: string;
 }
+
+export type ConnectionType = 'fiber' | 'dsl' | 'wireless';
+export type BillingCycle = 'Monthly' | 'Quarterly' | 'Yearly';
+export type HighlightType = 'new' | 'trending' | 'reliable' | 'popular' | 'undefined';
 
 export interface VendorServicePackage {
     name: 'Basic' | 'Standard' | 'Premium';
@@ -106,15 +109,7 @@ export interface VendorService {
     short_description: string;
     full_description: string;
 
-    packages: {
-        name: 'Basic' | 'Standard' | 'Premium';
-        price: number;
-        billing_cycle: BillingCycle;
-        speed_label?: string; // "100 Mbps", optional
-        features: string[];
-        description?: string;
-        is_popular?: boolean;
-    }[];
+    packages: VendorServicePackage[];
 
     features: string[];
     faqs: VendorFAQ[];
@@ -126,6 +121,8 @@ export interface VendorService {
 
     created_at: string;
     updated_at: string;
+
+    [key: string]: unknown;
 }
 
 // User Transactions
@@ -141,6 +138,23 @@ export interface UserTransaction {
 
     created_at: string;
     updated_at: string;
+
+    [key: string]: unknown;
+}
+
+// Customer Subscription
+export interface CustomerSubscription {
+    user_id: string;
+    vendor_service_id: string;
+    subscribed_at: Date;
+    next_billing_date: Date;
+    package_name: ['Basic' | 'Standard' | 'Premium'];
+    status: ['active' | 'cancelled' | 'expired'];
+
+    created_at: string;
+    updated_at: string;
+
+    [key: string]: unknown;
 }
 
 // Button varaints

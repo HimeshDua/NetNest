@@ -1,13 +1,13 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Typography } from '@/components/ui/typography';
-import { Head, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 
 import Layout from '@/layouts/layout';
 
+import TransactionDialog from '@/components/customer/transactions/default';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageProps } from '@/types';
@@ -78,9 +78,10 @@ export default function DetailedVendorServices() {
     const { vendor } = usePage<Props>().props;
     const highlight = getHighlight(vendor.highlight);
 
+    ///transaction
+
     return (
-        <Layout>
-            <Head title={vendor.title} />
+        <Layout title={vendor.title}>
             <div className="container mt-12 grid grid-cols-1 gap-8 px-3 lg:grid-cols-12">
                 {/* Left Column */}
                 <div className="space-y-6 lg:col-span-8">
@@ -197,7 +198,8 @@ export default function DetailedVendorServices() {
                                                         <li key={i}>{feature}</li>
                                                     ))}
                                                 </ul>
-                                                <Button className="w-full">Subscribe Now</Button>
+                                                {/* // dialog */}
+                                                <TransactionDialog price={pkg.price} />
                                             </div>
                                         </TabsContent>
                                     ))}

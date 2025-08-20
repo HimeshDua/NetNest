@@ -13,6 +13,7 @@ class VendorService extends Model
     protected $table = 'vendor_services';
 
     protected $fillable = [
+        'id',
         'user_id',
         'title',
         'slug',

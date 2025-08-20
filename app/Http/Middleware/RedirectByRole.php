@@ -19,7 +19,7 @@ class RedirectByRole
                 case 'vendor':
                     return redirect()->route('vendor.dashboard');
                 case 'customer':
-                    return redirect()->route('customer.dashboard');
+                    return redirect()->route('home');
             }
         }
 

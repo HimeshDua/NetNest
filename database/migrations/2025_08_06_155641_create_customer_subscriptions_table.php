@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('vendor_service_id')->constrained()->cascadeOnDelete();
             $table->date('subscribed_at');
             $table->date('next_billing_date');
+            $table->enum('package_name', ['Basic', 'Standard', 'Premium']);
             $table->enum('status', ['active', 'cancelled', 'expired'])->default('active');
             $table->timestamps();
         });

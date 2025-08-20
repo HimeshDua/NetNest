@@ -1,121 +1,83 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { CreditCard, Download, FileText, Package, RefreshCw, Settings, Zap } from 'lucide-react';
+import { Main } from '@/layouts/main';
+import { UserTransaction, VendorServicePackage } from '@/types';
+import { Download, FileText, Settings } from 'lucide-react';
+import { Badge } from '../../ui/badge';
+import { Button } from '../../ui/button';
+import { Card, CardContent } from '../../ui/card';
 
-const invoices = [
-    {
-        id: 'INV-001',
-        date: 'Mar 1, 2024',
-        amount: '$29.00',
-        status: 'Paid',
-    },
-    {
-        id: 'INV-002',
-        date: 'Feb 1, 2024',
-        amount: '$29.00',
-        status: 'Paid',
-    },
-    {
-        id: 'INV-003',
-        date: 'Jan 1, 2024',
-        amount: '$29.00',
-        status: 'Paid',
-    },
-];
+interface billingData {
+    transactions: UserTransaction[];
+    customerServices: VendorServicePackage[];
+}
+export default function UserBilling({ billingData }: { billingData: billingData }) {
+    const { transactions, customerServices } = billingData;
 
-export default function UserBilling() {
+    // useEffect(() => {
+    //     console.log('transactions', transactions);
+    //     console.log('customerSubscription', customerServices);
+    // }, [transactions, customerServices]);
+
     return (
-        <div className="container mx-auto px-4 py-6 md:px-6 2xl:max-w-[1400px]">
-            <div className="mx-auto max-w-4xl">
-                {/* Header */}
-                <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row">
-                    <div>
-                        <h1 className="text-2xl font-semibold">Billing & Subscription</h1>
-                        <p className="text-sm text-muted-foreground">Manage your subscription and billing details</p>
-                    </div>
-                    <Button variant="outline">
-                        <Settings className="mr-2 size-4" />
-                        Billing Settings
-                    </Button>
+        <Main>
+            {/* Header */}
+            <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row">
+                <div>
+                    <h1 className="text-2xl font-semibold">Billing & Subscription</h1>
+                    <p className="text-sm text-muted-foreground">Manage your subscription and billing details</p>
                 </div>
+                <Button variant="outline">
+                    <Settings className="mr-2 size-4" />
+                    Billing Settings
+                </Button>
+            </div>
 
-                {/* Current Plan */}
-                <Card className="mb-8 p-0">
-                    <CardContent className="p-6">
-                        <div className="flex flex-col items-start justify-between gap-6 sm:flex-row">
-                            <div>
-                                <div className="flex items-center gap-2">
-                                    <Package className="size-5 text-primary" />
-                                    <h2 className="text-lg font-semibold">Pro Plan</h2>
-                                    <Badge>Current Plan</Badge>
-                                </div>
-                                <p className="mt-1 text-sm text-muted-foreground">$29/month • Renews on April 1, 2024</p>
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                <Button variant="outline">Change Plan</Button>
-                                <Button variant="destructive">Cancel Plan</Button>
-                            </div>
+            {/* Current Plan */}
+            <Card className="mb-8 p-0">
+                <CardContent className="space-y-4 p-6">
+                    {customerServices.map((pkg, idx) => (
+                        <div key={idx} className="rounded-lg border p-4">
+                            <h3 className="text-lg font-semibold">{pkg.name}</h3>
+                            <p className="line-clamp-2 text-sm text-muted-foreground">{pkg.description}</p>
+                            <p className="mt-2 font-medium">
+                                {pkg.currency ?? 'PKR'} {Number(pkg.price).toFixed(2)}
+                            </p>
                         </div>
+                    ))}
+                </CardContent>
+            </Card>
 
-                        <div className="mt-6 space-y-4">
-                            <div>
-                                <div className="mb-2 flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <Zap className="size-4 text-primary" />
-                                        <span className="text-sm font-medium">API Requests</span>
-                                    </div>
-                                    <span className="text-sm">8,543 / 10,000</span>
-                                </div>
-                                <Progress value={85.43} className="h-2" />
-                            </div>
-
-                            <div>
-                                <div className="mb-2 flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <RefreshCw className="size-4 text-primary" />
-                                        <span className="text-sm font-medium">Monthly Syncs</span>
-                                    </div>
-                                    <span className="text-sm">143 / 200</span>
-                                </div>
-                                <Progress value={71.5} className="h-2" />
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Payment Method */}
-                <Card className="mb-8 p-0">
+            {/* Payment Method */}
+            {/* <Card className="mb-8 p-0">
                     <CardContent className="p-6">
                         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
                             <div className="space-y-1">
                                 <h2 className="text-lg font-semibold">Payment Method</h2>
                                 <div className="flex items-center gap-2">
                                     <CreditCard className="size-4 text-muted-foreground" />
-                                    <span className="text-sm text-muted-foreground">Visa ending in 4242</span>
+                                    <span className="text-sm text-muted-foreground">{transactions[0]?.payment_method || 'Not available'}</span>
                                 </div>
                             </div>
                             <Button variant="outline">Update Payment Method</Button>
                         </div>
                     </CardContent>
-                </Card>
+                </Card> */}
 
-                {/* Billing History */}
-                <Card className="p-0">
-                    <CardContent className="p-6">
-                        <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row">
-                            <h2 className="text-lg font-semibold">Billing History</h2>
-                            <Button variant="outline" size="sm">
-                                <Download className="mr-2 size-4" />
-                                Download All
-                            </Button>
-                        </div>
+            {/* Billing History */}
+            <Card className="p-0">
+                <CardContent className="p-6">
+                    <div className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row">
+                        <h2 className="text-lg font-semibold">Billing History</h2>
+                        <Button variant="outline" size="sm">
+                            <Download className="mr-2 size-4" />
+                            Download All
+                        </Button>
+                    </div>
 
-                        <div className="space-y-4">
-                            {invoices.map((invoice) => (
+                    <div className="space-y-4">
+                        {transactions.length > 0 ? (
+                            transactions.map((tx) => (
                                 <div
-                                    key={invoice.id}
+                                    key={tx.transaction_reference || tx.customer_subscription_id}
                                     className="flex flex-col items-start justify-between gap-3 border-b py-3 last:border-0 sm:flex-row sm:items-center"
                                 >
                                     <div className="flex items-center gap-3">
@@ -123,23 +85,31 @@ export default function UserBilling() {
                                             <FileText className="size-4 text-muted-foreground" />
                                         </div>
                                         <div>
-                                            <p className="font-medium">{invoice.id}</p>
-                                            <p className="text-sm text-muted-foreground">{invoice.date}</p>
+                                            <p className="font-medium">{tx.transaction_reference || 'No reference'}</p>
+                                            <p className="text-sm text-muted-foreground">{new Date(tx.payment_date).toLocaleDateString()}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-4">
-                                        <Badge variant="outline">{invoice.status}</Badge>
-                                        <span className="font-medium">{invoice.amount}</span>
+                                        <Badge
+                                            variant={tx.status === 'completed' ? 'default' : tx.status === 'pending' ? 'secondary' : 'destructive'}
+                                        >
+                                            {tx.status}
+                                        </Badge>
+                                        <span className="font-medium">
+                                            {tx.currency.toUpperCase()} {Number(tx.amount).toFixed(2)}
+                                        </span>
                                         <Button variant="ghost" size="sm">
                                             <Download className="size-4" />
                                         </Button>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
+                            ))
+                        ) : (
+                            <p className="text-sm text-muted-foreground">No billing history found.</p>
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
+        </Main>
     );
 }
