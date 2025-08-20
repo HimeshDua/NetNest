@@ -22,7 +22,6 @@ class SubscriptionController
                 'status'       => $sub->status,
             ])->values())->toArray();
 
-
         $serviceIds = array_keys($subsByService);
 
         $customerServices = VendorService::whereIn('id', $serviceIds)->get();
