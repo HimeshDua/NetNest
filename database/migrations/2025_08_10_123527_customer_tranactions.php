@@ -14,23 +14,42 @@ return new class extends Migration
         Schema::create('customer_transactions', function (Blueprint $table) {
             $table->id();
 
-            // Links payment to a subscription
+            // Links transaction to a subscription
             $table->foreignId('customer_subscription_id')
-                ->constrained()
+                ->constrained('customer_subscriptions')
                 ->cascadeOnDelete();
 
+            // Basic transaction fields
             $table->decimal('amount', 10, 2);
-            $table->string('currency', 3)->default('USD'); // optional
+            $table->string('currency', 3)->default('USD'); // ISO code (USD, PKR, EUR)
 
-            $table->dateTime('payment_date');
-            $table->string('payment_method')->nullable(); // e.g., 'credit_card', 'paypal'
-            $table->string('transaction_reference')->nullable(); // from payment gateway // paypal
+            // When the payment actually happened
+            $table->timestamp('payment_date')->useCurrent();
 
-            $table->enum('status', ['pending', 'completed', 'failed', 'refunded'])->default('pending');
+            // Payment details
+            $table->string('payment_method')->nullable(); // e.g. 'credit_card', 'paypal', 'jazzcash'
+            $table->string('transaction_reference')->nullable(); // Gateway reference (txn_id)
+
+            // More robust status tracking
+            $table->enum('status', [
+                'pending',     // waiting for confirmation
+                'processing',  // in progress (useful for async gateways)
+                'completed',   // success
+                'failed',      // failed transaction
+                'refunded',    // user got money back
+            ])->default('pending');
+
+            // Audit fields
+            $table->json('meta')->nullable(); // store gateway raw response / debug info
 
             $table->timestamps();
+
+            // Performance indexing
+            $table->index(['customer_subscription_id', 'status']);
+            $table->index(['payment_date']);
         });
     }
+
 
     /**
      * Reverse the migrations.

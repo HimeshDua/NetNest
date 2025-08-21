@@ -20,6 +20,9 @@ return new class extends Migration
             $table->enum('package_name', ['Basic', 'Standard', 'Premium']);
             $table->enum('status', ['active', 'cancelled', 'expired'])->default('active');
             $table->timestamps();
+
+            // service
+            $table->index(['vendor_service_id', 'package_name', 'status']);
         });
     }
 

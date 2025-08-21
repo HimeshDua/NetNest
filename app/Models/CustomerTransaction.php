@@ -9,7 +9,6 @@ class CustomerTransaction extends Model
 {
     use HasFactory;
 
-    // Customer Billing History
     protected $fillable = [
         'customer_subscription_id',
         'amount',
@@ -18,16 +17,42 @@ class CustomerTransaction extends Model
         'payment_method',
         'transaction_reference',
         'status',
+        'meta',
     ];
 
     protected $casts = [
         'payment_date' => 'datetime',
         'amount' => 'decimal:2',
+        'meta' => 'array', // store structured gateway response
     ];
 
-    // Relationships
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
     public function subscription()
     {
         return $this->belongsTo(CustomerSubscription::class, 'customer_subscription_id');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers
+    |--------------------------------------------------------------------------
+    */
+    public function isCompleted(): bool
+    {
+        return $this->status === 'completed';
+    }
+
+    public function isRefunded(): bool
+    {
+        return $this->status === 'refunded';
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
     }
 }

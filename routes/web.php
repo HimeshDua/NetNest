@@ -39,9 +39,9 @@ Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->gr
     Route::post('/support', [\App\Http\Controllers\Customer\SupportTicketController::class, 'store']);
     // Route::get('/connection-status', [\App\Http\Controllers\Customer\ConnectionController::class, 'status'])->name('customer.connection.status');
 
-    // previous and current subscriptions management
+    // previous and current subscriptions management 
     Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
-    Route::get('/transaction', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
+    Route::post('/transaction', [\App\Http\Controllers\Customer\SubscriptionController::class, 'store'])->name('transaction.store');
 
     // Route::post('/Request', [\App\Http\Controllers\Customer\ProfileController::class, 'VendorRequest'])->name('customer.request');
     // Route::get('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'index'])->name('customer.profile');

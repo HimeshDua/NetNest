@@ -4,69 +4,115 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useForm } from '@inertiajs/react';
 import { Shield } from 'lucide-react';
+import { useState } from 'react';
+
+// Luhn algorithm to validate card numbers
+const validateCardNumber = (num: string) => {
+    const digits = num.replace(/\s/g, '');
+    let sum = 0,
+        shouldDouble = false;
+    for (let i = digits.length - 1; i >= 0; i--) {
+        let digit = parseInt(digits[i], 10);
+        if (shouldDouble) {
+            digit *= 2;
+            if (digit > 9) digit -= 9;
+        }
+        sum += digit;
+        shouldDouble = !shouldDouble;
+    }
+    return sum % 10 === 0;
+};
 
 export default function TransactionDialog({ price }: { price: number }) {
-    // const [formData, setFormData] = useState({
-    //     cardholderName: '',
-    //     cardNumber: '',
-    //     expiryDate: '',
-    //     cvv: '',
-    // });
+    const [open, setOpen] = useState(false);
 
-    const { data, setData, processing, reset, errors, clearErrors } = useForm<{
-        cardholderName: Required<string>;
-        cardNumber: Required<string>;
-        expiryDate: Required<string>;
-        cvv: Required<string>;
-    }>({
+    const { data, setData, processing, post, reset, errors, setError, clearErrors } = useForm({
         cardholderName: '',
         cardNumber: '',
         expiryDate: '',
         cvv: '',
     });
 
+    // Input formatting
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        let formattedValue = value;
+        let formatted = value;
 
-        setData((prev) => ({ ...prev, [name]: formattedValue }));
-        // validateField(name, formattedValue);
-        console.log(data);
+        if (name === 'cardNumber') {
+            formatted = value
+                .replace(/\D/g, '')
+                .replace(/(.{4})/g, '$1 ')
+                .trim()
+                .slice(0, 19);
+        }
+        if (name === 'expiryDate') {
+            formatted = value
+                .replace(/\D/g, '')
+                .replace(/(\d{2})(\d{1,2})/, '$1/$2')
+                .slice(0, 5);
+        }
+        if (name === 'cvv') {
+            formatted = value.replace(/\D/g, '').slice(0, 4);
+        }
+
+        setData(name as keyof typeof data, formatted);
+        clearErrors(name as keyof typeof data);
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        let valid = true;
 
-        const { cardNumber, expiryDate, cvv } = data;
-        cardNumber
-            .replace(/\s/g, '')
-            .replace(/(.{4})/g, '$1 ')
-            .trim();
-        if (cardNumber.length > 19) data.cardNumber = cardNumber.slice(0, 19);
+        // Validations
+        if (!data.cardholderName.trim()) {
+            setError('cardholderName', 'Cardholder name is required.');
+            valid = false;
+        }
+        if (!validateCardNumber(data.cardNumber)) {
+            setError('cardNumber', 'Invalid card number.');
+            valid = false;
+        }
+        if (!/^\d{2}\/\d{2}$/.test(data.expiryDate)) {
+            setError('expiryDate', 'Invalid expiry date (MM/YY).');
+            valid = false;
+        }
+        if (data.cvv.length < 3) {
+            setError('cvv', 'CVV must be 3 or 4 digits.');
+            valid = false;
+        }
 
-        expiryDate.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2');
-        if (expiryDate.length > 5) data.expiryDate = expiryDate.slice(0, 5);
+        if (!valid) return;
 
-        cvv.replace(/\D/g, '').slice(0, 4);
+        // Mock submission
+        console.log('Submitting payment', data);
+        post(route('transaction.store', data));
 
-        console.log(data, errors);
+        // Here you’d call an Inertia post route
+        // post('/transactions', data, { onSuccess: ... })
+
+        setTimeout(() => {
+            reset();
+            setOpen(false);
+        }, 1500);
     };
-    // Close Modal
+
     const closeModal = () => {
-        clearErrors();
         reset();
+        clearErrors();
+        setOpen(false);
     };
 
     return (
-        <Dialog>
-            <DialogTrigger className="mt-2.5 w-full">
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
                 <Button className="w-full">Subscribe Now</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader className="text-center">
                     <DialogTitle className="text-2xl font-bold">Complete Your Payment</DialogTitle>
-                    <DialogDescription>Enter your payment details securely below</DialogDescription>
+                    <DialogDescription>Enter your payment details securely to subscribe</DialogDescription>
                 </DialogHeader>
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Cardholder Name */}
                     <div className="space-y-2">
@@ -96,7 +142,7 @@ export default function TransactionDialog({ price }: { price: number }) {
                         {errors.cardNumber && <p className="text-sm text-destructive">{errors.cardNumber}</p>}
                     </div>
 
-                    {/* Expiry and CVV */}
+                    {/* Expiry + CVV */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="expiryDate">Expiry Date</Label>
@@ -124,24 +170,19 @@ export default function TransactionDialog({ price }: { price: number }) {
                         </div>
                     </div>
 
-                    <DialogFooter className="gap-2">
-                        {/* <DialogClose asChild>
-                            <Button variant="secondary" onClick={closeModal}>
-                                Cancel
-                            </Button>
-                        </DialogClose> */}
-
-                        <Button type="submit" className="w-full" variant="destructive" disabled={processing}>
-                            Pay now - ${price}
+                    <DialogFooter>
+                        <Button type="submit" className="w-full" disabled={processing}>
+                            {processing ? 'Processing...' : `Pay now - PKR ${price}`}
+                        </Button>
+                        <Button type="button" variant="secondary" onClick={closeModal} className="w-full">
+                            Cancel
                         </Button>
                     </DialogFooter>
                 </form>
 
-                <div className="flex items-center justify-center gap-4 border-t pt-4">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Shield className="h-4 w-4" />
-                        Your payment is secured with 256-bit SSL encryption
-                    </div>
+                <div className="mt-4 flex items-center justify-center gap-2 border-t pt-4 text-sm text-muted-foreground">
+                    <Shield className="h-4 w-4" />
+                    Secured with 256-bit SSL encryption
                 </div>
             </DialogContent>
         </Dialog>

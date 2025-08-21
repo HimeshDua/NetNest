@@ -1,11 +1,9 @@
-'use client';
-
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { VendorService } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BarChartIcon, BookmarkIcon, CalendarIcon, DollarSignIcon, GlobeIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
+import { BarChartIcon, CalendarIcon, DollarSignIcon, GlobeIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
 
 type Props = {
     services: {
@@ -65,60 +63,56 @@ export default function VendorServiceGrid({ services, onPageChange }: Props) {
                 {services.data.map((service) => {
                     const highlight = getHighlightDetails(service.highlight);
                     return (
-                        <Link key={service.id} href={route('services.show', service.slug)} className="block">
-                            <Card className="flex h-full flex-col">
-                                <CardHeader className="pb-2">
-                                    <div className="mt-3">
-                                        <CardTitle>{service.title}</CardTitle>
-                                        <div className="mt-1 flex items-center gap-1">
-                                            <GlobeIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                                            <CardDescription className="!mt-0">{service.title}</CardDescription>
-                                        </div>
+                        <Card key={service.id} className="flex h-full flex-col">
+                            <CardHeader className="pb-2">
+                                <div className="mt-3">
+                                    <CardTitle>{service.title}</CardTitle>
+                                    <div className="mt-1 flex items-center gap-1">
+                                        <GlobeIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                                        <CardDescription className="!mt-0">{service.title}</CardDescription>
                                     </div>
-                                </CardHeader>
+                                </div>
+                            </CardHeader>
 
-                                <CardContent className="flex flex-grow flex-col gap-3">
-                                    <div className="space-y-2">
-                                        <div className="flex items-center gap-2">
-                                            <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
-                                            <span className="text-sm">{service.packages[0].price}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                                            <span className="text-sm">Posted {getDaysAgo(service.posted_date)}</span>
-                                        </div>
+                            <CardContent className="flex flex-grow flex-col gap-3">
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <DollarSignIcon className="h-4 w-4 text-muted-foreground" />
+                                        <span className="text-sm">{service.packages[0].price}</span>
                                     </div>
-
-                                    <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{service.short_description}</p>
-
-                                    <div className="mt-auto">
-                                        <p className="mb-1.5 text-xs font-medium text-muted-foreground">Features:</p>
-                                        <div className="flex flex-wrap gap-1.5">
-                                            {service.features.slice(0, 3).map((feature, index) => (
-                                                <Badge variant="secondary" key={index} className="text-xs">
-                                                    {feature}
-                                                </Badge>
-                                            ))}
-                                            {service.features.length > 3 && (
-                                                <Badge variant="outline" className="text-xs">
-                                                    +{service.features.length - 3} more
-                                                </Badge>
-                                            )}
-                                        </div>
+                                    <div className="flex items-center gap-2">
+                                        <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                                        <span className="text-sm">Posted {getDaysAgo(service.posted_date)}</span>
                                     </div>
-                                </CardContent>
+                                </div>
 
-                                <CardFooter className="flex gap-3 pt-2">
-                                    <Button variant="outline" size="sm" className="w-1/2">
-                                        <BookmarkIcon className="mr-1 h-4 w-4" />
-                                        Save
-                                    </Button>
-                                    <Button size="sm" className="w-1/2">
+                                <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{service.short_description}</p>
+
+                                <div className="mt-auto">
+                                    <p className="mb-1.5 text-xs font-medium text-muted-foreground">Features:</p>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {service.features.slice(0, 3).map((feature, index) => (
+                                            <Badge variant="secondary" key={index} className="text-xs">
+                                                {feature}
+                                            </Badge>
+                                        ))}
+                                        {service.features.length > 3 && (
+                                            <Badge variant="outline" className="text-xs">
+                                                +{service.features.length - 3} more
+                                            </Badge>
+                                        )}
+                                    </div>
+                                </div>
+                            </CardContent>
+
+                            <CardFooter className="flex gap-3 pt-2">
+                                <Link href={route('services.show', service.slug)} className="block w-full">
+                                    <Button size="sm" className="w-full">
                                         Subscribe
                                     </Button>
-                                </CardFooter>
-                            </Card>
-                        </Link>
+                                </Link>
+                            </CardFooter>
+                        </Card>
                     );
                 })}
             </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Settings\CardController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,9 @@ Route::middleware('auth')->group(function () {
     Route::put('settings/password', [PasswordController::class, 'update'])
         ->middleware('throttle:6,1')
         ->name('password.update');
+
+    Route::get('settings/card', [CardController::class, 'edit'])->name('card.edit');
+    Route::post('settings/card', [CardController::class, 'store'])->name('card.store');
 
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/appearance');
