@@ -145,12 +145,12 @@ function Navigation() {
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                                <Link href="/customer/billing">Billings</Link>
+                                <Link href="/billing">Billings</Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                                <Link href="/customer/subscription">Subscriptions</Link>
+                                <Link href="/subscription">Subscriptions</Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                     </>

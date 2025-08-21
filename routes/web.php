@@ -29,7 +29,7 @@ Route::middleware(['auth', 'redirect.role'])->get('/dashboard', fn() => null)->n
 // Customer Routes
 // ---------------------------
 
-Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->group(function () {
+Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
     // Route::get('/dashboard', [\App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
 
     // Route::get('/services', [\App\Http\Controllers\Customer\ConnectionController::class, 'services'])->name('customer.services');
@@ -50,7 +50,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->gr
 // ---------------------------
 // Vendor Routes
 // ---------------------------
-Route::middleware(['auth', 'verified', 'role:vendor'])->prefix('vendor')->group(function () {
+Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index'])->name('vendor.dashboard');
     Route::resource('/submission', \App\Http\Controllers\Vendor\SubmissionController::class)->only(['index', 'store', 'edit', 'update']);
     Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');

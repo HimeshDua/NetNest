@@ -42,33 +42,33 @@ export function getSidebarData(role: string | null) {
                     url: '/admin/dashboard',
                     icon: SquareTerminal,
                     items: [
-                        { title: 'Overview', url: '/admin/dashboard' },
-                        { title: 'Analytics', url: '/admin/analytics' },
+                        { title: 'Overview', url: '/dashboard' },
+                        { title: 'Analytics', url: '/analytics' },
                     ],
                 },
                 {
                     title: 'Users',
                     url: '/admin/users',
                     icon: Users,
-                    items: [{ title: 'User Management', url: '/admin/users' }],
+                    items: [{ title: 'User Management', url: '/users' }],
                 },
                 {
                     title: 'Plans',
                     url: '/admin/plans',
                     icon: FileCheck,
-                    items: [{ title: 'All Plans', url: '/admin/plans' }],
+                    items: [{ title: 'All Plans', url: '/plans' }],
                 },
                 {
                     title: 'Billing',
                     url: '/admin/billing',
                     icon: PieChart,
-                    items: [{ title: 'Invoices', url: '/admin/billing' }],
+                    items: [{ title: 'Invoices', url: '/billing' }],
                 },
                 {
                     title: 'CMS',
                     url: '/admin/cms',
                     icon: Frame,
-                    items: [{ title: 'Manage Pages', url: '/admin/cms' }],
+                    items: [{ title: 'Manage Pages', url: '/cms' }],
                 },
                 ...sharedItems,
             ],
@@ -100,15 +100,15 @@ export function getSidebarData(role: string | null) {
                     title: 'Dashboard',
                     url: '/vendor/dashboard',
                     icon: SquareTerminal,
-                    items: [{ title: 'Overview', url: '/vendor/dashboard' }],
+                    items: [{ title: 'Overview', url: '/dashboard' }],
                 },
                 {
                     title: 'Operations',
                     url: '/vendor/assigned-connections',
                     icon: Map,
                     items: [
-                        { title: 'Package Upload', url: '/vendor/submission' },
-                        { title: 'Package Edit', url: '/vendor/submission/edit' },
+                        { title: 'Package Upload', url: '/submission' },
+                        { title: 'Package Edit', url: '/submission/edit' },
                     ],
                 },
                 {
@@ -116,42 +116,9 @@ export function getSidebarData(role: string | null) {
                     url: '/vendor/assigned-connections',
                     icon: Map,
                     items: [
-                        { title: 'Assigned', url: '/vendor/assigned-connections' },
-                        { title: 'Requests', url: '/vendor/installation-requests' },
+                        { title: 'Assigned', url: '/assigned-connections' },
+                        { title: 'Requests', url: '/installation-requests' },
                     ],
-                },
-                ...sharedItems,
-            ],
-            navSecondary,
-        };
-    }
-
-    if (role === 'customer') {
-        return {
-            navMain: [
-                {
-                    title: 'Dashboard',
-                    url: '/customer/dashboard',
-                    icon: SquareTerminal,
-                    items: [{ title: 'Overview', url: '/customer/dashboard' }],
-                },
-                {
-                    title: 'Services',
-                    url: '/customer/services',
-                    icon: FileCheck,
-                    items: [{ title: 'Services', url: '/customer/services' }],
-                },
-                {
-                    title: 'Billing',
-                    url: '/customer/billing',
-                    icon: PieChart,
-                    items: [{ title: 'My Invoices', url: '/customer/billing' }],
-                },
-                {
-                    title: 'Subscription Management',
-                    url: '/customer/subscription-management',
-                    icon: Map,
-                    items: [{ title: 'Status', url: '/customer/connection-status' }],
                 },
                 ...sharedItems,
             ],
