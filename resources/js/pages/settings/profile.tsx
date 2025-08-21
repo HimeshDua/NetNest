@@ -1,6 +1,6 @@
 import { BreadcrumbItem, type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
-import { Link, useForm, usePage } from '@inertiajs/react';
+import { Link, router, useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -10,10 +10,12 @@ import DeleteUser from '@/components/delete-user';
 import HeadingSmall from '@/components/heading-small';
 import InputError from '@/components/input-error';
 import ConditionalLayout from '@/components/layout/conditionalLayout';
+import LogoutSection from '@/components/logout-user';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import SettingsLayout from '@/layouts/settings/layout';
 
 type ProfileForm = {
@@ -47,6 +49,13 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
     const vendorRequest = (e: React.FormEvent) => {
         e.preventDefault();
         post(route('customer.request'));
+    };
+
+    const cleanup = useMobileNavigation();
+
+    const handleLogout = () => {
+        cleanup();
+        router.flushAll();
     };
 
     return (
@@ -174,6 +183,10 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                         </div>
                     </>
                 )}
+
+                <Separator />
+
+                <LogoutSection />
 
                 <Separator />
 

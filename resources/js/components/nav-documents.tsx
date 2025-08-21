@@ -1,6 +1,4 @@
-'use client';
-
-import { IconDots, IconFolder, IconShare3, IconTrash, type Icon } from '@tabler/icons-react';
+import { IconDots, IconFolder, IconShare3, IconTrash } from '@tabler/icons-react';
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import {
@@ -17,9 +15,9 @@ export function NavDocuments({
     items,
 }: {
     items: {
-        name: string;
+        title: string;
         url: string;
-        icon: Icon;
+        icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     }[];
 }) {
     const { isMobile } = useSidebar();
@@ -29,11 +27,11 @@ export function NavDocuments({
             <SidebarGroupLabel>User Pages</SidebarGroupLabel>
             <SidebarMenu>
                 {items.map((item) => (
-                    <SidebarMenuItem key={item.name}>
+                    <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild>
                             <a href={item.url}>
                                 <item.icon />
-                                <span>{item.name}</span>
+                                <span>{item.title}</span>
                             </a>
                         </SidebarMenuButton>
                         <DropdownMenu>
