@@ -85,7 +85,7 @@ export default function AdminDashboardPage() {
                 </section>
 
                 <div className="grid justify-between gap-4 md:grid-cols-7">
-                    <div className="col-span-3 bg-blue-300 md:col-span-4 lg:col-span-4">wow</div>
+                    <div className="col-span-3 bg-blue-300 md:col-span-4 lg:col-span-4">CMS Controls and Drag n Drop for top vendors</div>
                     <CustomerRequest
                         classname="col-span-3 md:col-span-3 lg:col-span-3"
                         customerRequest={customerRequests}

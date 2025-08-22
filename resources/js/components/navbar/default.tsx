@@ -122,7 +122,7 @@ export default function Navbar({
                 actions = [
                     {
                         text: 'Dashboard',
-                        href: '/dashboard',
+                        href: '/admin/dashboard',
                         isButton: true,
                         variant: 'secondary',
                     },

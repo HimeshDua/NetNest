@@ -65,6 +65,7 @@ export interface PageProps extends InertiaPageProps {
     };
     customerServices: VendorService[];
     subsByService: CustomerSubscription[];
+    flash: { success?: string; error?: string };
     [key: string]: any;
 }
 

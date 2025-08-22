@@ -1,6 +1,6 @@
 import { Typography } from '@/components/ui/typography';
 import { CloudUpload, Lock, Server } from 'lucide-react';
-const features = [
+const feature02Data = [
     {
         name: 'Automated User Onboarding',
         description:
@@ -42,7 +42,7 @@ export default function Feature02() {
                             </Typography>
 
                             <dl className="mt-10 max-w-xl space-y-8 text-muted-foreground lg:max-w-none">
-                                {features.map((feature) => (
+                                {feature02Data.map((feature) => (
                                     <div key={feature.name} className="relative pl-9">
                                         <dt className="inline font-semibold text-foreground">
                                             <feature.icon aria-hidden="true" className="absolute top-1 left-1 size-5 text-primary" />

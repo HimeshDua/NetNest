@@ -5,7 +5,7 @@ import Layout from '@/layouts/layout';
 
 function welcome() {
     return (
-        <Layout>
+        <Layout title="">
             <HeroPage />
             <Feature01 />
             <Feature02 />

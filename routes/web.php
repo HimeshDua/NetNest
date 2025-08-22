@@ -73,8 +73,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::resource('/billing', \App\Http\Controllers\Admin\BillingManagementController::class)->only(['index', 'update']);
     Route::resource('/support', \App\Http\Controllers\Admin\SupportManagementController::class)->only(['index']);
 
-    Route::get('/cms', [\App\Http\Controllers\Admin\CMSController::class, 'index'])->name('admin.cms');
-    Route::put('/cms/{section}', [\App\Http\Controllers\Admin\CMSController::class, 'update']);
+    Route::get('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'edit'])->name('admin.cms');
+    Route::post('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'update'])->name('admin.cms.update');
 
     Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics');
 });
