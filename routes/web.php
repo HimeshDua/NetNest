@@ -7,10 +7,9 @@ require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
 
 // Public routes
-Route::get('/', fn() => Inertia::render('Public/Home'))->name('home');
-Route::get('/about', fn() => Inertia::render('Public/About'))->name('about');
+Route::get('/', [\App\Http\Controllers\Public\HomeController::class, 'index'])->name('home');
+Route::get('/about', [\App\Http\Controllers\Public\AboutController::class, 'index'])->name('about');
 Route::get('/contact', fn() => Inertia::render('Public/Contact'))->name('contact');
-Route::get('/plans', [\App\Http\Controllers\Public\PlanController::class, 'index'])->name('plans');
 // Route::get('/vendors', fn() => Inertia::render('Public/Vendors'))->name('vendors');
 
 
@@ -73,7 +72,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::resource('/billing', \App\Http\Controllers\Admin\BillingManagementController::class)->only(['index', 'update']);
     Route::resource('/support', \App\Http\Controllers\Admin\SupportManagementController::class)->only(['index']);
 
-    Route::get('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'edit'])->name('admin.cms');
+    Route::get('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'edit'])->name('admin.cms.edit');
     Route::post('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'update'])->name('admin.cms.update');
 
     Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics');

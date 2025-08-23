@@ -15,29 +15,28 @@ class CmsController extends Controller
      */
     public function edit()
     {
-        // Find the first CMS record, or create a new one if it doesn't exist.
         $cms = Cms::firstOrNew([]);
 
         return Inertia::render('Admin/Cms', [
-            'cms' => $cms
+            'cms' => $cms,
         ]);
     }
 
     /**
-     * Update the CMS settings.
+     * Update CMS.
      */
     public function update(Request $request)
     {
-        // Find the first CMS record or initialize a new one.
         $cms = Cms::firstOrNew([]);
 
         $data = $request->validate([
-            // Hero
-            'hero_title' => 'nullable|string|max:255',
-            'hero_subtitle' => 'nullable|string',
-            'hero_background_image' => 'nullable|file|image|max:2048', // 2MB max
-            'hero_cta_text' => 'nullable|string|max:255',
-            'hero_cta_link' => 'nullable|url', // Use 'url' to validate link format
+            // Hero section stored as JSON
+            'hero' => 'nullable|array',
+            'hero.title' => 'nullable|string|max:255',
+            'hero.subtitle' => 'nullable|string',
+            'hero.background' => 'nullable|file|image|max:2048',
+            'hero.cta_text' => 'nullable|string|max:255',
+            'hero.cta_link' => 'nullable|url',
 
             // Marquees
             'marquees' => 'nullable|array',
@@ -50,64 +49,69 @@ class CmsController extends Controller
             'features_primary.*.description' => 'nullable|string',
             'features_primary.*.icon' => 'nullable|string',
 
-            // About
-            'about_title' => 'nullable|string|max:255',
-            'about_description' => 'nullable|string',
-            'about_image' => 'nullable|file|image|max:2048',
+            'features_secondary' => 'nullable|array',
+            'features_secondary.*.title' => 'string|max:255',
+            'features_secondary.*.description' => 'nullable|string',
+            'features_secondary.*.icon' => 'nullable|string',
+
+            // About section stored as JSON
+            'about' => 'nullable|array',
+            'about.title' => 'nullable|string|max:255',
+            'about.description' => 'nullable|string',
+            'about.image' => 'nullable|file|image|max:2048',
 
             // Testimonials
             'testimonials' => 'nullable|array',
             'testimonials.*.name' => 'string|max:255',
             'testimonials.*.quote' => 'string',
-            'testimonials.*.avatar' => 'nullable|url', // Using url validation for simplicity
+            'testimonials.*.avatar' => 'nullable|file|image|max:2048',
 
             // SEO
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|array',
-            'meta_keywords.*' => 'string',
-
-            // Footer + Social
-            'footer_links' => 'nullable|array',
-            'footer_links.*.name' => 'string|max:255',
-            'footer_links.*.href' => 'nullable|url',
-
-            'social_links' => 'nullable|array',
-            'social_links.*.platform' => 'string|max:255',
-            'social_links.*.url' => 'nullable|url',
-            'social_links.*.icon' => 'nullable|string',
+            'seo' => 'nullable|array',
+            'seo.meta_title' => 'nullable|string|max:255',
+            'seo.meta_description' => 'nullable|string',
+            'seo.meta_keywords' => 'nullable|array',
+            'seo.meta_keywords.*' => 'string',
         ]);
 
-        // Handle Hero image upload and deletion of old image
-        if ($request->hasFile('hero_background_image')) {
-            // Delete the old image if it exists
-            if ($cms->hero_background_image) {
-                Storage::disk('public')->delete($cms->hero_background_image);
+        // --- File handling ---
+        // Hero background
+        if ($request->hasFile('hero.background')) {
+            if (isset($cms->hero['background'])) {
+                Storage::disk('public')->delete($cms->hero['background']);
             }
-            $data['hero_background_image'] = $request->file('hero_background_image')->store('cms', 'public');
+            $data['hero']['background'] = $request->file('hero.background')->store('cms', 'public');
         } else {
-            // If no new file is uploaded, retain the existing path or set to null if it's explicitly removed
-            $data['hero_background_image'] = $cms->hero_background_image;
+            $data['hero']['background'] = $cms->hero['background'] ?? null;
         }
 
-        // Handle About image upload and deletion of old image
-        if ($request->hasFile('about_image')) {
-            // Delete the old image if it exists
-            if ($cms->about_image) {
-                Storage::disk('public')->delete($cms->about_image);
+        // About image
+        if ($request->hasFile('about.image')) {
+            if (isset($cms->about['image'])) {
+                Storage::disk('public')->delete($cms->about['image']);
             }
-            $data['about_image'] = $request->file('about_image')->store('cms', 'public');
+            $data['about']['image'] = $request->file('about.image')->store('cms', 'public');
         } else {
-            // If no new file is uploaded, retain the existing path or set to null if it's explicitly removed
-            $data['about_image'] = $cms->about_image;
+            $data['about']['image'] = $cms->about['image'] ?? null;
         }
 
-        // Use fill() to update attributes from the validated data
-        $cms->fill($data);
+        // Testimonials avatars
+        if ($request->has('testimonials')) {
+            foreach ($request->file('testimonials', []) as $index => $file) {
+                if ($file && $file->isValid()) {
+                    if (isset($cms->testimonials[$index]['avatar'])) {
+                        Storage::disk('public')->delete($cms->testimonials[$index]['avatar']);
+                    }
+                    $data['testimonials'][$index]['avatar'] = $file->store('cms/testimonials', 'public');
+                } else {
+                    $data['testimonials'][$index]['avatar'] = $cms->testimonials[$index]['avatar'] ?? null;
+                }
+            }
+        }
 
-        // Save the model (creates a new record or updates the existing one)
-        $cms->save();
+        // --- Save ---
+        $cms->fill($data)->save();
 
-        return redirect()->route('admin.cms')->with('success', 'CMS updated successfully!');
+        return redirect()->route('admin.cms.edit')->with('success', 'CMS updated successfully!');
     }
 }

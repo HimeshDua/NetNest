@@ -1,6 +1,7 @@
 import { PageProps as InertiaPageProps } from '@inertiajs/inertia';
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
+import { AboutPageCMS, HomePageCMS } from './cms';
 
 //Layouts
 export interface LayoutProps {
@@ -66,6 +67,8 @@ export interface PageProps extends InertiaPageProps {
     customerServices: VendorService[];
     subsByService: CustomerSubscription[];
     flash: { success?: string; error?: string };
+    homePage: HomePageCMS[];
+    aboutPage: AboutPageCMS[];
     [key: string]: any;
 }
 

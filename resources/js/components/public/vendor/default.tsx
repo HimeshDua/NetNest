@@ -57,6 +57,22 @@ export default function VendorServiceGrid({ services, onPageChange }: Props) {
         }
     };
 
+    if (!services.data.length) {
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle>No Services Available</CardTitle>
+                    <CardDescription>We couldn’t find any vendor services at the moment. Please check back later.</CardDescription>
+                </CardHeader>
+                <CardFooter className="flex justify-center">
+                    <Link href={route('home')}>
+                        <Button>Go Back Home</Button>
+                    </Link>
+                </CardFooter>
+            </Card>
+        );
+    }
+
     return (
         <>
             <div className="grid grid-cols-1 gap-6 px-4 sm:grid-cols-2 lg:grid-cols-3">

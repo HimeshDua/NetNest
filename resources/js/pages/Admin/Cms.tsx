@@ -1,4 +1,4 @@
-import CmsPage from '@/components/admin/cms-default';
+import CmsForm from '@/components/admin/cmsForm';
 import DashboardLayout from '@/layouts/dashboard-layout';
 import { Main } from '@/layouts/main';
 import { PageProps } from '@/types';
@@ -7,9 +7,9 @@ import { usePage } from '@inertiajs/react';
 function CMS() {
     const { cms } = usePage<PageProps>().props;
     return (
-        <DashboardLayout title="Admin Dashboard">
+        <DashboardLayout title="Central Management System">
             <Main className="grid space-y-6">
-                <CmsPage cms={cms} />
+                <CmsForm cms={cms} />
             </Main>
         </DashboardLayout>
     );

@@ -39,7 +39,7 @@ return new class extends Migration
 
             $table->timestamps();
             // indexing in query
-            $table->index(['title', 'connection_type', 'features', 'packages', 'posted_date', 'short_description']);
+            $table->index(['title', 'connection_type', 'posted_date']);
         });
     }
 

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             // service
-            $table->index(['vendor_service_id', 'package_name', 'status']);
+            $table->index(['vendor_service_id', 'package_name']);
         });
     }
 

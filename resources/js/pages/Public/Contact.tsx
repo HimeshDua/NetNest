@@ -3,7 +3,7 @@ import Layout from '@/layouts/layout';
 
 function Contact() {
     return (
-        <Layout>
+        <Layout title="Contact Us">
             <CenterAligned />
         </Layout>
     );

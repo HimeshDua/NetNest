@@ -12,41 +12,27 @@ return new class extends Migration
         Schema::create('cms', function (Blueprint $table) {
             $table->id();
 
-            // Hero Section
-            $table->string('hero_title')->nullable();
-            $table->text('hero_subtitle')->nullable();
-            $table->string('hero_background_image')->nullable(); // store file path
-            $table->string('hero_cta_text')->nullable();
-            $table->string('hero_cta_link')->nullable();
+            // Each section stored as JSON for flexibility
+            $table->json('hero')->nullable();
+            // Example: { "title": "Welcome", "subtitle": "Fastest Internet", "background": "hero.jpg", "cta_text": "Get Started", "cta_link": "/signup" }
 
-            // Marquee / Announcements
             $table->json('marquees')->nullable();
-            // Example: [{ "text": "50% off first month", "link": "/pricing" }, ...]
+            // Example: [{ "text": "50% off first month", "link": "/pricing" }]
 
-            // Features Section
             $table->json('features_primary')->nullable();
             // Example: [{ "title": "Fast Internet", "description": "Blazing fast speed", "icon": "wifi" }]
 
             $table->json('features_secondary')->nullable();
-            // Example: [{ "name": "24/7 Support", "description": "Always available", "icon": "headset" }]
+            // Example: [{ "title": "24/7 Support", "description": "Always available", "icon": "headset" }]
 
-            // About / Info Section
-            $table->string('about_title')->nullable();
-            $table->text('about_description')->nullable();
-            $table->string('about_image')->nullable();
+            $table->json('about')->nullable();
+            // Example: { "title": "About Us", "description": "We provide reliable...", "image": "about.jpg" }
 
-            // Testimonials Section
             $table->json('testimonials')->nullable();
-            // Example: [{ "name": "John Doe", "quote": "Amazing service!", "avatar": "path.jpg" }]
+            // Example: [{ "name": "John Doe", "quote": "Amazing service!", "avatar": "john.jpg" }]
 
-            // SEO + Meta
-            $table->string('meta_title')->nullable();
-            $table->text('meta_description')->nullable();
-            $table->json('meta_keywords')->nullable();
-
-            // Footer Links
-            $table->json('footer_links')->nullable(); // [{ name, href }]
-            $table->json('social_links')->nullable(); // [{ platform, url, icon }]
+            $table->json('seo')->nullable();
+            // Example: { "title": "ISP Company", "description": "Fastest internet in town", "keywords": ["internet", "wifi", "broadband"] }
 
             $table->timestamps();
         });

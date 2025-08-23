@@ -1,13 +1,43 @@
-// types/cms.ts
+// types/cms.d.ts
+
+export interface Hero {
+    title: string;
+    subtitle: string;
+    background_image?: file;
+    background_image_path?: string;
+    buttons: {
+        text: string;
+        href: string;
+    }[];
+    mockup: {
+        srcLight: file;
+        srcDark: file;
+        alt: string;
+    };
+}
+
 export interface Marquee {
     text: string;
     link: string;
 }
 
-export interface Feature {
+export interface Feature1 {
+    title: string;
+    description: string;
+}
+
+export interface Feature2 {
     title: string;
     description: string;
     icon: string;
+}
+
+export interface About {
+    title: string;
+    description: string;
+    image?: file | null;
+    image_path?: string;
+    onChange: (file: File | null) => void;
 }
 
 export interface Testimonial {
@@ -16,44 +46,44 @@ export interface Testimonial {
     avatar: string;
 }
 
-export interface FooterLink {
-    name: string;
-    href: string;
+export interface Seo {
+    title: string;
+    description: string;
+    keywords: string[];
 }
 
-export interface SocialLink {
-    platform: string;
-    url: string;
-    icon: string;
+export interface HomePageCMS {
+    hero: Hero;
+
+    marquees: Marquee[];
+
+    features_primary: Feature01[];
+    features_secondary: Feature02[];
+
+    testimonials: Testimonial[];
+    seo: Seo;
+}
+
+export interface AboutPageCMS {
+    title: string;
+    description: string;
+    image?: file | null;
+    image_path?: string;
+    onChange: (file: File | null) => void;
 }
 
 export interface Cms {
     id?: number;
-
-    hero_title: string;
-    hero_subtitle: string;
-    hero_background_image?: File | null;
-    hero_background_image_path?: string;
-    hero_cta_text: string;
-    hero_cta_link: string;
+    hero: Hero;
 
     marquees: Marquee[];
-    features_primary: Feature[];
-    features_secondary: Feature[];
 
-    about_title: string;
-    about_description: string;
-    about_image?: File | null;
-    about_image_path?: string;
+    features_primary: Feature01[];
+    features_secondary: Feature02[];
+
+    about: About;
 
     testimonials: Testimonial[];
 
-    meta_title: string;
-    meta_description: string;
-    meta_keywords: string[];
-
-    footer_links: FooterLink[];
-    social_links: SocialLink[];
-
-    // Add this line to satisfy the FormDataType constraint
+    seo: Seo;
 }
