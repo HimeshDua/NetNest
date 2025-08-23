@@ -8,6 +8,7 @@ export interface Hero {
     buttons: {
         text: string;
         href: string;
+        variant: string;
     }[];
     mockup: {
         srcLight: file;

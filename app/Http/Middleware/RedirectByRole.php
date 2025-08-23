@@ -13,13 +13,14 @@ class RedirectByRole
         $user = $request->user();
 
         if ($user) {
+            // echo ($user);
             switch ($user->role) {
+                case 'customer':
+                    return redirect()->route('home');
                 case 'admin':
                     return redirect()->route('admin.dashboard');
                 case 'vendor':
                     return redirect()->route('vendor.dashboard');
-                case 'customer':
-                    return redirect()->route('home');
             }
         }
 

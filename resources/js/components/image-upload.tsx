@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Dropzone, DropzoneContent, DropzoneEmptyState } from '@/components/ui/shadcn-io/dropzone';
 import { useState } from 'react';
+import { Label } from './ui/label';
 
 interface ImageUploadProps {
     name: string;
@@ -8,7 +9,6 @@ interface ImageUploadProps {
     value?: string | null; // existing file path from DB
     onChange: (file: File | null) => void;
 }
-
 export const ImageUpload = ({ name, label, value, onChange }: ImageUploadProps) => {
     const [files, setFiles] = useState<File[] | undefined>();
     const [filePreview, setFilePreview] = useState<string | undefined>(value ? `/storage/${value}` : undefined);
@@ -30,19 +30,19 @@ export const ImageUpload = ({ name, label, value, onChange }: ImageUploadProps) 
     };
 
     return (
-        <div className="space-y-2">
-            <label className="text-sm font-medium">{label}</label>
-            <Dropzone accept={{ 'image/*': ['.png', '.jpg', '.jpeg'] }} onDrop={handleDrop} src={files} className="h-full p-6">
-                {!filePreview ? <DropzoneEmptyState /> : null}
+        <div className="flex w-full flex-col space-y-3">
+            <Label className="text-sm font-medium">{label}</Label>
+            <Dropzone accept={{ 'image/*': ['.png', '.jpg', '.jpeg'] }} onDrop={handleDrop} src={files} className="w-full rounded-md p-6 sm:p-8">
+                {!filePreview && <DropzoneEmptyState />}
                 <DropzoneContent>
                     {filePreview && (
-                        <div className="relative h-full min-h-[180px] w-full overflow-hidden rounded-md">
-                            <img alt={`${name} preview`} className="absolute top-0 left-0 h-full w-full object-cover" src={filePreview} />
+                        <div className="relative h-full min-h-[180px] w-full overflow-hidden rounded-md sm:min-h-[220px]">
+                            <img alt={`${name} preview`} src={filePreview} className="inset-0 w-full object-cover" />
                             <Button
                                 type="button"
                                 variant="destructive"
                                 size="sm"
-                                className="absolute top-2 right-2"
+                                className="absolute top-2 right-2 m-1"
                                 onClick={() => {
                                     setFilePreview(undefined);
                                     setFiles(undefined);

@@ -25,92 +25,115 @@ class CmsController extends Controller
     /**
      * Update CMS.
      */
+
     public function update(Request $request)
     {
         $cms = Cms::firstOrNew([]);
 
-        $data = $request->validate([
-            // Hero section stored as JSON
+        // ---- Validation (matches cms.d.ts) ----
+        $request->validate([
+            // HERO
             'hero' => 'nullable|array',
             'hero.title' => 'nullable|string|max:255',
             'hero.subtitle' => 'nullable|string',
-            'hero.background' => 'nullable|file|image|max:2048',
-            'hero.cta_text' => 'nullable|string|max:255',
-            'hero.cta_link' => 'nullable|url',
+            'hero.background_image' => 'nullable|file|image|max:4096',
+            'hero.buttons' => 'nullable|array',
+            'hero.buttons.*.text' => 'required_with:hero.buttons.*.href|string|max:255',
+            // allow absolute (http/https) or relative (/path) URLs
+            'hero.buttons.*.href' => ['required_with:hero.buttons.*.text', 'string', 'max:2048', 'regex:/^(https?:\/\/|\/)/'],
+            'hero.buttons.*.variant' => ['required_with:hero.buttons.*.text', 'string', 'max:128'],
+            'hero.mockup' => 'nullable|array',
+            'hero.mockup.srcLight' => 'nullable|file|image|max:8192',
+            'hero.mockup.srcDark' => 'nullable|file|image|max:8192',
+            'hero.mockup.alt' => 'nullable|string|max:255',
 
-            // Marquees
+            // MARQUEES
             'marquees' => 'nullable|array',
-            'marquees.*.text' => 'string|max:255',
-            'marquees.*.link' => 'nullable|url',
+            'marquees.*.text' => 'required|string|max:255',
+            'marquees.*.link' => ['nullable', 'string', 'max:2048', 'regex:/^(https?:\/\/|\/)/'],
 
-            // Features
+            // FEATURES
             'features_primary' => 'nullable|array',
-            'features_primary.*.title' => 'string|max:255',
+            'features_primary.*.title' => 'required|string|max:255',
             'features_primary.*.description' => 'nullable|string',
-            'features_primary.*.icon' => 'nullable|string',
 
             'features_secondary' => 'nullable|array',
-            'features_secondary.*.title' => 'string|max:255',
+            'features_secondary.*.title' => 'required|string|max:255',
             'features_secondary.*.description' => 'nullable|string',
-            'features_secondary.*.icon' => 'nullable|string',
+            'features_secondary.*.icon' => 'nullable|string|max:255',
 
-            // About section stored as JSON
+            // ABOUT
             'about' => 'nullable|array',
             'about.title' => 'nullable|string|max:255',
             'about.description' => 'nullable|string',
-            'about.image' => 'nullable|file|image|max:2048',
+            'about.image' => 'nullable|file|image|max:4096',
 
-            // Testimonials
+            // TESTIMONIALS (avatar is a string path/url in your TS)
             'testimonials' => 'nullable|array',
-            'testimonials.*.name' => 'string|max:255',
-            'testimonials.*.quote' => 'string',
-            'testimonials.*.avatar' => 'nullable|file|image|max:2048',
+            'testimonials.*.name' => 'required|string|max:255',
+            'testimonials.*.quote' => 'required|string',
+            'testimonials.*.avatar' => 'nullable|string|max:2048',
 
             // SEO
             'seo' => 'nullable|array',
-            'seo.meta_title' => 'nullable|string|max:255',
-            'seo.meta_description' => 'nullable|string',
-            'seo.meta_keywords' => 'nullable|array',
-            'seo.meta_keywords.*' => 'string',
+            'seo.title' => 'nullable|string|max:255',
+            'seo.description' => 'nullable|string',
+            'seo.keywords' => 'nullable|array',
+            'seo.keywords.*' => 'string|max:255',
         ]);
 
-        // --- File handling ---
-        // Hero background
-        if ($request->hasFile('hero.background')) {
-            if (isset($cms->hero['background'])) {
-                Storage::disk('public')->delete($cms->hero['background']);
+        // ---- Build & merge JSON payloads ----
+
+        // HERO
+        $hero = array_replace_recursive($cms->hero ?? [], $request->input('hero', []));
+        if ($request->hasFile('hero.background_image')) {
+            if (!empty($cms->hero['background_image'])) {
+                Storage::disk('public')->delete($cms->hero['background_image']);
             }
-            $data['hero']['background'] = $request->file('hero.background')->store('cms', 'public');
+            $hero['background_image'] = $request->file('hero.background_image')->store('cms/hero', 'public');
         } else {
-            $data['hero']['background'] = $cms->hero['background'] ?? null;
+            // keep existing if not re-uploaded
+            $hero['background_image'] = $hero['background_image'] ?? ($cms->hero['background_image'] ?? null);
         }
 
-        // About image
+        // HERO MOCKUP (srcLight/srcDark)
+        $hero['mockup'] = $hero['mockup'] ?? [];
+        foreach (['srcLight', 'srcDark'] as $k) {
+            if ($request->hasFile("hero.mockup.$k")) {
+                if (!empty($cms->hero['mockup'][$k])) {
+                    Storage::disk('public')->delete($cms->hero['mockup'][$k]);
+                }
+                $hero['mockup'][$k] = $request->file("hero.mockup.$k")->store('cms/hero/mockups', 'public');
+            } else {
+                $hero['mockup'][$k] = $hero['mockup'][$k] ?? ($cms->hero['mockup'][$k] ?? null);
+            }
+        }
+        $cms->hero = $hero;
+
+        // MARQUEES / FEATURES
+        $cms->marquees = $request->input('marquees', $cms->marquees ?? []);
+        $cms->features_primary = $request->input('features_primary', $cms->features_primary ?? []);
+        $cms->features_secondary = $request->input('features_secondary', $cms->features_secondary ?? []);
+
+        // ABOUT
+        $about = array_replace_recursive($cms->about ?? [], $request->input('about', []));
         if ($request->hasFile('about.image')) {
-            if (isset($cms->about['image'])) {
+            if (!empty($cms->about['image'])) {
                 Storage::disk('public')->delete($cms->about['image']);
             }
-            $data['about']['image'] = $request->file('about.image')->store('cms', 'public');
+            $about['image'] = $request->file('about.image')->store('cms/about', 'public');
         } else {
-            $data['about']['image'] = $cms->about['image'] ?? null;
+            $about['image'] = $about['image'] ?? ($cms->about['image'] ?? null);
         }
+        $cms->about = $about;
 
-        // Testimonials avatars
-        if ($request->has('testimonials')) {
-            foreach ($request->file('testimonials', []) as $index => $file) {
-                if ($file && $file->isValid()) {
-                    if (isset($cms->testimonials[$index]['avatar'])) {
-                        Storage::disk('public')->delete($cms->testimonials[$index]['avatar']);
-                    }
-                    $data['testimonials'][$index]['avatar'] = $file->store('cms/testimonials', 'public');
-                } else {
-                    $data['testimonials'][$index]['avatar'] = $cms->testimonials[$index]['avatar'] ?? null;
-                }
-            }
-        }
+        // TESTIMONIALS (string avatar; no file processing here)
+        $cms->testimonials = $request->input('testimonials', $cms->testimonials ?? []);
 
-        // --- Save ---
-        $cms->fill($data)->save();
+        // SEO
+        $cms->seo = $request->input('seo', $cms->seo ?? []);
+
+        $cms->save();
 
         return redirect()->route('admin.cms.edit')->with('success', 'CMS updated successfully!');
     }

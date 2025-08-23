@@ -29,8 +29,6 @@ const staticDefaults: HeroCMS = {
 export default function HeroPage({ hero }: { hero?: HeroProps }) {
     const safeHero = { ...staticDefaults, ...hero };
 
-    console.log(safeHero);
-
     return (
         <Section className={cn('fade-bottom overflow-hidden pb-0 sm:pb-0 md:pb-0')}>
             <div className="max-w-container mx-auto flex flex-col gap-12 pt-16 sm:gap-24">
@@ -57,8 +55,8 @@ export default function HeroPage({ hero }: { hero?: HeroProps }) {
                             <MockupFrame size="small">
                                 <Mockup>
                                     <Screenshot
-                                        srcLight={safeHero.mockup.srcLight}
-                                        srcDark={safeHero.mockup.srcDark}
+                                        srcLight={`/storage/${safeHero.mockup.srcLight}`}
+                                        srcDark={`/storage/${safeHero.mockup.srcDark}`}
                                         alt={safeHero.mockup.alt}
                                         width={1248}
                                         height={765}

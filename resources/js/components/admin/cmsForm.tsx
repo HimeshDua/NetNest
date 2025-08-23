@@ -9,10 +9,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Cms } from '@/types/cms';
 import { useForm } from '@inertiajs/react';
 import { ChevronDown, ChevronUp, Plus, Save, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ImageUpload } from '../image-upload';
 import { Badge } from '../ui/badge';
 
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 export default function CmsForm({ cms }: { cms: Cms }) {
     const { data, setData, post, processing, errors } = useForm<Cms>({
         hero: cms?.hero || {
@@ -24,6 +25,7 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                 {
                     text: '',
                     href: '',
+                    variant: '',
                 },
             ],
             mockup: {
@@ -177,6 +179,31 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                                                 }}
                                                                 placeholder="/signup or https://example.com"
                                                             />
+
+                                                            <Select
+                                                                defaultValue={btn.variant || 'default'}
+                                                                onValueChange={(e) => {
+                                                                    const buttons = [...data.hero.buttons];
+                                                                    buttons[idx].variant = e.target.value;
+                                                                    setData('hero', { ...data.hero, buttons });
+                                                                }}
+                                                            >
+                                                                <SelectTrigger className="w-[180px]">
+                                                                    <SelectValue placeholder="Select Variant" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    <SelectGroup>
+                                                                        <SelectLabel>Variants</SelectLabel>
+                                                                        <SelectItem value="default">Default</SelectItem>
+                                                                        <SelectItem value="outline">Outline</SelectItem>
+                                                                        <SelectItem value="destructive">Destructive</SelectItem>
+                                                                        <SelectItem value="secondary">Secondary</SelectItem>
+                                                                        <SelectItem value="ghost">Ghost</SelectItem>
+                                                                        <SelectItem value="link">Link</SelectItem>
+                                                                    </SelectGroup>
+                                                                </SelectContent>
+                                                            </Select>
+
                                                             <Button
                                                                 size="icon"
                                                                 variant="destructive"
@@ -196,7 +223,7 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                                         onClick={() =>
                                                             setData('hero', {
                                                                 ...data.hero,
-                                                                buttons: [...(data.hero.buttons || []), { text: '', href: '' }],
+                                                                buttons: [...(data.hero.buttons || []), { text: '', href: '', variant: '' }],
                                                             })
                                                         }
                                                     >
@@ -566,7 +593,7 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                     value={data.seo.title}
                                     onChange={(e) => setData('seo', { ...data.seo, title: e.target.value })}
                                 />
-                                <p className="text-sm text-muted-foreground">{data.seo.title.length}/60 characters</p>
+                                <p className="text-sm text-muted-foreground">{(data.seo.title || '').length}/60 characters</p>
                                 {errors['seo.title'] && <p className="text-sm text-red-500">{errors['seo.title']}</p>}
                             </div>
 
@@ -579,14 +606,14 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                     onChange={(e) => setData('seo', { ...data.seo, description: e.target.value })}
                                     rows={3}
                                 />
-                                <p className="text-sm text-muted-foreground">{data.seo.description.length}/160 characters</p>
+                                <p className="text-sm text-muted-foreground">{(data.seo.description || '').length}/160 characters</p>
                                 {errors['seo.description'] && <p className="text-sm text-red-500">{errors['seo.description']}</p>}
                             </div>
 
                             <div className="grid gap-2">
                                 <Label>Meta Keywords</Label>
                                 <div className="mb-2 flex flex-wrap gap-2">
-                                    {data.seo.keywords.map((keyword, idx) => (
+                                    {(data.seo.keywords || []).map((keyword, idx) => (
                                         <Badge key={idx} variant="secondary" className="gap-1">
                                             {keyword}
                                             <button
@@ -601,7 +628,9 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                             </button>
                                         </Badge>
                                     ))}
-                                    {data.seo.keywords.length === 0 && <span className="text-sm text-muted-foreground">No keywords added yet</span>}
+                                    {(data.seo.keywords || '').length === 0 && (
+                                        <span className="text-sm text-muted-foreground">No keywords added yet</span>
+                                    )}
                                 </div>
                                 <Input
                                     placeholder="Type a keyword and press Enter to add"
