@@ -29,6 +29,8 @@ const staticDefaults: HeroCMS = {
 export default function HeroPage({ hero }: { hero?: HeroProps }) {
     const safeHero = { ...staticDefaults, ...hero };
 
+    console.log(safeHero);
+
     return (
         <Section className={cn('fade-bottom overflow-hidden pb-0 sm:pb-0 md:pb-0')}>
             <div className="max-w-container mx-auto flex flex-col gap-12 pt-16 sm:gap-24">
