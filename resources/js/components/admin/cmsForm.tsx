@@ -19,8 +19,6 @@ export default function CmsForm({ cms }: { cms: Cms }) {
         hero: cms?.hero || {
             title: '',
             subtitle: '',
-            background_image: '',
-            background_image_path: '',
             buttons: [
                 {
                     text: '',
@@ -34,10 +32,10 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                 alt: '',
             },
         },
-        marquees: cms?.marquees || [],
+        marquees: cms?.marquees || [{ text: '', link: '' }],
         features_primary: cms?.features_primary || [],
         features_secondary: cms?.features_secondary || [],
-        about: cms?.about || { title: '', description: '', image: null, image_path: '' },
+        about: cms?.about || { title: '', description: '', image: '' },
         testimonials: cms?.testimonials || [],
         seo: cms?.seo || { title: '', description: '', keywords: [] },
     });
@@ -182,9 +180,9 @@ export default function CmsForm({ cms }: { cms: Cms }) {
 
                                                             <Select
                                                                 defaultValue={btn.variant || 'default'}
-                                                                onValueChange={(e) => {
+                                                                onValueChange={(value) => {
                                                                     const buttons = [...data.hero.buttons];
-                                                                    buttons[idx].variant = e.target.value;
+                                                                    buttons[idx].variant = value;
                                                                     setData('hero', { ...data.hero, buttons });
                                                                 }}
                                                             >
@@ -556,21 +554,23 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                 />
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label>Description</Label>
+                            <Label className="mb-2.5 h-fit">Description</Label>
+                            <div className="grid-col grid grid-cols-7">
                                 <Textarea
                                     placeholder="Tell your story and what makes you unique..."
                                     value={data.about.description}
                                     onChange={(e) => setData('about', { ...data.about, description: e.target.value })}
                                     rows={4}
+                                    className="col-span-4 h-full"
                                 />
+                                <img className="col-span-3 h-full object-cover px-2" src={`/storage/${data.about.image}`} />
                             </div>
 
                             <ImageUpload
                                 name="about_image"
                                 label="About Section Image"
                                 // description="Recommended: 600x400px, shows your team or product"
-                                value={data.about.image}
+                                value={data?.about?.image}
                                 onChange={(file) => setData('about', { ...data.about, image: file })}
                             />
                         </CardContent>

@@ -5,8 +5,6 @@ import { Section } from '@/components/ui/section';
 import { cn } from '@/lib/utils';
 import { HeroCMS } from '@/types/cms-zod';
 
-type HeroProps = Partial<HeroCMS>;
-
 const staticDefaults: HeroCMS = {
     title: 'Build and Scale Your Internet Service with NetNest',
     subtitle:
@@ -26,7 +24,7 @@ const staticDefaults: HeroCMS = {
     },
 };
 
-export default function HeroPage({ hero }: { hero?: HeroProps }) {
+export default function HeroPage({ hero }: { hero?: HeroCMS }) {
     const safeHero = { ...staticDefaults, ...hero };
 
     return (
@@ -34,11 +32,9 @@ export default function HeroPage({ hero }: { hero?: HeroProps }) {
             <div className="max-w-container mx-auto flex flex-col gap-12 pt-16 sm:gap-24">
                 <div className="flex flex-col items-center gap-6 text-center sm:gap-12">
                     <h1 className="animate-appear relative z-10 inline-block bg-linear-to-r from-foreground to-foreground bg-clip-text text-4xl leading-tight font-semibold text-balance text-transparent drop-shadow-2xl sm:text-6xl sm:leading-tight md:text-8xl md:leading-tight md:text-balance! dark:to-muted-foreground">
-                        {/* <h1 className="text-4xl font-semibold sm:text-6xl md:text-8xl"> */}
                         {safeHero.title}
                     </h1>
                     <p className="text-md animate-appear relative z-10 max-w-[740px] font-medium text-balance text-muted-foreground opacity-0 delay-100 sm:text-xl">
-                        {/* <p className="text-md text-muted-foreground sm:text-xl"> */}
                         {safeHero.subtitle}
                     </p>
                     {safeHero.buttons && (
@@ -55,8 +51,8 @@ export default function HeroPage({ hero }: { hero?: HeroProps }) {
                             <MockupFrame size="small">
                                 <Mockup>
                                     <Screenshot
-                                        srcLight={`/storage/${safeHero.mockup.srcLight}`}
-                                        srcDark={`/storage/${safeHero.mockup.srcDark}`}
+                                        srcLight={hero?.mockup?.srcLight ? `/storage/${safeHero.mockup.srcLight}` : `${safeHero.mockup.srcLight}`}
+                                        srcDark={hero?.mockup?.srcDark ? `/storage/${safeHero.mockup.srcDark}` : `${safeHero.mockup.srcDark}`}
                                         alt={safeHero.mockup.alt}
                                         width={1248}
                                         height={765}

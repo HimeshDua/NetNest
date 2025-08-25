@@ -6,14 +6,15 @@ import { PageProps } from '@/types';
 import { usePage } from '@inertiajs/react';
 
 function home() {
-    const { homePage: h } = usePage<PageProps>().props;
+    const { homePage } = usePage<PageProps>().props;
 
-    const hero = h[0].hero;
-    console.log(hero);
+    const h = homePage?.[0];
+    console.log(h);
+
     return (
         <Layout title="">
-            <HeroPage hero={hero} />
-            <Feature01 dynamicfeature01Data={h.feature1_title} />
+            <HeroPage hero={h?.hero} />
+            <Feature01 dynamicfeature01Data={h?.features_primary} />
             <Feature02 />
         </Layout>
     );

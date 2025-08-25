@@ -19,7 +19,7 @@ const staticfeature01Data: Feature1[] = [
     },
 ];
 
-export default function Feature01({ dynamicfeature01Data }: { dynamicfeature01Data: Feature1[] }) {
+export default function Feature01({ dynamicfeature01Data }: { dynamicfeature01Data?: Feature1[] }) {
     const feature01Data: Feature1[] = dynamicfeature01Data || staticfeature01Data;
     return (
         <div className="flex h-full w-full items-center justify-center">

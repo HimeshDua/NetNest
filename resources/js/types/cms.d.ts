@@ -3,12 +3,10 @@
 export interface Hero {
     title: string;
     subtitle: string;
-    background_image?: file;
-    background_image_path?: string;
     buttons: {
         text: string;
         href: string;
-        variant: string;
+        variant: 'default' | 'outline' | 'secondary' | 'destructive' | 'ghost' | 'link';
     }[];
     mockup: {
         srcLight: file;
@@ -37,8 +35,6 @@ export interface About {
     title: string;
     description: string;
     image?: file | null;
-    image_path?: string;
-    onChange: (file: File | null) => void;
 }
 
 export interface Testimonial {
@@ -54,23 +50,21 @@ export interface Seo {
 }
 
 export interface HomePageCMS {
-    hero: Hero;
+    hero?: Hero;
 
-    marquees: Marquee[];
+    marquees?: Marquee[];
 
-    features_primary: Feature01[];
-    features_secondary: Feature02[];
+    features_primary?: Feature01[];
+    features_secondary?: Feature02[];
 
-    testimonials: Testimonial[];
-    seo: Seo;
+    testimonials?: Testimonial[];
+    seo?: Seo;
 }
 
 export interface AboutPageCMS {
     title: string;
     description: string;
     image?: file | null;
-    image_path?: string;
-    onChange: (file: File | null) => void;
 }
 
 export interface Cms {

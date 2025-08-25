@@ -31,17 +31,16 @@ class CmsController extends Controller
         $cms = Cms::firstOrNew([]);
 
         // ---- Validation (matches cms.d.ts) ----
-        $request->validate([
+        $data$request->validate([
             // HERO
             'hero' => 'nullable|array',
             'hero.title' => 'nullable|string|max:255',
             'hero.subtitle' => 'nullable|string',
-            'hero.background_image' => 'nullable|file|image|max:4096',
             'hero.buttons' => 'nullable|array',
             'hero.buttons.*.text' => 'required_with:hero.buttons.*.href|string|max:255',
-            // allow absolute (http/https) or relative (/path) URLs
-            'hero.buttons.*.href' => ['required_with:hero.buttons.*.text', 'string', 'max:2048', 'regex:/^(https?:\/\/|\/)/'],
-            'hero.buttons.*.variant' => ['required_with:hero.buttons.*.text', 'string', 'max:128'],
+            'hero.buttons.*.href' => ['required_with:hero.buttons.*.text', 'string', 'regex:/^(https?:\/\/|\/)/'],
+            'hero.buttons.*.variant' => 'nullable|string|max:128',
+
             'hero.mockup' => 'nullable|array',
             'hero.mockup.srcLight' => 'nullable|file|image|max:8192',
             'hero.mockup.srcDark' => 'nullable|file|image|max:8192',
@@ -85,16 +84,7 @@ class CmsController extends Controller
         // ---- Build & merge JSON payloads ----
 
         // HERO
-        $hero = array_replace_recursive($cms->hero ?? [], $request->input('hero', []));
-        if ($request->hasFile('hero.background_image')) {
-            if (!empty($cms->hero['background_image'])) {
-                Storage::disk('public')->delete($cms->hero['background_image']);
-            }
-            $hero['background_image'] = $request->file('hero.background_image')->store('cms/hero', 'public');
-        } else {
-            // keep existing if not re-uploaded
-            $hero['background_image'] = $hero['background_image'] ?? ($cms->hero['background_image'] ?? null);
-        }
+        $hero = array_replace_recursive($data->hero ?? [], $request->input('hero', []));
 
         // HERO MOCKUP (srcLight/srcDark)
         $hero['mockup'] = $hero['mockup'] ?? [];
@@ -111,12 +101,14 @@ class CmsController extends Controller
         $cms->hero = $hero;
 
         // MARQUEES / FEATURES
-        $cms->marquees = $request->input('marquees', $cms->marquees ?? []);
-        $cms->features_primary = $request->input('features_primary', $cms->features_primary ?? []);
-        $cms->features_secondary = $request->input('features_secondary', $cms->features_secondary ?? []);
+        $cms->marquees = $request->input('marquees', $data->marquees ?? []);
+        $cms->features_primary = $request->input('features_primary', $data->features_primary ?? []);
+        $cms->features_secondary = $request->input('features_secondary', $data->features_secondary ?? []);
+
+        
 
         // ABOUT
-        $about = array_replace_recursive($cms->about ?? [], $request->input('about', []));
+        $about = array_replace_recursive($data->about ?? [], $request->input('about', []));
         if ($request->hasFile('about.image')) {
             if (!empty($cms->about['image'])) {
                 Storage::disk('public')->delete($cms->about['image']);
@@ -128,12 +120,12 @@ class CmsController extends Controller
         $cms->about = $about;
 
         // TESTIMONIALS (string avatar; no file processing here)
-        $cms->testimonials = $request->input('testimonials', $cms->testimonials ?? []);
+        $cms->testimonials = $request->input('testimonials', $data->testimonials ?? []);
 
         // SEO
         $cms->seo = $request->input('seo', $cms->seo ?? []);
 
-        $cms->save();
+        $cms->fill($data)->save();
 
         return redirect()->route('admin.cms.edit')->with('success', 'CMS updated successfully!');
     }
