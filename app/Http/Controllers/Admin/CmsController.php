@@ -31,7 +31,7 @@ class CmsController extends Controller
         $cms = Cms::firstOrNew([]);
 
         // ---- Validation (matches cms.d.ts) ----
-        $data$request->validate([
+        $data = $request->validate([
             // HERO
             'hero' => 'nullable|array',
             'hero.title' => 'nullable|string|max:255',
@@ -105,7 +105,7 @@ class CmsController extends Controller
         $cms->features_primary = $request->input('features_primary', $data->features_primary ?? []);
         $cms->features_secondary = $request->input('features_secondary', $data->features_secondary ?? []);
 
-        
+
 
         // ABOUT
         $about = array_replace_recursive($data->about ?? [], $request->input('about', []));
