@@ -12,7 +12,10 @@ return new class extends Migration
         Schema::create('cms', function (Blueprint $table) {
             $table->id();
             $table->json('hero')->nullable();
-            $table->json('marquees')->nullable();
+
+            $table->string('marquee_text')->nullable();
+            $table->string('marquee_link')->nullable();
+
             $table->json('features_primary')->nullable();
             $table->json('features_secondary')->nullable();
             $table->json('about')->nullable();
@@ -23,11 +26,8 @@ return new class extends Migration
     }
 
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('c_m_s');
+        Schema::dropIfExists('cms');
     }
 };

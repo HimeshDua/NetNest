@@ -69,6 +69,12 @@ export interface PageProps extends InertiaPageProps {
     flash: { success?: string; error?: string };
     CmsProp: Cms[] | undefined;
     cms: CmsYes;
+    marquee: [
+        {
+            marquee_text: string;
+            marquee_link: string;
+        },
+    ];
     [key: string]: any;
 }
 

@@ -16,7 +16,8 @@ class Cms extends Model
         'hero',
 
         // Marquee
-        'marquees',
+        'marquee_text',
+        'marquee_link',
 
         // Features
         'features_primary',
@@ -35,7 +36,6 @@ class Cms extends Model
 
     protected $casts = [
         'hero' => 'array',
-        'marquees' => 'array',
         'features_primary' => 'array',
         'features_secondary' => 'array',
         'about' => 'array',

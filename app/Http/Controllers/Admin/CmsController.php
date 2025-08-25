@@ -42,10 +42,9 @@ class CmsController extends Controller
             'hero.mockup' => 'nullable|array',
             'hero.mockup.alt' => 'nullable|string|max:255',
 
-            // MARQUEES
-            'marquees' => 'nullable|array',
-            'marquees.*.text' => 'required|string|max:255',
-            'marquees.*.link' => ['nullable', 'string', 'max:2048', 'regex:/^(https?:\/\/|\/)/'],
+            // MARQUEE
+            'marquee_text' => 'required|string|max:255',
+            'marquee_link' => ['nullable', 'string', 'max:2048', 'regex:/^(https?:\/\/|\/)/'],
 
             // FEATURES
             'features_primary' => 'nullable|array',
@@ -112,7 +111,8 @@ class CmsController extends Controller
 
         // Update the CMS model with all data
         $cms->hero = $heroData;
-        $cms->marquees = $validated['marquees'] ?? [];
+        $cms->marquee_text = $validated['marquee_text'] ?? '';
+        $cms->marquee_link = $validated['marquee_link'] ?? '';
         $cms->features_primary = $validated['features_primary'] ?? [];
         $cms->features_secondary = $validated['features_secondary'] ?? [];
         $cms->about = $aboutData;

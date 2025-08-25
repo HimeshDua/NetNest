@@ -176,7 +176,7 @@
     }
 
     body {
-        @apply bg-background text-foreground;
+        @apply relative bg-background text-foreground;
     }
 
     .animate-appear {
@@ -217,4 +217,8 @@
 .sr-only {
     top: 0;
     left: 0;
+}
+
+body {
+    display: relative;
 }

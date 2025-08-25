@@ -15,11 +15,6 @@ export interface Hero {
     };
 }
 
-export interface Marquee {
-    text: string;
-    link: string;
-}
-
 export interface Feature1 {
     title: string;
     description: string;
@@ -54,7 +49,8 @@ export interface Cms {
 
     hero?: Hero;
 
-    marquees?: Marquee[];
+    marquee_text?: string;
+    marquee_link?: string;
 
     features_primary?: Feature01[];
     features_secondary?: Feature02[];
@@ -68,7 +64,8 @@ export interface Cms {
 export interface CmsYes {
     hero: Hero;
 
-    marquees: Marquee[];
+    marquee_text: string;
+    marquee_link: string;
 
     features_primary: Feature01[];
     features_secondary: Feature02[];
