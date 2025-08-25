@@ -6,7 +6,7 @@ export interface Hero {
     buttons: {
         text: string;
         href: string;
-        variant: 'default' | 'outline' | 'secondary' | 'destructive' | 'ghost' | 'link';
+        variant: 'default' | 'outline' | 'secondary' | 'destructive' | 'ghost' | 'link' | string;
     }[];
     mockup: {
         srcLight: file;
@@ -49,7 +49,9 @@ export interface Seo {
     keywords: string[];
 }
 
-export interface HomePageCMS {
+export interface Cms {
+    id?: number;
+
     hero?: Hero;
 
     marquees?: Marquee[];
@@ -57,18 +59,13 @@ export interface HomePageCMS {
     features_primary?: Feature01[];
     features_secondary?: Feature02[];
 
+    about?: About;
+
     testimonials?: Testimonial[];
     seo?: Seo;
 }
 
-export interface AboutPageCMS {
-    title: string;
-    description: string;
-    image?: file | null;
-}
-
-export interface Cms {
-    id?: number;
+export interface CmsYes {
     hero: Hero;
 
     marquees: Marquee[];
@@ -79,6 +76,5 @@ export interface Cms {
     about: About;
 
     testimonials: Testimonial[];
-
     seo: Seo;
 }

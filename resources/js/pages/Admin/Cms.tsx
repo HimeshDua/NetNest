@@ -1,4 +1,5 @@
 import CmsForm from '@/components/admin/cmsForm';
+// import CmsForm from '@/components/admin/cmsTestForm';
 import DashboardLayout from '@/layouts/dashboard-layout';
 import { Main } from '@/layouts/main';
 import { PageProps } from '@/types';
@@ -9,7 +10,7 @@ function CMS() {
     return (
         <DashboardLayout title="Central Management System">
             <Main className="grid space-y-6">
-                <CmsForm cms={cms} />
+                <CmsForm cms={cms!} />
             </Main>
         </DashboardLayout>
     );

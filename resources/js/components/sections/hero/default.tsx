@@ -20,7 +20,7 @@ const staticDefaults: HeroCMS = {
     mockup: {
         srcLight: '/app-light.png',
         srcDark: '/app-dark.png',
-        alt: 'Launch UI app screenshot',
+        alt: 'NetNest app screenshot',
     },
 };
 

@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Cms } from '@/types/cms';
+import { Cms, CmsYes } from '@/types/cms';
 import { useForm } from '@inertiajs/react';
 import { ChevronDown, ChevronUp, Plus, Save, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
@@ -15,7 +15,7 @@ import { Badge } from '../ui/badge';
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 export default function CmsForm({ cms }: { cms: Cms }) {
-    const { data, setData, post, processing, errors } = useForm<Cms>({
+    const { data, setData, post, processing, errors } = useForm<CmsYes>({
         hero: cms?.hero || {
             title: '',
             subtitle: '',
