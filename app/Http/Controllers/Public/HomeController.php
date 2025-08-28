@@ -12,9 +12,9 @@ class HomeController extends Controller
     public function index()
     {
         $homePage = Cms::get()->makeHidden('about')->toArray();
-
-        // dd($homePage);
-
-        return Inertia::render('Public/Home', ['homePage' => $homePage ?? null]);
+        $seo = Cms::get('seo')->toArray();
+        // dd($seo);
+        
+        return Inertia::render('Public/Home', ['homePage' => $homePage ?? null , 'seo' => $seo]);
     }
 }

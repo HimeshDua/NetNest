@@ -6,7 +6,7 @@ import Layout from '@/layouts/layout';
 
 function PricingsPage() {
     return (
-        <Layout>
+        <Layout title='PLANS'>
             <div className="relative">
                 <div className="mx-auto max-w-7xl px-4 py-24">
                     <div className="mx-auto mb-20 max-w-2xl text-center">

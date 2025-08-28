@@ -12,9 +12,7 @@ class AboutController extends Controller
     public function index()
     {
         $aboutPage = Cms::get([
-            'about_title',
-            'about_description',
-            'about_image',
+            'about'
         ])->toArray();
         // dd($aboutPage);
         return Inertia::render('Public/About', ['aboutPage' => $aboutPage]);

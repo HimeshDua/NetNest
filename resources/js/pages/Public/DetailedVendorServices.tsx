@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Typography } from '@/components/ui/typography';
-import { usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 
 import Layout from '@/layouts/layout';
 
@@ -12,7 +12,6 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageProps } from '@/types';
 import { BarChartIcon, MapPinIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
-
 interface Props extends PageProps {
     vendor: VendorService;
 }
@@ -26,17 +25,17 @@ type ConnectionType = 'fiber' | 'dsl' | 'wireless';
 interface VendorService {
     id: number;
     user_id: number;
-
+    
     title: string;
     slug: string;
     location: string;
 
     connection_type: ConnectionType;
     highlight: HighlightType;
-
+    
     short_description: string;
     full_description: string;
-
+    
     packages: {
         name: 'Basic' | 'Standard' | 'Premium';
         price: number;
@@ -46,18 +45,20 @@ interface VendorService {
         description?: string;
         is_popular?: boolean;
     }[];
-
+    
     features: string[];
     faqs: VendorFAQ[];
     images: string[];
-
+    
     speed_details: string[];
     coverage_area: string;
     is_active: boolean;
-
+    
     created_at: string;
     updated_at: string;
 }
+const appUrl = import.meta.env.APP_URL;
+const appName = import.meta.env.APP_NAME; 
 
 const getHighlight = (highlight: VendorService['highlight']) => {
     switch (highlight) {
@@ -77,10 +78,41 @@ const getHighlight = (highlight: VendorService['highlight']) => {
 export default function DetailedVendorServices() {
     const { vendor } = usePage<Props>().props;
     const highlight = getHighlight(vendor.highlight);
-
+    
     ///transaction
-
+    
     return (
+
+        <>
+         <Head>
+        <title>{vendor.title} - NetNest</title>
+        <meta
+          name="description"
+          content={vendor.short_description}
+        />
+        <meta
+          name="keywords"
+          content={vendor.features.join(', ')}
+        />
+        <meta property="og:title" content={vendor.title} />
+        <meta
+          property="og:description"
+          content={vendor.images[0]}
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`https://${appUrl + appName} `} />
+        <meta property="og:site_name" content="NetNest" />
+        <meta property="og:locale" content="en_US" />
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={vendor.title} />
+        <meta
+          name="twitter:description"
+          content={vendor.short_description}
+        />
+      </Head>
+
+
         <Layout title={vendor.title}>
             <div className="container mt-12 grid grid-cols-1 gap-8 px-3 lg:grid-cols-12">
                 {/* Left Column */}
@@ -210,5 +242,6 @@ export default function DetailedVendorServices() {
                 </div>
             </div>
         </Layout>
+        </>
     );
 }

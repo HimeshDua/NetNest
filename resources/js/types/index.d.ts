@@ -1,7 +1,7 @@
 import { PageProps as InertiaPageProps } from '@inertiajs/inertia';
 import { LucideIcon } from 'lucide-react';
 import type { Config } from 'ziggy-js';
-import { Cms, CmsYes } from './cms';
+import { Cms, CmsYes, Seo } from './cms';
 
 //Layouts
 export interface LayoutProps {
@@ -64,6 +64,7 @@ export interface PageProps extends InertiaPageProps {
     auth: {
         user?: User | null;
     };
+    seo : Seo[] ;
     customerServices: VendorService[];
     subsByService: CustomerSubscription[];
     flash: { success?: string; error?: string };

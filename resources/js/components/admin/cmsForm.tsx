@@ -16,7 +16,7 @@ import { Badge } from '../ui/badge';
 import { Switch } from '../ui/switch';
 
 export default function CmsForm({ cms }: { cms: Cms }) {
-    const { data, setData, post, processing, errors } = useForm<CmsYes>({
+    const { data,  setData, post, processing, errors } = useForm<CmsYes>({
         hero: cms?.hero || {
             title: '',
             subtitle: '',
@@ -644,7 +644,7 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                         onChange={(file) => setData('about', { ...data.about, image: file })}
                                     />
 
-                                    {data.about.image && (
+                                    {/* {data.about.image && (
                                         <div className="flex flex-col gap-2">
                                             <Label>Image Preview</Label>
                                             <div className="flex h-48 items-center justify-center overflow-hidden rounded-md border p-2">
@@ -655,7 +655,7 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                                 />
                                             </div>
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             </CardContent>
                         </Card>

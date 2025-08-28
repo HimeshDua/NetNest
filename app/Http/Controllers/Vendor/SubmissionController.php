@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Vendor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Str;
 use App\Models\VendorService;
 
 class SubmissionController extends Controller
@@ -87,6 +86,6 @@ class SubmissionController extends Controller
 
         $vendor->update($validated);
 
-        return redirect()->route('vendor.submissions.index')->with('success', 'Vendor updated successfully.');
+        return redirect()->route('submission.index')->with('success', 'Vendor updated successfully.');
     }
 }

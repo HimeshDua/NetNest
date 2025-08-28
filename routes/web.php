@@ -21,7 +21,7 @@ Route::get('/services', [\App\Http\Controllers\Public\ServicesController::class,
 Route::get('/services/{slug}', [\App\Http\Controllers\Public\ServicesController::class, 'show'])->name('services.show');
 
 // Auth routes (already in `auth.php`) 
-Route::middleware(['auth', 'redirect.role'])->get('/juice', fn() => null)->name('juice');
+Route::middleware(['auth', 'redirect.role'])->get('/dashboard', fn() => null)->name('dashboard');
 
 // ---------------------------
 // Customer Routes

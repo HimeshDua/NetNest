@@ -15,13 +15,11 @@ class DashboardController
   {
     $vendorId = Auth::id();
     $service = VendorService::where('user_id', $vendorId)->first();
-    $subscriptions = CustomerSubscription::where('vendor_service_id', $service->id)->get();
-
+    
     if (!$service) {
-      return Inertia::render('Vendor/Dashboard', [
-        'error' => 'No service found for this vendor.'
-      ]);
+      return Inertia::render('Vendor/Submission');
     }
+    $subscriptions = CustomerSubscription::where('vendor_service_id', $service->id)->get();
 
     $totalCustomers = $subscriptions->count();
     $activeCustomers = $subscriptions->where('status', 'active')->count();

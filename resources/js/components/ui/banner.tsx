@@ -6,7 +6,14 @@ import { useEffect, useState } from 'react';
 
 export const Banner = ({ className }: { className?: string }) => {
     const { marquee } = usePage<PageProps>().props;
-    const { marquee_link: link, marquee_text: text } = marquee[0];
+    // const { marquee_link: link, marquee_text: text } = marquee[0] || [{
+    //     marquee_link : '',
+    //     marquee_text : ''
+    // }];
+if (marquee[0]) return  <div>juice</div> ;
+    
+const link = marquee[0]?.marquee_link || '';
+const text = marquee[0]?.marquee_text || '';
 
     const [isVisible, setIsVisible] = useState(true);
     const [isHovered, setIsHovered] = useState(false);
@@ -18,7 +25,7 @@ export const Banner = ({ className }: { className?: string }) => {
     }, [text]);
 
     if (!isVisible) return null;
-
+    
     return (
         <div
             className={cn(
