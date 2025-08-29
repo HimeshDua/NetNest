@@ -19,8 +19,9 @@ Route::middleware('auth')->group(function () {
         ->middleware('throttle:6,1')
         ->name('password.update');
 
-    Route::get('settings/card', [CardController::class, 'edit'])->name('card.edit');
-    Route::post('settings/card', [CardController::class, 'store'])->name('card.store');
+    Route::middleware(['auth', 'verified', 'role:customer'])->get('settings/card', [CardController::class, 'edit'])->name('card.edit');
+
+    Route::middleware(['auth', 'verified', 'role:customer'])->post('settings/card', [CardController::class, 'store'])->name('card.store');
 
     Route::get('settings/appearance', function () {
         return Inertia::render('settings/appearance');

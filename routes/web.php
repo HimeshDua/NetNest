@@ -23,12 +23,15 @@ Route::get('/services/{slug}', [\App\Http\Controllers\Public\ServicesController:
 // Auth routes (already in `auth.php`) 
 Route::middleware(['auth', 'redirect.role'])->get('/dashboard', fn() => null)->name('dashboard');
 
+
+
 // ---------------------------
 // Customer Routes
 // ---------------------------
 
 Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
     // Route::get('/dashboard', [\App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
+
 
     // Route::get('/services', [\App\Http\Controllers\Customer\ConnectionController::class, 'services'])->name('customer.services');
     Route::get('/billing', [\App\Http\Controllers\Customer\BillingController::class, 'index'])->name('customer.billing');
@@ -49,7 +52,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
 // Vendor Routes
 // ---------------------------
 Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index'])->name('vendor.dashboard');
+    Route::get('/vendor/dashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index'])->name('vendor.dashboard');
     Route::resource('/submission', \App\Http\Controllers\Vendor\SubmissionController::class)->only(['index', 'store', 'edit', 'update']);
     Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
     Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');

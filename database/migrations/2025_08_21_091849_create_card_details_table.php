@@ -14,11 +14,15 @@ return new class extends Migration
         Schema::create('card_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('card_holder');
-            $table->string('card_number'); // hashed or encrypted
+            $table->string('card_last_four');
+            $table->string('card_brand');
+            // $table->string('card_number');
+            // $table->string('card_holder');
             $table->string('expiry_month');
             $table->string('expiry_year');
-            $table->string('cvv'); // hashed or encrypted
+            $table->string('gateway_customer_id');
+            $table->string('gateway_payment_method_id');
+            // $table->string('cvv'); // hashed or encrypted
             $table->timestamps();
         });
     }
