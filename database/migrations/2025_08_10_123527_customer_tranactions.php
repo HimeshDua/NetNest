@@ -9,46 +9,52 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
+
+
     public function up(): void
     {
         Schema::create('customer_transactions', function (Blueprint $table) {
             $table->id();
 
-            // Links transaction to a subscription
+            // Links to domain subscription
             $table->foreignId('customer_subscription_id')
                 ->constrained('customer_subscriptions')
                 ->cascadeOnDelete();
 
-            // Basic transaction fields
+            // Optional direct link to Cashier’s invoice/charge for traceability
+            $table->string('cashier_invoice_id')->nullable();  // Stripe invoice id
+            $table->string('cashier_payment_intent_id')->nullable(); // Stripe PI id
+
+            // Monetary values
             $table->decimal('amount', 10, 2);
-            $table->string('currency', 3)->default('USD'); // ISO code (USD, PKR, EUR)
+            $table->string('currency', 3)->default('USD');
 
-            // When the payment actually happened
+            // Transaction details
             $table->timestamp('payment_date')->useCurrent();
+            $table->string('payment_method')->nullable();       // 'card', 'paypal', etc.
+            $table->string('transaction_reference')->nullable(); // external txn id
 
-            // Payment details
-            $table->string('payment_method')->nullable(); // e.g. 'credit_card', 'paypal', 'jazzcash'
-            $table->string('transaction_reference')->nullable(); // Gateway reference (txn_id)
-
-            // More robust status tracking
+            // Robust status
             $table->enum('status', [
-                'pending',     // waiting for confirmation
-                'processing',  // in progress (useful for async gateways)
-                'completed',   // success
-                'failed',      // failed transaction
-                'refunded',    // user got money back
+                'pending',
+                'processing',
+                'completed',
+                'failed',
+                'refunded',
             ])->default('pending');
 
-            // Audit fields
-            $table->json('meta')->nullable(); // store gateway raw response / debug info
+            // Raw gateway response
+            $table->json('meta')->nullable();
 
             $table->timestamps();
 
-            // Performance indexing
+            // Indexes for performance
             $table->index(['customer_subscription_id', 'status']);
             $table->index(['payment_date']);
         });
     }
+
 
 
     /**
