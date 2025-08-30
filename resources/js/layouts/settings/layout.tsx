@@ -18,10 +18,6 @@ const breadcrumbNavItems: NavItem[] = [
         title: 'Appearance',
         href: '/settings/appearance',
     },
-    {
-        title: 'Card',
-        href: '/settings/card',
-    },
 ];
 
 export default function SettingsLayout({ children }: PropsWithChildren) {

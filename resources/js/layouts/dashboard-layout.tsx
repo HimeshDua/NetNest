@@ -16,7 +16,7 @@ export default function DashboardLayout({ children, title }: { children: React.R
     useEffect(() => {
         if (flash?.success) toast.success(flash.success);
         if (flash?.error) toast.error(flash.error);
-        console.log(flash);
+        // console.log(flash);
     }, [flash]);
     return (
         <AppLayout title={title} breadcrumbs={breadcrumbs}>

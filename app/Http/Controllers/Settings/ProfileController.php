@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
+use App\Models\CustomerRequest;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,13 +31,14 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user  = $request->user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
 
         return to_route('profile.edit');
     }
@@ -59,5 +62,28 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+    public function request(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->with('error', "No user found with this email. Please log in and try again.");
+        }
+
+        if ($user->role !== "customer") {
+            return back()->with('error', "Only customers can request to become a vendor.");
+        }
+
+        $userRequest = CustomerRequest::firstOrCreate(
+            ['email' => $request->email],
+            ['user_id' => $user->id, 'role' => $user->role]
+        );
+
+        return back()->with('success', "Your request has been sent successfully! You’ll be upgraded to a vendor within 24 hours.");
     }
 }

@@ -44,7 +44,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
     Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
     Route::post('/transaction', [\App\Http\Controllers\Customer\SubscriptionController::class, 'store'])->name('transaction.store');
 
-    // Route::post('/Request', [\App\Http\Controllers\Customer\ProfileController::class, 'VendorRequest'])->name('customer.request');
+    Route::post('/request', [\App\Http\Controllers\Settings\ProfileController::class, 'request'])->name('customer.request');
     // Route::get('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'index'])->name('customer.profile');
 });
 

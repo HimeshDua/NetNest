@@ -64,7 +64,7 @@ export interface PageProps extends InertiaPageProps {
     auth: {
         user?: User | null;
     };
-    seo : Seo[] ;
+    seo: Seo[];
     customerServices: VendorService[];
     subsByService: CustomerSubscription[];
     flash: { success?: string; error?: string };
@@ -97,8 +97,8 @@ export type HighlightType = 'new' | 'trending' | 'reliable' | 'popular' | 'undef
 export interface VendorServicePackage {
     name: 'Basic' | 'Standard' | 'Premium';
     price: number;
-    billing_cycle: BillingCycle;
-    speed_label?: string; // "100 Mbps", optional
+    billing_cycle: 'Monthly' | 'Quarterly' | 'Yearly';
+    speed_label?: string;
     features: string[];
     description?: string;
     currency: string;
@@ -114,8 +114,8 @@ export interface VendorService {
     city: string;
     location: string;
     posted_date: string;
-    connection_type: ConnectionType;
-    highlight: HighlightType;
+    connection_type: 'fiber' | 'dsl' | 'wireless';
+    highlight: 'new' | 'trending' | 'reliable' | 'popular' | 'undefined';
 
     short_description: string;
     full_description: string;
@@ -123,7 +123,7 @@ export interface VendorService {
     packages: VendorServicePackage[];
 
     features: string[];
-    faqs: VendorFAQ[];
+    faqs: { question: string; answer: string }[];
     images: string[];
 
     speed_details: string[];

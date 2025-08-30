@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\VendorService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class SubmissionController extends Controller
 {
@@ -17,25 +19,33 @@ class SubmissionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            // 'vendor_name' => 'required|string|max:255',
-
-            'location' => 'required|string|max:255',
-            'connection_type' => 'required|in:fiber,dsl,wireless',
-            'price' => 'required|numeric|min:0',
-            'billing_cycle' => 'required|in:Monthly,Quarterly,Yearly',
+            'title'             => 'required|string|max:255',
+            'slug'              => 'nullable|string|max:255',
+            'city'              => 'nullable|string|max:255',
+            'location'          => 'required|string|max:255',
+            'connection_type'   => 'required|in:fiber,dsl,wireless,satellite',
+            'highlight'         => 'nullable|in:new,trending,reliable,popular,undefined',
             'short_description' => 'required|string|max:500',
-            'full_description' => 'required|string',
-            'highlight' => 'nullable|in:new,trending,reliable,popular,undefined',
-            'features' => 'nullable|string', // comma-separated
-            'faqs' => 'nullable|json',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'full_description'  => 'required|string',
+
+            'packages'          => 'nullable|array',
+            'features'          => 'nullable|array',
+            'faqs'              => 'nullable|array',
+            'images.*'          => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'speed_details'     => 'nullable|array',
+            'coverage_area'     => 'nullable|string|max:255',
+            'is_active'         => 'nullable|boolean',
         ]);
+        // dd($request);
 
-        $validated['user_id'] = auth()->id();
+        $validated['user_id'] = Auth::user()->id;
 
+        // Slug fallback
+        if (empty($validated['slug'])) {
+            $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
+        }
 
-
+        // Handle images
         if ($request->hasFile('images')) {
             $imagePaths = [];
             foreach ($request->file('images') as $img) {
@@ -46,46 +56,16 @@ class SubmissionController extends Controller
             $validated['images'] = [];
         }
 
-        $validated['features'] = isset($validated['features'])
-            ? array_filter(array_map('trim', explode(',', $validated['features'])))
-            : [];
+        // Ensure arrays are arrays (avoid nulls)
+        $validated['features'] = $validated['features'] ?? [];
+        $validated['faqs']     = $validated['faqs'] ?? [];
+        $validated['packages'] = $validated['packages'] ?? [];
+        $validated['speed_details'] = $validated['speed_details'] ?? [];
 
-        $validated['faqs'] = isset($validated['faqs'])
-            ? json_decode($validated['faqs'], true)
-            : [];
+        VendorService::Create($validated);
 
-        VendorService::create($validated);
-
-        return redirect()->route('services.index')->with('success', 'Vendor service added successfully.');
-    }
-
-
-
-
-    public function edit(string $id) //get 
-    {
-        $vendor = VendorService::findOrFail($id);
-        return Inertia::render('Vendor/Submission/Edit', compact('vendor'));
-    }
-
-    public function update(Request $request, string $id) // post
-    {
-        $vendor = VendorService::findOrFail($id);
-
-        $validated = $request->validate([
-            'title' => 'required|string',
-            'vendorName' => 'required|string',
-            'location' => 'required|string',
-            'connectionType' => 'required|in:fiber,dsl,wireless',
-            'price' => 'required|string',
-            'postedDate' => 'required|date',
-            'description' => 'required|string',
-            'highlight' => 'required|in:new,trending,reliable,popular,undefined',
-            'features' => 'nullable|array',
-        ]);
-
-        $vendor->update($validated);
-
-        return redirect()->route('submission.index')->with('success', 'Vendor updated successfully.');
+        return redirect()
+            ->route('services.index')
+            ->with('success', 'Vendor service added successfully.');
     }
 }

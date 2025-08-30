@@ -7,8 +7,11 @@ import { Head, usePage } from '@inertiajs/react';
 
 function home() {
     const { homePage, seo: seodata } = usePage<PageProps>().props;
-    const seo = seodata[0].seo;
-    //juice
+    const seo = seodata?.[0]?.seo || {
+        title: 'NetNest',
+        description: 'NetNest is a Internet Service Provider E-commerce Platform for both Users and Vendors with full fledged Intuitive Profile',
+        keywords: 'NetNest, ISP, CMS',
+    };
     // console.log(seo);
     // console.log(JSON.stringify(seo.keywords))
 
@@ -18,9 +21,9 @@ function home() {
     return (
         <>
             <Head>
-                <title>{seo.title}</title>
-                <meta name="description" content={seo.description} />
-                <meta name="keywords" content={seo?.keywords?.length > 1 ? seo.keywords.join(', ') : 'NetNest, ISP, CMS'} />
+                <title>{seo?.title}</title>
+                <meta name="description" content={seo?.description} />
+                <meta name="keywords" content={seo.keywords} />
                 <meta property="og:title" content={seo.title} />
                 <meta property="og:description" content={seo.description} />
                 <link rel="canonical" href={window.location.href} />
