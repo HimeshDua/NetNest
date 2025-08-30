@@ -8,6 +8,7 @@ import { Head, usePage } from '@inertiajs/react';
 function home() {
     const { homePage, seo: seodata } = usePage<PageProps>().props;
     const seo = seodata[0].seo;
+    //juice
     // console.log(seo);
     // console.log(JSON.stringify(seo.keywords))
 
