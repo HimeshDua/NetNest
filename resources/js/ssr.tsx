@@ -1,8 +1,10 @@
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
+import { Elements } from '@stripe/react-stripe-js';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import ReactDOMServer from 'react-dom/server';
 import { type RouteName, route } from 'ziggy-js';
+import { stripePromise } from './lib/stripe';
 
 const appName = import.meta.env.VITE_APP_NAME || 'NetNest';
 
@@ -24,7 +26,11 @@ createServer((page) =>
                 });
             /* eslint-enable */
 
-            return <App {...props} />;
+            return (
+                <Elements stripe={stripePromise}>
+                    <App {...props} />
+                </Elements>
+            );
         },
     }),
 );

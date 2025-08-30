@@ -1,6 +1,8 @@
 import '@/css/global.css';
 
+import { stripePromise } from '@/lib/stripe';
 import { createInertiaApp } from '@inertiajs/react';
+import { Elements } from '@stripe/react-stripe-js';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
@@ -13,7 +15,11 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <Elements stripe={stripePromise}>
+                <App {...props} />
+            </Elements>,
+        );
     },
     progress: {
         color: '#4B5563',

@@ -39,11 +39,11 @@ export interface Testimonial {
 }
 
 export interface Seo {
-    seo : {
+    seo: {
         title: string;
         description: string;
-        keywords: string[];
-    }
+        keywords: string;
+    };
 }
 
 export interface Cms {
@@ -65,7 +65,7 @@ export interface Cms {
 
 export interface CmsYes {
     hero: Hero;
- 
+
     marquee_text: string;
     marquee_link: string;
 
