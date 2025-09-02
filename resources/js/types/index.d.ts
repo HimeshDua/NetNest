@@ -64,6 +64,7 @@ export interface PageProps extends InertiaPageProps {
     auth: {
         user?: User | null;
     };
+    vendor: VendorService;
     seo: Seo[];
     customerServices: VendorService[];
     subsByService: CustomerSubscription[];

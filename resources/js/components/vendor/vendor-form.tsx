@@ -284,7 +284,7 @@ export default function VendorServiceForm() {
                                     onChange={(e) => setData('featuresStr', e.target.value)}
                                     placeholder="Free router, 24/7 support, No FUP"
                                 />
-                                {errors.features && <p className="text-sm text-red-500">{errors.features}</p>}
+                                {errors.featuresStr && <p className="text-sm text-red-500">{errors.featuresStr}</p>}
                             </div>
 
                             <div className="space-y-2">
@@ -294,7 +294,7 @@ export default function VendorServiceForm() {
                                     onChange={(e) => setData('speedDetailsStr', e.target.value)}
                                     placeholder="Up to 50 Mbps, Upload 20 Mbps"
                                 />
-                                {errors.speed_details && <p className="text-sm text-red-500">{errors.speed_details}</p>}
+                                {errors.speedDetailsStr && <p className="text-sm text-red-500">{errors.speedDetailsStr}</p>}
                             </div>
                         </section>
 
