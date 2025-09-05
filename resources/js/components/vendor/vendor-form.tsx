@@ -27,16 +27,35 @@ type PackageForm = {
 
 type FaqItem = { question: string; answer: string };
 
+export type VendorServiceFormData = {
+    title: string;
+    slug: string;
+    city: string;
+    location: string;
+    posted_date: string;
+    connection_type: 'fiber' | 'dsl' | 'wireless';
+    highlight: 'new' | 'trending' | 'reliable' | 'popular' | 'undefined';
+    short_description: string;
+    full_description: string;
+    featuresStr: string;
+    speedDetailsStr: string;
+    packages: PackageForm[];
+    faqs: FaqItem[];
+    images: File[];
+    coverage_area: string;
+    is_active: boolean;
+};
+
 export default function VendorServiceForm() {
-    const { data, setData, post, processing, errors, reset, transform } = useForm({
+    const { data, setData, post, processing, errors, reset, transform } = useForm<VendorServiceFormData>({
         // Core
         title: '',
         slug: '',
         city: '',
         location: '',
         posted_date: new Date().toISOString().slice(0, 10), // YYYY-MM-DD
-        connection_type: 'fiber' as 'fiber' | 'dsl' | 'wireless',
-        highlight: 'undefined' as 'new' | 'trending' | 'reliable' | 'popular' | 'undefined',
+        connection_type: 'fiber',
+        highlight: 'undefined',
 
         short_description: '',
         full_description: '',
@@ -57,8 +76,8 @@ export default function VendorServiceForm() {
             is_popular: name === 'Standard', // default popular mid-tier
         })),
 
-        faqs: [] as FaqItem[],
-        images: [] as File[],
+        faqs: [],
+        images: [],
 
         coverage_area: '',
         is_active: true,
@@ -318,7 +337,7 @@ export default function VendorServiceForm() {
                                             onChange={(e) => handlePackageChange(idx, 'price', e.target.value)}
                                             placeholder="e.g. 2999"
                                         />
-                                        {errors[`packages.${idx}.price` as any] && (
+                                        {(errors as any)[`packages.${idx}.price`] && (
                                             <p className="text-sm text-red-500">{(errors as any)[`packages.${idx}.price`]}</p>
                                         )}
                                     </div>

@@ -41,6 +41,7 @@ export interface NavItem {
 
 export interface SharedData {
     name: string;
+    isRequestSend: {};
     quote: { message: string; author: string };
     auth: Auth;
     ziggy: Config & { location: string };
@@ -86,19 +87,19 @@ export interface Vendor {
     question: string;
     answer: string;
 }
-export interface VendorFAQ {
-    question: string;
-    answer: string;
-}
 
 export type ConnectionType = 'fiber' | 'dsl' | 'wireless';
-export type BillingCycle = 'Monthly' | 'Quarterly' | 'Yearly';
 export type HighlightType = 'new' | 'trending' | 'reliable' | 'popular' | 'undefined';
 
-export interface VendorServicePackage {
-    name: 'Basic' | 'Standard' | 'Premium';
+type PackageName = 'Basic' | 'Standard' | 'Premium';
+type BillingCycle = 'Monthly' | 'Quarterly' | 'Yearly';
+
+type FaqItem = { question: string; answer: string };
+
+export interface PackageForm {
+    name: PackageName;
     price: number;
-    billing_cycle: 'Monthly' | 'Quarterly' | 'Yearly';
+    billing_cycle: BillingCycle;
     speed_label?: string;
     features: string[];
     description?: string;
@@ -106,7 +107,7 @@ export interface VendorServicePackage {
     is_popular?: boolean;
 }
 
-export interface VendorService {
+export type VendorService = {
     id: number;
     user_id: number;
 
@@ -115,17 +116,17 @@ export interface VendorService {
     city: string;
     location: string;
     posted_date: string;
-    connection_type: 'fiber' | 'dsl' | 'wireless';
-    highlight: 'new' | 'trending' | 'reliable' | 'popular' | 'undefined';
+    connection_type: ConnectionType;
+    highlight: HighlightType;
 
     short_description: string;
     full_description: string;
 
-    packages: VendorServicePackage[];
+    packages: PackageForm[];
 
     features: string[];
     faqs: { question: string; answer: string }[];
-    images: string[];
+    images: File[];
 
     speed_details: string[];
     coverage_area: string;
@@ -135,7 +136,27 @@ export interface VendorService {
     updated_at: string;
 
     [key: string]: unknown;
-}
+};
+
+// Vendor Service Form
+export type VendorServiceFormData = {
+    title: string;
+    slug: string;
+    city: string;
+    location: string;
+    posted_date: string;
+    connection_type: 'fiber' | 'dsl' | 'wireless';
+    highlight: 'new' | 'trending' | 'reliable' | 'popular' | 'undefined';
+    short_description: string;
+    full_description: string;
+    featuresStr: string;
+    speedDetailsStr: string;
+    packages: PackageForm[];
+    faqs: FaqItem[];
+    images: File[];
+    coverage_area: string;
+    is_active: boolean;
+};
 
 // User Transactions
 

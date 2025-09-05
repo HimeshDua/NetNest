@@ -110,6 +110,7 @@ export default function Navbar({
                 roleBasedLinks = [
                     { text: 'Dashboard', href: '/customer/dashboard' },
                     { text: 'Services', href: '/services' },
+                    { text: 'Support', href: '/support' },
                     { text: 'Billings', href: '/customer/billing' },
                     { text: 'Subscription ', href: '/customer/subscription-management' },
                     // { text: 'Support', href: '/customer/support' },

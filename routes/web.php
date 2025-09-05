@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
+require __DIR__ . '/channels.php';
 
 // Public routes
 Route::get('/', [\App\Http\Controllers\Public\HomeController::class, 'index'])->name('home');
@@ -56,7 +58,7 @@ Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
     Route::resource('/submission', \App\Http\Controllers\Vendor\SubmissionController::class)->only(['index', 'store', 'edit', 'update']);
     Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
     Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
-    Route::get('/support', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'index'])->name('vendor.support');
+    Route::get('/vendor/support', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'index'])->name('vendor.support');
     // Route::get('/profile', [\App\Http\Controllers\Vendor\ProfileController::class, 'index'])->name('vendor.profile');
 });
 
@@ -72,10 +74,33 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::resource('/users', \App\Http\Controllers\Admin\UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
     Route::resource('/plans', \App\Http\Controllers\Admin\PlanManagementController::class)->except(['edit', 'create']);
     Route::resource('/billing', \App\Http\Controllers\Admin\BillingManagementController::class)->only(['index', 'update']);
-    Route::resource('/support', \App\Http\Controllers\Admin\SupportManagementController::class)->only(['index']);
+    // Route::resource('/support', \App\Http\Controllers\Admin\SupportManagementController::class)->only(['index']);
 
     Route::get('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'edit'])->name('admin.cms.edit');
     Route::post('/cms/post', [\App\Http\Controllers\Admin\CmsController::class, 'update'])->name('admin.cms.update');
 
     Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics');
+});
+
+// ---------------------------
+// Chat Routes
+// ---------------------------
+Route::middleware(['auth'])->group(function () {
+    // CUSTOMER: start/get a conversation with a vendor (only if purchased)
+    Route::middleware(['role:customer'])->group(function () {
+        Route::get('/chat/vendor/{vendorId}', [ChatController::class, 'openWithVendor'])
+            ->name('chat.open'); // e.g. route('chat.open', $vendor->id)
+    });
+
+    // VENDOR: vendor inbox + open a specific conversation
+    Route::middleware(['role:vendor'])->prefix('vendor')->group(function () {
+        Route::get('/conversations', [ChatController::class, 'vendorIndex'])->name('vendor.conversations');
+        Route::get('/conversations/{conversation}', [ChatController::class, 'show'])->name('vendor.conversations.show');
+    });
+
+    // Shared API endpoints (both participants may use, controller will authorize)
+    Route::get('/conversations/{conversation}/messages', [ChatController::class, 'fetch'])
+        ->name('conversations.messages');
+    Route::post('/conversations/{conversation}/send', [ChatController::class, 'send'])
+        ->name('conversations.send');
 });

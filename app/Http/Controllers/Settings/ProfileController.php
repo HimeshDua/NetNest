@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\ProfileUpdateRequest;
 use App\Models\CustomerRequest;
 use App\Models\User;
+use App\Models\VendorService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,9 +21,13 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        $userId = Auth::user()->id;
+        $isRequestSend = CustomerRequest::where('user_id', $userId)->firstOrFail();
+
         return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
+            'isRequestSend' => $isRequestSend
         ]);
     }
 

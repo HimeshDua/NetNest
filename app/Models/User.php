@@ -66,4 +66,21 @@ class User extends Authenticatable
     {
         return $this->role === 'customer';
     }
+
+
+    public function conversations()
+    {
+        return $this->hasMany(Conversation::class, 'customer_id')
+            ->orWhere('vendor_id', $this->id);
+    }
+
+    public function conversationsAsCustomer()
+    {
+        return $this->hasMany(Conversation::class, 'customer_id');
+    }
+
+    public function conversationsAsVendor()
+    {
+        return $this->hasMany(Conversation::class, 'vendor_id');
+    }
 }

@@ -4,15 +4,7 @@ import { cn } from '@/lib/utils';
 import { PageProps } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import * as React from 'react';
-import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
-} from '../ui/navigation-menu';
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from '../ui/navigation-menu';
 
 // Define reusable ListItem
 function ListItem({ className, title, children, ...props }: React.ComponentProps<'a'> & { title: string }) {
@@ -110,9 +102,16 @@ function Navigation() {
                     </>
                 )}
 
-                {/* Vendor */}
                 {userRole === 'vendor' && (
-                    <>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                            <Link href="/chat">Message</Link>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
+                )}
+                {/* Vendor */}
+                {/* {userRole === 'vendor' && (
+     we               <>
                         <NavigationMenuItem>
                             <NavigationMenuTrigger>Vendor Dashboard</NavigationMenuTrigger>
                             <NavigationMenuContent>
@@ -133,7 +132,7 @@ function Navigation() {
                             </NavigationMenuContent>
                         </NavigationMenuItem>
                     </>
-                )}
+                )} */}
 
                 {/* Customer */}
                 {userRole === 'customer' && (
@@ -146,6 +145,11 @@ function Navigation() {
                         <NavigationMenuItem>
                             <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
                                 <Link href="/billing">Billings</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href="/support">Support</Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
