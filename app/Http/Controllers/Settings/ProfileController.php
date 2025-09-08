@@ -22,12 +22,12 @@ class ProfileController extends Controller
     public function edit(Request $request): Response
     {
         $userId = Auth::user()->id;
-        $isRequestSend = CustomerRequest::where('user_id', $userId)->firstOrFail();
+        $isRequestSend = CustomerRequest::where('user_id', $userId)->get('id');
 
         return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
-            'isRequestSend' => $isRequestSend
+            'isRequestSend' => $isRequestSend ?? []
         ]);
     }
 

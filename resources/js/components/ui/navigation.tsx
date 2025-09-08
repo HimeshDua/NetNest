@@ -105,7 +105,7 @@ function Navigation() {
                 {userRole === 'vendor' && (
                     <NavigationMenuItem>
                         <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                            <Link href="/chat">Message</Link>
+                            <Link href="/vendor/conversations">Conversations</Link>
                         </NavigationMenuLink>
                     </NavigationMenuItem>
                 )}

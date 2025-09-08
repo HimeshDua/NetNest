@@ -33,7 +33,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth, isRequestSend } = usePage<SharedData>().props;
 
-    console.log(isRequestSend);
+    // console.log(isRequestSend);
     const { data, setData, patch, post, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
         name: auth.user.name,
         email: auth.user.email,
@@ -137,7 +137,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                     </form>
                 </div>
 
-                {auth.user.role == 'customer' && isRequestSend && (
+                {auth.user.role == 'customer' && !isRequestSend?.[0]?.id && (
                     <>
                         <Separator />
 

@@ -12,17 +12,11 @@ require __DIR__ . '/channels.php';
 Route::get('/', [\App\Http\Controllers\Public\HomeController::class, 'index'])->name('home');
 Route::get('/about', [\App\Http\Controllers\Public\AboutController::class, 'index'])->name('about');
 Route::get('/contact', fn() => Inertia::render('Public/Contact'))->name('contact');
-// Route::get('/vendors', fn() => Inertia::render('Public/Vendors'))->name('vendors');
-
-
-// Route::patch('/role/update', [\App\Http\Controllers\Admin\DashboardController::class, 'updateCustomerRole'])
-//     ->name('admin.role.update');
-
 
 Route::get('/services', [\App\Http\Controllers\Public\ServicesController::class, 'index'])->name('services.index');
 Route::get('/services/{slug}', [\App\Http\Controllers\Public\ServicesController::class, 'show'])->name('services.show');
 
-// Auth routes (already in `auth.php`) 
+// Auth routes (already in `auth.php`)
 Route::middleware(['auth', 'redirect.role'])->get('/dashboard', fn() => null)->name('dashboard');
 
 
@@ -32,22 +26,19 @@ Route::middleware(['auth', 'redirect.role'])->get('/dashboard', fn() => null)->n
 // ---------------------------
 
 Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
-    // Route::get('/dashboard', [\App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
 
-
-    // Route::get('/services', [\App\Http\Controllers\Customer\ConnectionController::class, 'services'])->name('customer.services');
     Route::get('/billing', [\App\Http\Controllers\Customer\BillingController::class, 'index'])->name('customer.billing');
-    // support is in-app chat with vendors
+
     Route::get('/support', [\App\Http\Controllers\Customer\SupportTicketController::class, 'index'])->name('customer.support');
-    Route::post('/support', [\App\Http\Controllers\Customer\SupportTicketController::class, 'store']);
-    // Route::get('/connection-status', [\App\Http\Controllers\Customer\ConnectionController::class, 'status'])->name('customer.connection.status');
+
+    Route::get('/chat/v/{vendorId}', [ChatController::class, 'openWithVendor'])
+        ->name('chat.open');
 
     // previous and current subscriptions management 
     Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
     Route::post('/transaction', [\App\Http\Controllers\Customer\SubscriptionController::class, 'store'])->name('transaction.store');
 
     Route::post('/request', [\App\Http\Controllers\Settings\ProfileController::class, 'request'])->name('customer.request');
-    // Route::get('/profile', [\App\Http\Controllers\Customer\ProfileController::class, 'index'])->name('customer.profile');
 });
 
 // ---------------------------
@@ -56,9 +47,11 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
 Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
     Route::get('/vendor/dashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index'])->name('vendor.dashboard');
     Route::resource('/submission', \App\Http\Controllers\Vendor\SubmissionController::class)->only(['index', 'store', 'edit', 'update']);
-    Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
-    Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
-    Route::get('/vendor/support', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'index'])->name('vendor.support');
+    // Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
+    // Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
+
+    Route::get('/vendor/conversations', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'index'])->name('vendor.conversations');
+    Route::get('/c/{conversation}', [ChatController::class, 'show'])->name('vendor.conversations.show');
     // Route::get('/profile', [\App\Http\Controllers\Vendor\ProfileController::class, 'index'])->name('vendor.profile');
 });
 
@@ -86,18 +79,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
 // Chat Routes
 // ---------------------------
 Route::middleware(['auth'])->group(function () {
-    // CUSTOMER: start/get a conversation with a vendor (only if purchased)
-    Route::middleware(['role:customer'])->group(function () {
-        Route::get('/chat/vendor/{vendorId}', [ChatController::class, 'openWithVendor'])
-            ->name('chat.open'); // e.g. route('chat.open', $vendor->id)
-    });
-
-    // VENDOR: vendor inbox + open a specific conversation
-    Route::middleware(['role:vendor'])->prefix('vendor')->group(function () {
-        Route::get('/conversations', [ChatController::class, 'vendorIndex'])->name('vendor.conversations');
-        Route::get('/conversations/{conversation}', [ChatController::class, 'show'])->name('vendor.conversations.show');
-    });
-
     // Shared API endpoints (both participants may use, controller will authorize)
     Route::get('/conversations/{conversation}/messages', [ChatController::class, 'fetch'])
         ->name('conversations.messages');

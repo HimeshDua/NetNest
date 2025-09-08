@@ -27,7 +27,7 @@ class ChatController extends Controller
         }
 
         // Ensure customer actually bought from this vendor
-        if (! $this->hasPurchasedFromVendor($customerId, $vendorId)) {
+        if (!$this->hasPurchasedFromVendor($customerId, $vendorId)) {
             abort(403, 'You are not authorized to chat with this vendor. Purchase required.');
         }
 
@@ -39,24 +39,6 @@ class ChatController extends Controller
         // Render Inertia chat page (your Public/Chat Inertia component should render Chat UI)
         return Inertia::render('Public/Chat', [
             'conversationId' => $conversation->id,
-            'auth' => ['user' => Auth::user()],
-        ]);
-    }
-
-    /**
-     * Vendor: list conversations for this vendor (inbox)
-     */
-    public function vendorIndex()
-    {
-        $vendorId = Auth::id();
-
-        $conversations = Conversation::where('vendor_id', $vendorId)
-            ->with(['customer']) // optional: eager load customer
-            ->orderByDesc('updated_at')
-            ->get();
-
-        return Inertia::render('Vendor/Conversations', [
-            'conversations' => $conversations,
             'auth' => ['user' => Auth::user()],
         ]);
     }
