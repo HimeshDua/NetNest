@@ -19,10 +19,9 @@ class DashboardController
         $user =  ['totalVendor' => $totalVendor, 'totalRevenue' => $totalRevenue, 'totalCustomer' => $totalCustomer];
 
         $requestedUserIds = CustomerRequest::pluck('user_id');
-        $customerRequests = User::whereIn('id', $requestedUserIds)->where(
+        $customerRequests = User::whereIn('id', $requestedUserIds)->whereNotIn(
             'role',
-            '!=',
-            'vendor'
+            ['vendor', 'admin']
         )->latest()->paginate(4);
 
         return Inertia::render('Admin/Dashboard',  ['user' => $user, 'customerRequests' => $customerRequests]);

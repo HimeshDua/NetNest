@@ -6,11 +6,6 @@ import { useEffect, useState } from 'react';
 
 export const Banner = ({ className }: { className?: string }) => {
     const { marquee } = usePage<PageProps>().props;
-    // const { marquee_link: link, marquee_text: text } = marquee[0] || [{
-    //     marquee_link : '',
-    //     marquee_text : ''
-    // }];
-    if (marquee[0]) return <div>juice</div>;
 
     const link = marquee[0]?.marquee_link || '';
     const text = marquee[0]?.marquee_text || '';
