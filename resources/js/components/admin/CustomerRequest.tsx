@@ -62,7 +62,7 @@ export function CustomerRequest({
 
             <div className="grid gap-3">
                 {customerRequest.data.map((cr, index) => (
-                    <Card key={index} className="cursor-pointer border transition-all duration-200 hover:shadow-md">
+                    <Card key={index} className="border transition-all duration-200 hover:shadow-md">
                         <CardContent className="p-4">
                             <div className="flex items-start justify-between">
                                 <div className="flex items-start space-x-4">
@@ -106,7 +106,7 @@ export function CustomerRequest({
 
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                        <Button size="sm" variant="outline" className="gap-1">
+                                        <Button size="sm" variant="outline" className="cursor-pointer gap-1">
                                             <UserPlus className="h-4 w-4" />
                                             Review
                                         </Button>

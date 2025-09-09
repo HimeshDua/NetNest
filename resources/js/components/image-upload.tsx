@@ -6,7 +6,7 @@ import { Label } from './ui/label';
 interface ImageUploadProps {
     name: string;
     label: string;
-    value?: string | null; // existing file path from DB
+    value?: string | null;
     onChange: (file: File | null) => void;
 }
 export const ImageUpload = ({ name, label, value, onChange }: ImageUploadProps) => {
@@ -30,7 +30,7 @@ export const ImageUpload = ({ name, label, value, onChange }: ImageUploadProps) 
     };
 
     return (
-        <div className="flex w-full flex-col space-y-3">
+        <div className="flex w-full flex-col space-y-3" suppressHydrationWarning>
             <Label className="text-sm font-medium">{label}</Label>
             <Dropzone accept={{ 'image/*': ['.png', '.jpg', '.jpeg'] }} onDrop={handleDrop} src={files} className="w-full rounded-md p-6 sm:p-8">
                 {!filePreview && <DropzoneEmptyState />}

@@ -9,14 +9,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Cms, CmsYes } from '@/types/cms';
 import { useForm } from '@inertiajs/react';
-import { ChevronDown, ChevronUp, Eye, EyeOff, HelpCircle, Plus, Save, Trash2, Upload } from 'lucide-react';
+import { ChevronDown, ChevronUp, HelpCircle, Plus, Save, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 import { ImageUpload } from '../image-upload';
 import { Badge } from '../ui/badge';
-import { Switch } from '../ui/switch';
 
 export default function CmsForm({ cms }: { cms: Cms }) {
-    const { data,  setData, post, processing, errors } = useForm<CmsYes>({
+    const { data, setData, post, processing, errors } = useForm<CmsYes>({
         hero: cms?.hero || {
             title: '',
             subtitle: '',
@@ -50,7 +49,7 @@ export default function CmsForm({ cms }: { cms: Cms }) {
         seo: false,
     });
 
-    const [previewMode, setPreviewMode] = useState(false);
+    const [previousAboutImage, setPreviousAboutImage] = useState<string | null>(data.about.image);
 
     const toggleSection = (section: string) => {
         setExpandedSections((prev) => ({
@@ -93,15 +92,6 @@ export default function CmsForm({ cms }: { cms: Cms }) {
 
     return (
         <div className="relative">
-            {/* Preview Mode Toggle */}
-            <div className="fixed top-6 right-6 z-10 flex items-center gap-2 rounded-lg bg-background p-3 shadow-md">
-                <Switch id="preview-mode" checked={previewMode} onCheckedChange={setPreviewMode} />
-                <Label htmlFor="preview-mode" className="flex cursor-pointer items-center gap-2">
-                    {previewMode ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    {previewMode ? 'Preview Mode' : 'Edit Mode'}
-                </Label>
-            </div>
-
             <form onSubmit={handleSubmit} className="space-y-6 p-6">
                 <div className="mb-6 flex items-center justify-between">
                     <div>
@@ -641,21 +631,22 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                         label="About Section Image"
                                         // description="Recommended: 600x400px, shows your team or product"
                                         value={data?.about?.image}
-                                        onChange={(file) => setData('about', { ...data.about, image: file })}
+                                        onChange={(file) => {
+                                            setData('about', { ...data.about, image: file });
+                                        }}
                                     />
-
-                                    {/* {data.about.image && (
+                                    {previousAboutImage && data.about?.image && (
                                         <div className="flex flex-col gap-2">
                                             <Label>Image Preview</Label>
-                                            <div className="flex h-48 items-center justify-center overflow-hidden rounded-md border p-2">
+                                            <div className="flex h-full items-center justify-center overflow-hidden rounded-md border p-2">
                                                 <img
-                                                    src={data.about.image.startsWith('http') ? data.about.image : `/storage/${data.about.image}`}
+                                                    src={previousAboutImage && `/storage/${previousAboutImage}`}
                                                     alt="About section preview"
-                                                    className="max-h-full max-w-full object-contain"
+                                                    className="h-full max-h-full max-w-full object-contain"
                                                 />
                                             </div>
                                         </div>
-                                    )} */}
+                                    )}
                                 </div>
                             </CardContent>
                         </Card>

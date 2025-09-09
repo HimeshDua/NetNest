@@ -45,7 +45,7 @@ export default function AdminDashboardPage() {
 
     return (
         <DashboardLayout title="Admin Dashboard">
-            <Main className="space-y-6">
+            <Main className="space-y-6 p-6">
                 <header className="ps-2">
                     <Typography variant="3xl/bold" className="mb-2 tracking-tight" as="h1">
                         Welcome back, {name}! 👋
@@ -85,7 +85,7 @@ export default function AdminDashboardPage() {
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-7">
                     <Card className="col-span-1 p-6 lg:col-span-4">
                         <CardHeader className="mb-4 p-0">
-                            <CardTitle>Featured Vendors</CardTitle>
+                            <CardTitle>Featured Vendors (Top Ranking)</CardTitle>
                             <Typography variant="sm/normal" className="text-muted-foreground">
                                 Drag and drop to rearrange top vendors on the homepage
                             </Typography>

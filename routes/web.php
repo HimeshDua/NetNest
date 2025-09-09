@@ -66,8 +66,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
 
     Route::resource('/users', \App\Http\Controllers\Admin\UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
     Route::resource('/plans', \App\Http\Controllers\Admin\PlanManagementController::class)->except(['edit', 'create']);
-    Route::resource('/billing', \App\Http\Controllers\Admin\BillingManagementController::class)->only(['index', 'update']);
-    // Route::resource('/support', \App\Http\Controllers\Admin\SupportManagementController::class)->only(['index']);
 
     Route::get('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'edit'])->name('admin.cms.edit');
     Route::post('/cms/post', [\App\Http\Controllers\Admin\CmsController::class, 'update'])->name('admin.cms.update');
