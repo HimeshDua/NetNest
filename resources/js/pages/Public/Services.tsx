@@ -1,13 +1,16 @@
-import VendorServiceGrid from '@/components/public/vendor/default';
+import VendorServiceGridSkeleton from '@/components/public/vendor/skeleton';
 import Layout from '@/layouts/layout';
 import { Head, router, usePage } from '@inertiajs/react';
+import { lazy, Suspense } from 'react';
 
 function Vendors() {
     const { services } = usePage<any>().props;
-
     const handlePageChange = (url: string | null) => {
         if (url) router.get(url);
     };
+
+    const VendorService = lazy(() => import('@/components/public/vendor/default'));
+
     return (
         <>
             <Head>
@@ -50,8 +53,9 @@ function Vendors() {
                         Explore high-speed internet, secure VPN, dedicated lines, and more. Curated for your business and home needs.
                     </p>
                 </div>
-                {/* <ServiceFilters cities={cities} connectionTypes={connectionTypes} services={services} filters={filters} /> */}
-                <VendorServiceGrid services={services} onPageChange={handlePageChange} />
+                <Suspense fallback={<VendorServiceGridSkeleton />}>
+                    <VendorService services={services} onPageChange={handlePageChange} />
+                </Suspense>
             </Layout>
         </>
     );

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { VendorService } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BarChartIcon, CalendarIcon, DollarSignIcon, GlobeIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
+import { BarChartIcon, CalendarIcon, DollarSignIcon, GlobeIcon, PackageX, RotateCcw, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
 
 type Props = {
     services: {
@@ -59,15 +59,22 @@ export default function VendorServiceGrid({ services, onPageChange }: Props) {
 
     if (!services.data.length) {
         return (
-            <Card>
+            <Card className="flex flex-col items-center justify-center p-8 text-center">
+                <PackageX className="mb-4 h-16 w-16 text-muted-foreground" />
                 <CardHeader>
-                    <CardTitle>No Services Available</CardTitle>
-                    <CardDescription>We couldn’t find any vendor services at the moment. Please check back later.</CardDescription>
+                    <CardTitle className="text-2xl font-semibold">No Services Available</CardTitle>
+                    <CardDescription className="text-base text-muted-foreground">
+                        We couldn’t find any vendor services at the moment. Please check back later or try a different search.
+                    </CardDescription>
                 </CardHeader>
-                <CardFooter className="flex justify-center">
+                <CardFooter className="mt-6 flex flex-col justify-center gap-4 sm:flex-row">
                     <Link href={route('home')}>
                         <Button>Go Back Home</Button>
                     </Link>
+                    <Button variant="outline" onClick={() => window.location.reload()}>
+                        <RotateCcw className="mr-2 h-4 w-4" />
+                        Try Again
+                    </Button>
                 </CardFooter>
             </Card>
         );
