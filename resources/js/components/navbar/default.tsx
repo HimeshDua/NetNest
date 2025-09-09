@@ -102,7 +102,7 @@ export default function Navbar({
                     { text: 'Dashboard', href: '/vendor/dashboard' },
                     { text: 'Assigned', href: '/vendor/assigned-connections' },
                     { text: 'Requests', href: '/vendor/installation-requests' },
-                    { text: 'Support', href: '/vendor/support' },
+                    { text: 'Conversations', href: '/vendor/conversations' },
                 ];
                 break;
 
@@ -194,7 +194,7 @@ export default function Navbar({
     };
 
     return (
-        <header className={cn('sticky top-0 z-50 -mb-4 px-4 pb-4', 'fade-bottom bg-background/80 backdrop-blur-lg', className)}>
+        <header className={cn('z-50 -mb-4 px-4 pb-4', 'fade-bottom bg-background/80 backdrop-blur-lg', className)}>
             <div className="max-w-container relative mx-auto">
                 <NavbarComponent>
                     <NavbarLeft>

@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Customer;
 
 use App\Models\CustomerSubscription;
 use App\Models\VendorService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class SupportTicketController
+class SupportController
 {
     public function index()
     {

@@ -29,7 +29,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
 
     Route::get('/billing', [\App\Http\Controllers\Customer\BillingController::class, 'index'])->name('customer.billing');
 
-    Route::get('/support', [\App\Http\Controllers\Customer\SupportTicketController::class, 'index'])->name('customer.support');
+    Route::get('/support', [\App\Http\Controllers\Customer\SupportController::class, 'index'])->name('customer.support');
 
     Route::get('/chat/v/{vendorId}', [ChatController::class, 'openWithVendor'])
         ->name('chat.open');
@@ -50,7 +50,7 @@ Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
     // Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
     // Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
 
-    Route::get('/vendor/conversations', [\App\Http\Controllers\Vendor\SupportTicketController::class, 'index'])->name('vendor.conversations');
+    Route::get('/vendor/conversations', [\App\Http\Controllers\Vendor\ConversationController::class, 'index'])->name('vendor.conversations');
     Route::get('/c/{conversation}', [ChatController::class, 'show'])->name('vendor.conversations.show');
     // Route::get('/profile', [\App\Http\Controllers\Vendor\ProfileController::class, 'index'])->name('vendor.profile');
 });

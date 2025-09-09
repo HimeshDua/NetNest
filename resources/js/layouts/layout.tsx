@@ -20,7 +20,7 @@ function Layout({ children, title }: LayoutProps) {
     return (
         <>
             {auth.user && auth.user.email.length > 0 && <Banner className="bg-gradient-to-b from-blue-500 to-blue-600" />}
-            <main className="mx-auto max-w-6xl">
+            <main className="relative mx-auto max-w-6xl">
                 <Head title={title} />
                 <Navbar auth={auth} />
                 <Section className="min-h-[64vh]">

@@ -11,7 +11,7 @@ export default function AdminDashboardPage() {
     const cardsData = [
         {
             label: 'Total Revenue',
-            value: `${user.totalRevenue * 300}  PKR`,
+            value: `${user.totalRevenue}  PKR`,
             change: '+20.1%',
             iconColor: 'text-green-500',
             icon: <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />,

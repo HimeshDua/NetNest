@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Models\Conversation;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class SupportTicketController
+class ConversationController
 {
     public function index()
     {
@@ -18,7 +17,7 @@ class SupportTicketController
             ->orderByDesc('updated_at')
             ->get();
 
-        return Inertia::render('Vendor/Support', [
+        return Inertia::render('Vendor/Conversations', [
             'conversations' => $conversations,
             'auth' => ['user' => Auth::user()],
         ]);
