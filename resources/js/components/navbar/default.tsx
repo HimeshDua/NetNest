@@ -100,7 +100,7 @@ export default function Navbar({
             case 'vendor':
                 roleBasedLinks = [
                     { text: 'Dashboard', href: '/vendor/dashboard' },
-                    { text: 'Assigned', href: '/vendor/assigned-connections' },
+                    { text: 'Conversations', href: route('vendor.conversations') },
                     { text: 'Requests', href: '/vendor/installation-requests' },
                     { text: 'Conversations', href: '/vendor/conversations' },
                 ];

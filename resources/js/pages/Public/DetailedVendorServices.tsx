@@ -10,10 +10,10 @@ import TransactionDialog from '@/components/customer/transactions/default';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageProps, VendorService } from '@/types';
-import { BarChartIcon, MapPinIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
-interface Props extends PageProps {
-    vendor: VendorService;
-}
+import { BarChartIcon, FileText, MapPinIcon, ServerIcon, StarIcon, TrendingUpIcon, UsersIcon } from 'lucide-react';
+
+import '@/css/styles/tiptap.scss';
+import '@/css/styles/utils.css';
 
 const getHighlight = (highlight: VendorService['highlight']) => {
     switch (highlight) {
@@ -81,10 +81,21 @@ export default function DetailedVendorServices() {
                         <Separator />
 
                         {/* Description */}
-                        <Typography as="p" variant="lg/normal">
-                            {vendor.short_description}
-                        </Typography>
-                        <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: vendor.full_description }} />
+                        <div>
+                            <div className="mb-3 flex items-center gap-2">
+                                <FileText className="h-5 w-5" />
+                                <Typography as="h2" variant="xl/semibold">
+                                    Service Description
+                                </Typography>
+                            </div>
+                            <Typography as="p" variant="lg/normal" className="mb-4">
+                                {vendor.short_description}
+                            </Typography>
+                            <div
+                                className="prose tiptap prose-sm dark:tiptap dark:prose-invert -0! max-w-none border-0! bg-background! shadow-none!"
+                                dangerouslySetInnerHTML={{ __html: vendor.full_description }}
+                            />
+                        </div>
 
                         {/* Features */}
                         {vendor.features.length > 0 && (

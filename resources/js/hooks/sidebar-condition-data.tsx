@@ -41,7 +41,7 @@ export function getSidebarData(role: string | null) {
             navMain: [
                 { title: 'Dashboard', url: '/vendor/dashboard', icon: SquareTerminal },
                 { title: 'Operations', url: '/vendor/submission', icon: Map },
-                { title: 'Connections', url: '/vendor/assigned-connections', icon: Map },
+                { title: 'Conversations', url: route('vendor.conversations'), icon: IconMessageDots },
                 ...sharedItems,
             ],
             navSecondary,

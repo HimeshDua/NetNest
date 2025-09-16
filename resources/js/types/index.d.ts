@@ -69,7 +69,7 @@ export interface PageProps extends InertiaPageProps {
     seo: Seo[];
     customerServices: VendorService[];
     subsByService: CustomerSubscription[];
-    flash: { success?: string; error?: string };
+    flash: { success?: string; error?: string; warning?: string; info?: string };
     CmsProp: Cms[] | undefined;
     cms: CmsYes;
     marquee: [

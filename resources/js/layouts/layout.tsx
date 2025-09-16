@@ -9,14 +9,16 @@ import { toast } from 'sonner';
 import Navbar from '../components/navbar/default';
 
 function Layout({ children, title }: LayoutProps) {
-    const { auth } = usePage<PageProps>().props;
-    const { flash } = usePage<PageProps>().props;
+    const { auth, flash } = usePage<PageProps>().props;
 
     useEffect(() => {
         if (flash?.success) toast.success(flash.success);
         if (flash?.error) toast.error(flash.error);
-        console.log(flash);
+        if (flash?.info) toast.info(flash.info);
+        if (flash?.warning) toast.warning(flash.warning);
+        // console.log(flash);
     }, [flash]);
+
     return (
         <>
             {auth.user && auth.user.email.length > 0 && <Banner className="bg-gradient-to-b from-blue-500 to-blue-600" />}
@@ -25,7 +27,13 @@ function Layout({ children, title }: LayoutProps) {
                 <Navbar auth={auth} />
                 <Section className="min-h-[64vh]">
                     {children}
-                    <Toaster position="bottom-right" />
+                    <Toaster
+                        expand
+                        swipeDirections={['bottom', 'left', 'top']}
+                        richColors
+                        containerAriaLabel="PopUp Container"
+                        position="bottom-right"
+                    />
                 </Section>
                 <FooterWithNewsletter />
             </main>

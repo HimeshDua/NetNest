@@ -1,3 +1,4 @@
+import { Toaster } from '@/components/ui/sonner';
 import '@/css/global.css';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, type BreadcrumbItem } from '@/types';
@@ -16,11 +17,15 @@ export default function DashboardLayout({ children, title }: { children: React.R
     useEffect(() => {
         if (flash?.success) toast.success(flash.success);
         if (flash?.error) toast.error(flash.error);
+        if (flash?.info) toast.info(flash.info);
+        if (flash?.warning) toast.warning(flash.warning);
         // console.log(flash);
     }, [flash]);
+
     return (
         <AppLayout title={title} breadcrumbs={breadcrumbs}>
             {children}
+            <Toaster expand swipeDirections={['bottom', 'left', 'top']} richColors containerAriaLabel="PopUp Container" position="bottom-right" />
         </AppLayout>
     );
 }

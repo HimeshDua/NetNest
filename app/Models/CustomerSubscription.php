@@ -7,75 +7,75 @@ use Illuminate\Database\Eloquent\Model;
 
 class CustomerSubscription extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    /// For Vendor Dashboard Stats
+  /// For Vendor Dashboard Stats
 
-    // Customer Hbilling histo
-    protected $fillable = [
-        'user_id',
-        'vendor_service_id',
-        'subscribed_at',
-        'package_name',
-        'next_billing_date',
-        'status',
-    ];
+  // Customer Hbilling histo
+  protected $fillable = [
+    'user_id',
+    'vendor_service_id',
+    'subscribed_at',
+    'package_name',
+    'next_billing_date',
+    'status',
+  ];
 
-    protected $casts = [
-        'subscribed_at' => 'date',
-        'next_billing_date' => 'date',
-    ];
+  protected $casts = [
+    'subscribed_at' => 'date',
+    'next_billing_date' => 'date',
+  ];
 
-    // === Relationships ===
+  // === Relationships ===
 
-    // The customer who subscribed
-    public function customer()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+  // The customer who subscribed
+  public function customer()
+  {
+    return $this->belongsTo(User::class, 'user_id');
+  }
 
-    public function vendorService()
-    {
-        return $this->belongsTo(VendorService::class, 'vendor_service_id');
-    }
+  public function vendorService()
+  {
+    return $this->belongsTo(VendorService::class, 'vendor_service_id');
+  }
 
-    public function transactions()
-    {
-        return $this->hasMany(CustomerTransaction::class, 'customer_subscription_id');
-    }
+  public function transactions()
+  {
+    return $this->hasMany(CustomerTransaction::class, 'customer_subscription_id');
+  }
 
-    // === Scopes and Helpers ===
+  // === Scopes and Helpers ===
 
-    public function isActive(): bool
-    {
-        return $this->status === 'active';
-    }
+  public function isActive(): bool
+  {
+    return $this->status === 'active';
+  }
 
-    public function scopeActive($query)
-    {
-        return $query->where('status', 'active');
-    }
+  public function scopeActive($query)
+  {
+    return $query->where('status', 'active');
+  }
 
-    // === Boot: Set billing dates dynamically ===
+  // === Boot: Set billing dates dynamically ===
 
-    protected static function booted()
-    {
-        static::creating(function ($subscription) {
-            $subscription->subscribed_at = $subscription->subscribed_at ?? now();
+  protected static function booted()
+  {
+    static::creating(function ($subscription) {
+      $subscription->subscribed_at = $subscription->subscribed_at ?? now();
 
-            if (!$subscription->next_billing_date && $subscription->vendorService) {
-                switch ($subscription->vendorService->billing_cycle) {
-                    case 'Quarterly':
-                        $subscription->next_billing_date = now()->addMonths(3);
-                        break;
-                    case 'Yearly':
-                        $subscription->next_billing_date = now()->addYear();
-                        break;
-                    default:
-                        $subscription->next_billing_date = now()->addMonth();
-                        break;
-                }
-            }
-        });
-    }
+      if (!$subscription->next_billing_date && $subscription->vendorService) {
+        switch ($subscription->vendorService->billing_cycle) {
+          case 'Quarterly':
+            $subscription->next_billing_date = now()->addMonths(3);
+            break;
+          case 'Yearly':
+            $subscription->next_billing_date = now()->addYear();
+            break;
+          default:
+            $subscription->next_billing_date = now()->addMonth();
+            break;
+        }
+      }
+    });
+  }
 }

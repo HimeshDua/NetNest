@@ -27,59 +27,59 @@ Route::middleware(['auth', 'redirect.role'])->get('/dashboard', fn() => null)->n
 
 Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
 
-    Route::get('/billing', [\App\Http\Controllers\Customer\BillingController::class, 'index'])->name('customer.billing');
+  Route::get('/billing', [\App\Http\Controllers\Customer\BillingController::class, 'index'])->name('customer.billing');
 
-    Route::get('/support', [\App\Http\Controllers\Customer\SupportController::class, 'index'])->name('customer.support');
+  Route::get('/support', [\App\Http\Controllers\Customer\SupportController::class, 'index'])->name('customer.support');
 
-    Route::get('/chat/v/{vendorId}', [ChatController::class, 'openWithVendor'])
-        ->name('chat.open');
+  Route::get('/chat/v/{vendorId}', [ChatController::class, 'openWithVendor'])
+    ->name('chat.open');
 
-    // previous and current subscriptions management 
-    Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
-    Route::post('/transaction', [\App\Http\Controllers\Customer\SubscriptionController::class, 'store'])->name('transaction.store');
+  // previous and current subscriptions management
+  Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
+  Route::post('/transaction', [\App\Http\Controllers\Customer\SubscriptionController::class, 'store'])->name('transaction.store');
 
-    Route::post('/request', [\App\Http\Controllers\Settings\ProfileController::class, 'request'])->name('customer.request');
+  Route::post('/request', [\App\Http\Controllers\Settings\ProfileController::class, 'request'])->name('customer.request');
 });
 
 // ---------------------------
 // Vendor Routes
 // ---------------------------
 Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
-    Route::get('/vendor/dashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index'])->name('vendor.dashboard');
-    Route::resource('/submission', \App\Http\Controllers\Vendor\SubmissionController::class)->only(['index', 'store', 'edit', 'update']);
-    // Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
-    // Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
+  Route::get('/vendor/dashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index'])->name('vendor.dashboard');
+  Route::resource('/submission', \App\Http\Controllers\Vendor\SubmissionController::class)->only(['index', 'store', 'edit', 'update']);
+  // Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
+  // Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
 
-    Route::get('/vendor/conversations', [\App\Http\Controllers\Vendor\ConversationController::class, 'index'])->name('vendor.conversations');
-    Route::get('/c/{conversation}', [ChatController::class, 'show'])->name('vendor.conversations.show');
-    // Route::get('/profile', [\App\Http\Controllers\Vendor\ProfileController::class, 'index'])->name('vendor.profile');
+  Route::get('/vendor/conversations', [\App\Http\Controllers\Vendor\ConversationController::class, 'index'])->name('vendor.conversations');
+  Route::get('/c/{conversation}', [ChatController::class, 'show'])->name('vendor.conversations.show');
+  // Route::get('/profile', [\App\Http\Controllers\Vendor\ProfileController::class, 'index'])->name('vendor.profile');
 });
 
 // ---------------------------
 // Admin Routes
 // ---------------------------
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+  Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::patch('/role/update', [\App\Http\Controllers\Admin\DashboardController::class, 'updateCustomerRole'])
-        ->name('admin.role.update');
+  Route::patch('/role/update', [\App\Http\Controllers\Admin\DashboardController::class, 'updateCustomerRole'])
+    ->name('admin.role.update');
 
-    Route::resource('/users', \App\Http\Controllers\Admin\UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
-    Route::resource('/plans', \App\Http\Controllers\Admin\PlanManagementController::class)->except(['edit', 'create']);
+  Route::resource('/users', \App\Http\Controllers\Admin\UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
+  Route::resource('/plans', \App\Http\Controllers\Admin\PlanManagementController::class)->except(['edit', 'create']);
 
-    Route::get('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'edit'])->name('admin.cms.edit');
-    Route::post('/cms/post', [\App\Http\Controllers\Admin\CmsController::class, 'update'])->name('admin.cms.update');
+  Route::get('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'edit'])->name('admin.cms.edit');
+  Route::post('/cms/post', [\App\Http\Controllers\Admin\CmsController::class, 'update'])->name('admin.cms.update');
 
-    Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics');
+  Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics');
 });
 
 // ---------------------------
 // Chat Routes
 // ---------------------------
 Route::middleware(['auth'])->group(function () {
-    // Shared API endpoints (both participants may use, controller will authorize)
-    Route::get('/conversations/{conversation}/messages', [ChatController::class, 'fetch'])
-        ->name('conversations.messages');
-    Route::post('/conversations/{conversation}/send', [ChatController::class, 'send'])
-        ->name('conversations.send');
+  // Shared API endpoints (both participants may use, controller will authorize)
+  Route::get('/conversations/{conversation}/messages', [ChatController::class, 'fetch'])
+    ->name('conversations.messages');
+  Route::post('/conversations/{conversation}/send', [ChatController::class, 'send'])
+    ->name('conversations.send');
 });

@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm } from '@inertiajs/react';
 import React from 'react';
 import { RichEditor } from '../editor/rich-editor';
+import { Calendar22 } from '../ui/date-picker';
 
 type PackageName = 'Basic' | 'Standard' | 'Premium';
 type BillingCycle = 'Monthly' | 'Quarterly' | 'Yearly';
@@ -180,17 +181,6 @@ export default function VendorServiceForm() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="slug">Slug (optional)</Label>
-                                <Input
-                                    id="slug"
-                                    value={data.slug}
-                                    onChange={(e) => setData('slug', e.target.value)}
-                                    placeholder="fiber-max-50-mbps"
-                                />
-                                {errors.slug && <p className="text-sm text-red-500">{errors.slug}</p>}
-                            </div>
-
-                            <div className="space-y-2">
                                 <Label htmlFor="city">City</Label>
                                 <Input id="city" value={data.city} onChange={(e) => setData('city', e.target.value)} placeholder="Karachi" />
                                 {errors.city && <p className="text-sm text-red-500">{errors.city}</p>}
@@ -208,13 +198,7 @@ export default function VendorServiceForm() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="posted_date">Posted Date</Label>
-                                <Input
-                                    id="posted_date"
-                                    type="date"
-                                    value={data.posted_date}
-                                    onChange={(e) => setData('posted_date', e.target.value)}
-                                />
+                                <Calendar22 onSelect={(data) => setData('posted_date', data)} />
                                 {errors.posted_date && <p className="text-sm text-red-500">{errors.posted_date}</p>}
                             </div>
 

@@ -15,9 +15,10 @@ class DashboardController
   {
     $vendorId = Auth::id();
     $service = VendorService::where('user_id', $vendorId)->first();
-    
+
     if (!$service) {
-      return Inertia::render('Vendor/Submission');
+      return redirect()->route('submission.index')->with('warning', 'Please submit your service details first.');
+      // return Inertia::render('Vendor/Submission');
     }
     $subscriptions = CustomerSubscription::where('vendor_service_id', $service->id)->get();
 
