@@ -11,6 +11,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -70,6 +71,10 @@ class ProfileController extends Controller
   }
   public function request(Request $request)
   {
+
+    // dd($request->all());
+    Log::info('Vendor request received:', $request->all());
+
     $request->validate([
       'email' => ['required', 'email'],
       'phone' => ['required', 'string', 'min:10'],

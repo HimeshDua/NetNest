@@ -30,6 +30,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 type ProfileForm = {
     name: string;
     email: string;
+    phone: string;
+    description: string;
     latitude: number;
     longitude: number;
     location: string;
@@ -42,6 +44,8 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
     const { data, setData, patch, post, errors, processing, recentlySuccessful } = useForm<ProfileForm>({
         name: auth.user.name,
         email: auth.user.email,
+        phone: '',
+        description: '',
         latitude: 0,
         longitude: 0,
         location: '',
@@ -179,10 +183,13 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                                     id="phone"
                                                     type="text"
                                                     name="phone"
+                                                    value={data.phone}
+                                                    onChange={(e) => setData('phone', e.target.value)}
                                                     required
                                                     autoComplete="tel"
                                                     placeholder="e.g. 0303-1234567"
                                                 />
+                                                <InputError message={errors.phone} />
                                             </div>
 
                                             <LocationPicker
@@ -193,19 +200,25 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                                     setData('longitude', Number(location.lng));
                                                 }}
                                             />
+                                            <InputError message={errors.location} />
 
                                             <input type="hidden" name="latitude" value={data.latitude} />
+                                            <InputError message={errors.latitude} />
+
                                             <input type="hidden" name="longitude" value={data.longitude} />
+                                            <InputError message={errors.longitude} />
 
                                             <div className="flex flex-col gap-2">
                                                 <Label htmlFor="description">Service Description</Label>
                                                 <Textarea
                                                     id="description"
                                                     name="description"
+                                                    onChange={(e) => setData('description', e.target.value)}
                                                     required
                                                     placeholder="Describe your internet service, coverage, or unique offerings..."
                                                     className="w-full placeholder:text-accent-foreground/90"
                                                 />
+                                                <InputError message={errors.description} />
                                             </div>
 
                                             <InputError message={errors.email} />
