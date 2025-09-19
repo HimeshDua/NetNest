@@ -45,7 +45,7 @@ export default function AdminDashboardPage() {
 
     return (
         <DashboardLayout title="Admin Dashboard">
-            <Main className="space-y-6 p-6">
+            <Main className="container mx-auto space-y-6 p-6">
                 <header className="ps-2">
                     <Typography variant="3xl/bold" className="mb-2 tracking-tight" as="h1">
                         Welcome back, {name}! 👋
@@ -82,8 +82,8 @@ export default function AdminDashboardPage() {
                     })}
                 </section>
 
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-7">
-                    <Card className="col-span-1 p-6 lg:col-span-4">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-6">
+                    <Card className="col-span-1 p-6 lg:col-span-3">
                         <CardHeader className="mb-4 p-0">
                             <CardTitle>Featured Vendors (Top Ranking)</CardTitle>
                             <Typography variant="sm/normal" className="text-muted-foreground">
@@ -105,6 +105,7 @@ export default function AdminDashboardPage() {
                         </CardContent>
                     </Card>
 
+                    {/* Dialog 👍 */}
                     <CustomerRequest classname="col-span-1 lg:col-span-3" customerRequest={customerRequests} onPageChange={handlePageChange} />
                 </div>
             </Main>

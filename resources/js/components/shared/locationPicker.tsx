@@ -35,10 +35,11 @@ export type Location = {
 
 type LocationPickerProps = {
     onSelect: (location: Location) => void;
+    showTiles?: boolean;
 };
 
 // export const LocationPicker: React.FC<LocationPickerProps> = ({ onSelect }) => {
-export default function LocationPicker({ onSelect }: LocationPickerProps) {
+export default function LocationPicker({ onSelect, showTiles = true }: LocationPickerProps) {
     const [position, setPosition] = useState<LatLngLiteral>({
         lat: 31.5204,
         lng: 74.3487,
@@ -96,32 +97,33 @@ export default function LocationPicker({ onSelect }: LocationPickerProps) {
     }, []);
 
     return (
-        <div className="relative h-[200px] w-full overflow-hidden rounded-lg border md:h-[360px]">
-            <MapContainer
-                center={position}
-                zoom={19}
-                maxZoom={19}
-                minZoom={5}
-                inertia
-                fadeAnimation={true}
-                className="absolute z-10 h-full w-full"
-                scrollWheelZoom={false}
-                dragging={false}
-                doubleClickZoom={false}
-                touchZoom={false}
-                zoomControl={false}
-            >
-                <TileLayer
+        <div className={`relative ${showTiles ? 'h-[200px] md:h-[360px]' : null} w-full overflow-hidden rounded-lg border`}>
+            {showTiles && (
+                <MapContainer
+                    center={position}
+                    zoom={19}
                     maxZoom={19}
-                    crossOrigin={'anonymous'}
                     minZoom={5}
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={position} draggable={false} />
-                <MapNavigator position={position} />
-            </MapContainer>
-
+                    inertia
+                    fadeAnimation={true}
+                    className="absolute z-10 h-full w-full"
+                    scrollWheelZoom={false}
+                    dragging={false}
+                    doubleClickZoom={false}
+                    touchZoom={false}
+                    zoomControl={false}
+                >
+                    <TileLayer
+                        maxZoom={19}
+                        crossOrigin={'anonymous'}
+                        minZoom={5}
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={position} draggable={false} />
+                    <MapNavigator position={position} />
+                </MapContainer>
+            )}
             <div className="absolute right-4 bottom-4 z-50 flex flex-col items-end gap-2">
                 <Button size="icon" variant="secondary" onClick={handleUseMyLocation} disabled={isLoading} className="shadow-md">
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LocateFixed className="h-4 w-4" />}

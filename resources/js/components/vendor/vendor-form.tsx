@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm } from '@inertiajs/react';
 import React from 'react';
 import { RichEditor } from '../editor/rich-editor';
+import LocationPicker from '../shared/locationPicker';
 import { Calendar22 } from '../ui/date-picker';
 
 type PackageName = 'Basic' | 'Standard' | 'Premium';
@@ -194,6 +195,7 @@ export default function VendorServiceForm() {
                                     onChange={(e) => setData('location', e.target.value)}
                                     placeholder="DHA Phase 6"
                                 />
+                                <LocationPicker showTiles={false} onSelect={(loc) => setData('location', loc.name)} className="mt-2" />
                                 {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}
                             </div>
 
