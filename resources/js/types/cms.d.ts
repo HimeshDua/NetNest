@@ -27,8 +27,7 @@ export interface Feature2 {
 }
 
 export interface About {
-    title: string;
-    description: string;
+    content: string;
     image?: file | null;
 }
 

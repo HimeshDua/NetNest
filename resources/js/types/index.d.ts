@@ -67,6 +67,12 @@ export interface PageProps extends InertiaPageProps {
     };
     vendor: VendorService;
     seo: Seo[];
+    aboutPage: {
+        about: {
+            content: string;
+            image: string;
+        };
+    }[];
     customerServices: VendorService[];
     subsByService: CustomerSubscription[];
     flash: { success?: string; error?: string; warning?: string; info?: string };

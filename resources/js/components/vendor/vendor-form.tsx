@@ -1,4 +1,3 @@
-// resources/js/pages/vendor/VendorServiceForm.tsx
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -18,12 +17,12 @@ const PACKAGE_NAMES: PackageName[] = ['Basic', 'Standard', 'Premium'];
 
 type PackageForm = {
     name: PackageName;
-    price: string; // keep as string for inputs; convert to number on submit
+    price: string;
     billing_cycle: BillingCycle;
     speed_label: string;
-    featuresStr: string; // comma-separated in UI -> array on submit
+    featuresStr: string;
     description: string;
-    currency: string; // e.g. PKR
+    currency: string;
     is_popular: boolean;
 };
 
@@ -85,6 +84,12 @@ export default function VendorServiceForm() {
         is_active: true,
     });
 
+    const [disabledPackages, setDisabledPackages] = React.useState<Record<PackageName, boolean>>({
+        Basic: false,
+        Standard: false,
+        Premium: false,
+    });
+
     // ------- Helpers -------
     const splitCSV = (value: string) =>
         value
@@ -115,17 +120,18 @@ export default function VendorServiceForm() {
         e.preventDefault();
 
         transform((current) => {
-            // Map packages into API shape
-            const packages = (current.packages as PackageForm[]).map((p) => ({
-                name: p.name,
-                price: Number(p.price || 0),
-                billing_cycle: p.billing_cycle,
-                speed_label: p.speed_label || undefined,
-                features: splitCSV(p.featuresStr),
-                description: p.description || undefined,
-                currency: p.currency || 'PKR',
-                is_popular: !!p.is_popular,
-            }));
+            const packages = (current.packages as PackageForm[])
+                .filter((p) => !disabledPackages[p.name])
+                .map((p) => ({
+                    name: p.name,
+                    price: Number(p.price || 0),
+                    billing_cycle: p.billing_cycle,
+                    speed_label: p.speed_label || undefined,
+                    features: splitCSV(p.featuresStr),
+                    description: p.description || undefined,
+                    currency: p.currency || 'PKR',
+                    is_popular: !!p.is_popular,
+                }));
 
             return {
                 // Direct scalars
@@ -147,7 +153,7 @@ export default function VendorServiceForm() {
                 // Arrays/objects -> JSON strings (because forceFormData)
                 features: splitCSV(current.featuresStr),
                 speed_details: splitCSV(current.speedDetailsStr),
-                packages: packages,
+                packages,
                 faqs: (current.faqs as FaqItem[]).filter((f) => f.question.trim() && f.answer.trim()),
             };
         });
@@ -309,88 +315,107 @@ export default function VendorServiceForm() {
 
                             {data.packages.map((pkg, idx) => (
                                 <div key={pkg.name} className="grid gap-4 rounded-lg border p-4 md:grid-cols-3">
-                                    <div className="space-y-2">
-                                        <Label>Package</Label>
-                                        <Input value={pkg.name} readOnly className="bg-muted/40" />
-                                    </div>
+                                    {(pkg.name === 'Standard' || pkg.name === 'Premium') && (
+                                        <div className="mb-2 flex items-center gap-3 md:col-span-3">
+                                            <input
+                                                type="checkbox"
+                                                id={`disable-${pkg.name}`}
+                                                checked={disabledPackages[pkg.name]}
+                                                onChange={(e) =>
+                                                    setDisabledPackages({
+                                                        ...disabledPackages,
+                                                        [pkg.name]: e.target.checked,
+                                                    })
+                                                }
+                                                className="h-4 w-4"
+                                            />
+                                            <Label htmlFor={`disable-${pkg.name}`}>Disable {pkg.name} Package</Label>
+                                        </div>
+                                    )}
 
-                                    <div className="space-y-2">
-                                        <Label>Price</Label>
-                                        <Input
-                                            type="number"
-                                            min="0"
-                                            value={pkg.price}
-                                            onChange={(e) => handlePackageChange(idx, 'price', e.target.value)}
-                                            placeholder="e.g. 2999"
-                                        />
-                                        {(errors as any)[`packages.${idx}.price`] && (
-                                            <p className="text-sm text-red-500">{(errors as any)[`packages.${idx}.price`]}</p>
-                                        )}
-                                    </div>
+                                    {!disabledPackages[pkg.name] && (
+                                        <>
+                                            <div className="space-y-2">
+                                                <Label>Package</Label>
+                                                <Input value={pkg.name} readOnly className="bg-muted/40" />
+                                            </div>
 
-                                    <div className="space-y-2">
-                                        <Label>Billing Cycle</Label>
-                                        <Select
-                                            value={pkg.billing_cycle}
-                                            onValueChange={(v) => handlePackageChange(idx, 'billing_cycle', v as BillingCycle)}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="Monthly">Monthly</SelectItem>
-                                                <SelectItem value="Quarterly">Quarterly</SelectItem>
-                                                <SelectItem value="Yearly">Yearly</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
+                                            <div className="space-y-2">
+                                                <Label>Price</Label>
+                                                <Input
+                                                    type="number"
+                                                    min="0"
+                                                    value={pkg.price}
+                                                    onChange={(e) => handlePackageChange(idx, 'price', e.target.value)}
+                                                    placeholder="e.g. 2999"
+                                                />
+                                            </div>
 
-                                    <div className="space-y-2">
-                                        <Label>Speed Label (optional)</Label>
-                                        <Input
-                                            value={pkg.speed_label}
-                                            onChange={(e) => handlePackageChange(idx, 'speed_label', e.target.value)}
-                                            placeholder="50 Mbps"
-                                        />
-                                    </div>
+                                            <div className="space-y-2">
+                                                <Label>Billing Cycle</Label>
+                                                <Select
+                                                    value={pkg.billing_cycle}
+                                                    onValueChange={(v) => handlePackageChange(idx, 'billing_cycle', v as BillingCycle)}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="Monthly">Monthly</SelectItem>
+                                                        <SelectItem value="Quarterly">Quarterly</SelectItem>
+                                                        <SelectItem value="Yearly">Yearly</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
 
-                                    <div className="space-y-2">
-                                        <Label>Currency</Label>
-                                        <Input
-                                            value={pkg.currency}
-                                            onChange={(e) => handlePackageChange(idx, 'currency', e.target.value)}
-                                            placeholder="PKR"
-                                        />
-                                    </div>
+                                            <div className="space-y-2">
+                                                <Label>Speed Label (optional)</Label>
+                                                <Input
+                                                    value={pkg.speed_label}
+                                                    onChange={(e) => handlePackageChange(idx, 'speed_label', e.target.value)}
+                                                    placeholder="50 Mbps"
+                                                />
+                                            </div>
 
-                                    <div className="flex items-center gap-3">
-                                        <input
-                                            id={`popular-${idx}`}
-                                            type="checkbox"
-                                            checked={pkg.is_popular}
-                                            onChange={(e) => handlePackageChange(idx, 'is_popular', e.target.checked)}
-                                            className="h-4 w-4"
-                                        />
-                                        <Label htmlFor={`popular-${idx}`}>Mark as Popular</Label>
-                                    </div>
+                                            <div className="space-y-2">
+                                                <Label>Currency</Label>
+                                                <Input
+                                                    value={pkg.currency}
+                                                    onChange={(e) => handlePackageChange(idx, 'currency', e.target.value)}
+                                                    placeholder="PKR"
+                                                />
+                                            </div>
 
-                                    <div className="space-y-2 md:col-span-3">
-                                        <Label>Package Features (comma separated)</Label>
-                                        <Input
-                                            value={pkg.featuresStr}
-                                            onChange={(e) => handlePackageChange(idx, 'featuresStr', e.target.value)}
-                                            placeholder="Free installation, Static IP, Fair usage 1TB"
-                                        />
-                                    </div>
+                                            <div className="flex items-center gap-3">
+                                                <Input
+                                                    id={`popular-${idx}`}
+                                                    type="checkbox"
+                                                    checked={pkg.is_popular}
+                                                    onChange={(e) => handlePackageChange(idx, 'is_popular', e.target.checked)}
+                                                    className="h-4 w-4"
+                                                />
+                                                <Label htmlFor={`popular-${idx}`}>Mark as Popular</Label>
+                                            </div>
 
-                                    <div className="space-y-2 md:col-span-3">
-                                        <Label>Description (optional)</Label>
-                                        <Textarea
-                                            value={pkg.description}
-                                            onChange={(e) => handlePackageChange(idx, 'description', e.target.value)}
-                                            placeholder="More details about what's included..."
-                                        />
-                                    </div>
+                                            <div className="space-y-2 md:col-span-3">
+                                                <Label>Package Features (comma separated)</Label>
+                                                <Input
+                                                    value={pkg.featuresStr}
+                                                    onChange={(e) => handlePackageChange(idx, 'featuresStr', e.target.value)}
+                                                    placeholder="Free installation, Static IP, Fair usage 1TB"
+                                                />
+                                            </div>
+
+                                            <div className="space-y-2 md:col-span-3">
+                                                <Label>Description (optional)</Label>
+                                                <Textarea
+                                                    value={pkg.description}
+                                                    onChange={(e) => handlePackageChange(idx, 'description', e.target.value)}
+                                                    placeholder="More details about what's included..."
+                                                />
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             ))}
                         </section>
@@ -439,7 +464,23 @@ export default function VendorServiceForm() {
                         {/* ===== Images ===== */}
                         <section className="space-y-2">
                             <Label htmlFor="images">Images (multiple)</Label>
-                            <Input id="images" type="file" multiple onChange={(e) => setData('images', Array.from(e.target.files || []))} />
+                            <Input
+                                id="images"
+                                type="file"
+                                multiple
+                                onChange={(e) => {
+                                    const files = Array.from(e.target.files || []);
+                                    const maxSize = 2 * 1024 * 1024;
+                                    const validFiles = files.filter((file) => file.size <= maxSize);
+                                    const invalidFiles = files.filter((file) => file.size > maxSize);
+
+                                    if (invalidFiles.length > 0) {
+                                        alert(`Some files were too large (max 2MB each). They were ignored.`);
+                                    }
+
+                                    setData('images', validFiles);
+                                }}
+                            />
                             {errors.images && <p className="text-sm text-red-500">{errors.images}</p>}
                         </section>
 

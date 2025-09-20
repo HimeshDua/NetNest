@@ -36,10 +36,11 @@ export type Location = {
 type LocationPickerProps = {
     onSelect: (location: Location) => void;
     showTiles?: boolean;
+    className?: string;
 };
 
 // export const LocationPicker: React.FC<LocationPickerProps> = ({ onSelect }) => {
-export default function LocationPicker({ onSelect, showTiles = true }: LocationPickerProps) {
+export default function LocationPicker({ onSelect, showTiles = true, className }: LocationPickerProps) {
     const [position, setPosition] = useState<LatLngLiteral>({
         lat: 31.5204,
         lng: 74.3487,
@@ -97,7 +98,7 @@ export default function LocationPicker({ onSelect, showTiles = true }: LocationP
     }, []);
 
     return (
-        <div className={`relative ${showTiles ? 'h-[200px] md:h-[360px]' : null} w-full overflow-hidden rounded-lg border`}>
+        <div className={`relative ${className} ${showTiles ? 'h-[200px] md:h-[360px]' : null} w-full overflow-hidden rounded-lg border`}>
             {showTiles && (
                 <MapContainer
                     center={position}

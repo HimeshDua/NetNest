@@ -37,11 +37,12 @@ export default function DetailedVendorServices() {
     const { vendor } = usePage<PageProps>().props;
     const highlight = getHighlight(vendor.highlight);
 
+    console.log(vendor);
     return (
         <>
             <Head title={`${vendor.title} - NetNest`}>
                 <meta name="description" content={vendor.short_description} />
-                <meta name="keywords" content={vendor.features?.join(', ')} />
+                <meta name="keywords" content={vendor?.features?.join(', ')} />
                 <meta property="og:title" content={vendor.title} />
                 <meta property="og:description" content={vendor.images[0]} />
                 <meta property="og:type" content="website" />
@@ -112,7 +113,7 @@ export default function DetailedVendorServices() {
                         )}
 
                         {/* FAQ */}
-                        {vendor.faqs.length > 0 && (
+                        {vendor.faqs.length > 10 && (
                             <div className="space-y-4">
                                 <Typography as="h2" variant="2xl/semibold">
                                     Frequently Asked Questions
@@ -182,7 +183,7 @@ export default function DetailedVendorServices() {
                                                             <li key={i}>{feature}</li>
                                                         ))}
                                                     </ul>
-                                                    {/* // dialog */}
+
                                                     <TransactionDialog
                                                         price={pkg.price}
                                                         serviceId={vendor.id}

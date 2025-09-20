@@ -11,6 +11,7 @@ import { Cms, CmsYes } from '@/types/cms';
 import { useForm } from '@inertiajs/react';
 import { ChevronDown, ChevronUp, HelpCircle, Plus, Save, Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react';
+import { RichEditor } from '../editor/rich-editor';
 import { ImageUpload } from '../image-upload';
 import { Badge } from '../ui/badge';
 
@@ -36,7 +37,7 @@ export default function CmsForm({ cms }: { cms: Cms }) {
         marquee_link: cms?.marquee_link || '',
         features_primary: cms?.features_primary || [],
         features_secondary: cms?.features_secondary || [],
-        about: cms?.about || { title: '', description: '', image: '' },
+        about: cms?.about || { content: '', image: '' },
         testimonials: cms?.testimonials || [],
         seo: cms?.seo || { title: '', description: '', keywords: [] },
     });
@@ -597,7 +598,7 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
                                     About Section
-                                    {data.about.title && (
+                                    {data.about.content && (
                                         <Badge variant="secondary" className="ml-2">
                                             Configured
                                         </Badge>
@@ -607,21 +608,10 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                             </CardHeader>
                             <CardContent className="space-y-6 pt-6">
                                 <div className="grid gap-2">
-                                    <Label>About Title</Label>
-                                    <Input
-                                        placeholder="About Our Company"
-                                        value={data.about.title}
-                                        onChange={(e) => setData('about', { ...data.about, title: e.target.value })}
-                                    />
-                                </div>
-
-                                <div className="grid gap-2">
-                                    <Label>Description</Label>
-                                    <Textarea
-                                        placeholder="Tell your story and what makes you unique..."
-                                        value={data.about.description}
-                                        onChange={(e) => setData('about', { ...data.about, description: e.target.value })}
-                                        rows={6}
+                                    <Label>Content</Label>
+                                    <RichEditor
+                                        value={data.about.content}
+                                        onChange={(content) => setData('about', { ...data.about, content: content })}
                                     />
                                 </div>
 
@@ -629,7 +619,6 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                     <ImageUpload
                                         name="about_image"
                                         label="About Section Image"
-                                        // description="Recommended: 600x400px, shows your team or product"
                                         value={data?.about?.image}
                                         onChange={(file) => {
                                             setData('about', { ...data.about, image: file });
