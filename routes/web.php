@@ -35,7 +35,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
 
   // previous and current subscriptions management
   Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
-  Route::post('/transaction', [\App\Http\Controllers\Customer\SubscriptionController::class, 'store'])->name('transaction.store');
+  Route::post('/transaction', [\App\Http\Controllers\Customer\TransactionController::class, 'store'])->name('transaction.store');
 
   Route::post('/request', [\App\Http\Controllers\Settings\ProfileController::class, 'request'])->name('customer.request');
 });

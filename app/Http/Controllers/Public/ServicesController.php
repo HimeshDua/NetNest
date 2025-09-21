@@ -36,6 +36,7 @@ class ServicesController
 
   public function show($slug)
   {
+    $userId = Auth::id() ?? null;
     $vendor = VendorService::where('slug', $slug)->firstOrFail();
 
     return Inertia::render('Public/DetailedVendorServices', [

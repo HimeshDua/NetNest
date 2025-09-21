@@ -60,6 +60,7 @@ class VendorService extends Model
     return $this->hasMany(CustomerSubscription::class, 'vendor_service_id');
   }
 
+
   /*
     |--------------------------------------------------------------------------
     | Model Events

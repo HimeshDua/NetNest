@@ -1,8 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useForm } from '@inertiajs/react';
+import { PageProps } from '@/types';
+import { useForm, usePage } from '@inertiajs/react';
 import { Shield } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function TransactionDialog({
     price,
@@ -15,9 +17,10 @@ export default function TransactionDialog({
     payment_method: string;
     package_name: string;
 }) {
+    const { auth } = usePage<PageProps>().props;
     const [open, setOpen] = useState(false);
 
-    const { data, setData, processing, post, reset, errors, clearErrors } = useForm({
+    const { data, processing, post, reset, clearErrors } = useForm({
         vendor_service_id: serviceId.toString(),
         package_name: package_name.toString(),
         payment_method: payment_method.toString(),
@@ -25,7 +28,10 @@ export default function TransactionDialog({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(data);
+        const role = auth.user?.role;
+        if (role == 'admin' || role == 'vendor') return toast.error('You are not Authorized to subscribe to this service');
+
+        // console.log(data);
         post(route('transaction.store'), {
             onSuccess: () => {
                 reset();
