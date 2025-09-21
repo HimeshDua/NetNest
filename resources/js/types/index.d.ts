@@ -125,6 +125,8 @@ export type VendorService = {
     connection_type: ConnectionType;
     highlight: HighlightType;
 
+    vendor?: { id: number; name: string };
+
     short_description: string;
     full_description: string;
 

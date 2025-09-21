@@ -14,7 +14,7 @@ import { useEffect, useMemo, useState } from 'react';
 type SupportThread = {
     id: number; // conversation id
     vendor_id: number;
-    vendor?: {
+    vendor: {
         id: number;
         name: string;
         avatar?: string | null;
@@ -34,6 +34,8 @@ export default function CustomerSupport() {
 
     const [threads, setThreads] = useState<SupportThread[]>(initialThreads as SupportThread[]);
     const [query, setQuery] = useState('');
+
+    console.log('Support Threads:', threads);
 
     // Search filter
     const filtered = useMemo(() => {
@@ -126,46 +128,36 @@ export default function CustomerSupport() {
                                     <div
                                         key={thread.id}
                                         className="flex cursor-pointer items-center gap-4 p-4 hover:bg-muted/50"
-                                        onClick={() => openThread(thread.id)}
+                                        onClick={() => openThread(thread?.vendor.id)}
+                                        title={`Chat with ${thread.vendor?.name || 'Vendor'}`}
                                     >
-                                        <Avatar>
-                                            {thread.vendor?.avatar ? (
-                                                <img src={thread.vendor.avatar} alt={thread.vendor?.name} />
-                                            ) : (
-                                                <AvatarFallback>{(thread.vendor?.name || 'V').charAt(0)}</AvatarFallback>
-                                            )}
-                                        </Avatar>
+                                        <div className="flex w-full items-center gap-4">
+                                            <Avatar>
+                                                {thread.vendor?.avatar ? (
+                                                    <img src={thread.vendor.avatar} alt={thread.vendor?.name} />
+                                                ) : (
+                                                    <AvatarFallback>{(thread.vendor?.name || 'V').charAt(0)}</AvatarFallback>
+                                                )}
+                                            </Avatar>
 
-                                        <div className="min-w-0 flex-1">
-                                            <div className="flex items-center justify-between">
-                                                <div className="truncate font-medium">{thread.vendor?.name || 'Vendor'}</div>
-                                                <div className="flex items-center gap-2">
-                                                    {thread.unread_count && thread.unread_count > 0 ? (
-                                                        <Badge variant="destructive">{thread.unread_count}</Badge>
-                                                    ) : null}
-                                                    <div className="text-xs text-muted-foreground">
-                                                        {thread.last_message?.created_at
-                                                            ? new Date(thread.last_message.created_at).toLocaleString()
-                                                            : ''}
+                                            <div className="min-w-0 flex-1">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="truncate font-medium">{thread.vendor?.name || 'Vendor'}</div>
+                                                    <div className="flex items-center gap-2">
+                                                        {thread.unread_count && thread.unread_count > 0 ? (
+                                                            <Badge variant="destructive">{thread.unread_count}</Badge>
+                                                        ) : null}
+                                                        <div className="text-xs text-muted-foreground">
+                                                            {thread.last_message?.created_at
+                                                                ? new Date(thread.last_message.created_at).toLocaleString()
+                                                                : ''}
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <div className="truncate text-sm text-muted-foreground">
+                                                    {thread.last_message ? thread.last_message.body : 'No messages yet.'}
+                                                </div>
                                             </div>
-                                            <div className="truncate text-sm text-muted-foreground">
-                                                {thread.last_message ? thread.last_message.body : 'No messages yet.'}
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    openThread(thread.id);
-                                                }}
-                                            >
-                                                Open
-                                            </Button>
                                         </div>
                                     </div>
                                 ))}

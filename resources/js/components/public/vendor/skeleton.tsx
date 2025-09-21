@@ -4,21 +4,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function VendorServiceGridSkeleton() {
     return (
         <div className="space-y-6">
-            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                <Skeleton className="h-10 w-64" />
-                <div className="flex gap-2">
-                    <Skeleton className="h-10 w-32" />
-                    <Skeleton className="h-10 w-32" />
-                </div>
-            </div>
-
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 6 }).map((_, index) => (
                     <Card key={index} className="h-full overflow-hidden transition-all duration-300 hover:shadow-md">
                         <CardHeader className="pb-3">
                             <div className="flex items-start justify-between">
                                 <Skeleton className="h-12 w-12 rounded-xl" />
-                                <Skeleton className="h-5 w-16" />
+                                {Math.random() < 0.5 && <Skeleton className="h-5 w-16" />}
                             </div>
                             <div className="mt-4 space-y-2">
                                 <Skeleton className="h-6 w-3/4" />

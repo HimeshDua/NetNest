@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
 use App\Models\Conversation;
-use App\Models\VendorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use App\Models\CustomerSubscription;
+
 
 class ChatController extends Controller
 {
@@ -17,39 +18,27 @@ class ChatController extends Controller
    * Only allowed if the authenticated customer has a purchase/subscription/transaction
    * tied to that vendor.
    */
-
-  public function vendorIndex()
-  {
-    $vendorId = Auth::id();
-
-    $conversations = Conversation::where('vendor_id', $vendorId)
-      ->with(['customer']) // optional: eager load customer
-      ->orderByDesc('updated_at')
-      ->get();
-
-    return Inertia::render('Vendor/Conversations', [
-      'conversations' => $conversations,
-      'auth' => ['user' => Auth::user()],
-    ]);
-  }
-
-  public function openWithVendor(int $vendorId)
+  public function openWithVendor(int $vendorServiceId)
   {
     $customerId = Auth::id();
 
     // Prevent chatting with yourself
-    if ($customerId === (int) $vendorId) {
+    if ($customerId === (int) $vendorServiceId) {
       abort(400, 'Invalid vendor.');
     }
 
+    if ((int) !$customerId || (int) !$customerId) {
+      abort(400, 'Invalid customer or vendor.');
+    }
+
     // Ensure customer actually bought from this vendor
-    if (!$this->hasPurchasedFromVendor($customerId, $vendorId)) {
+    if (!$this->hasPurchasedFromVendor($customerId, $vendorServiceId)) {
       abort(403, 'You are not authorized to chat with this vendor. Purchase required.');
     }
 
     // Create or return existing conversation between this customer & vendor
     $conversation = Conversation::firstOrCreate(
-      ['customer_id' => $customerId, 'vendor_id' => $vendorId]
+      ['customer_id' => $customerId, 'vendor_id' => $vendorServiceId]
     );
 
     // Render Inertia chat page (your Public/Chat Inertia component should render Chat UI)
@@ -124,29 +113,37 @@ class ChatController extends Controller
   /**
    * Check if customer actually purchased from vendor.
    * Conditions:
-   *  - customer has an active subscription for any vendor_service that belongs to $vendorId
+   *  - customer has an active subscription for any vendor_service that belongs to $vendorServiceId
    *    OR
-   *  - customer has a completed transaction on a subscription where that subscription's vendor service belongs to $vendorId
+   *  - customer has a completed transaction on a subscription where that subscription's vendor service belongs to $vendorServiceId
    */
-  protected function hasPurchasedFromVendor(int $customerId, int $vendorId): bool
+  protected function hasPurchasedFromVendor(int $customerId, int $vendorServiceId): bool
   {
-    // 1) Active subscription on a vendorService owned by $vendorId
-    $hasActiveSubscription = \App\Models\CustomerSubscription::where('user_id', $customerId)
-      ->whereHas('vendorService', function ($q) use ($vendorId) {
-        $q->where('user_id', $vendorId);
-      })
+
+    $hasActiveSubscription = CustomerSubscription::where('user_id', $customerId)
       ->where('status', 'active')
-      ->exists();
+      ->whereHas('vendorService', function ($q) use ($vendorServiceId) {
+        $q->where('id', $vendorServiceId);
+      })->get();
+
+
+    // dd(
+    //   $hasActiveSubscription,
+    //   // 'my id',
+    //   // $customerId,
+    //   // 'vendor service id',
+    //   // $vendorServiceId
+    // );
 
     if ($hasActiveSubscription) {
       return true;
     }
 
-    // 2) Completed transaction tied to a subscription whose vendorService belongs to $vendorId
-    $hasCompletedTransaction = \App\Models\CustomerTransaction::whereHas('subscription', function ($q) use ($customerId, $vendorId) {
+    // 2) Completed transaction tied to a subscription whose vendorService belongs to $vendorServiceId
+    $hasCompletedTransaction = \App\Models\CustomerTransaction::whereHas('subscription', function ($q) use ($customerId, $vendorServiceId) {
       $q->where('user_id', $customerId)
-        ->whereHas('vendorService', function ($qq) use ($vendorId) {
-          $qq->where('user_id', $vendorId);
+        ->whereHas('vendorService', function ($qq) use ($vendorServiceId) {
+          $qq->where('user_id', $vendorServiceId);
         });
     })
       ->where('status', 'completed')

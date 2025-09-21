@@ -97,11 +97,12 @@ export default function VendorConversations() {
             // Mark as read on server (optional endpoint). If you don't have it, just visit the page.
             await axios.post(`/c/${conversationId}/read`);
         } catch (e) {
+            console.log('juice', e);
             // ignore error — endpoint may not exist; the show page should still load
         }
 
         // Navigate to vendor conversation page (will render Chat/Show)
-        router.visit(`/c/${conversationId}`);
+        router.visit(route('vendor.conversations.show', { conversation: conversationId }));
     };
 
     return (

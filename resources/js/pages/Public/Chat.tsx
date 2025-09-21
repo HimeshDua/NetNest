@@ -87,7 +87,7 @@ export default function Chat() {
 
         setIsSending(true);
         try {
-            const res = await axios.post(`/conversations/${conversationId}/send`, { body });
+            await axios.post(route('conversations.send', { conversation: conversationId }), { body });
             // setMessages((prev) => [...prev, res.data]);
             setBody('');
             inputRef.current?.focus();

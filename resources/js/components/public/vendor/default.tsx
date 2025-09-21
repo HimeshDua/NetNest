@@ -6,18 +6,16 @@ import { Link } from '@inertiajs/react';
 import {
     BarChartIcon,
     CalendarIcon,
+    ChevronLeft,
+    ChevronRight,
+    ChevronsLeft,
+    ChevronsRight,
     DollarSignIcon,
-    Filter,
     GlobeIcon,
-    Home,
-    PackageX,
-    RotateCcw,
-    Search,
     StarIcon,
     TrendingUpIcon,
     UsersIcon,
 } from 'lucide-react';
-import { useState } from 'react';
 
 type Props = {
     services: {
@@ -32,9 +30,6 @@ type Props = {
 };
 
 export default function VendorServiceGrid({ services, onPageChange }: Props) {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filterOpen, setFilterOpen] = useState(false);
-
     const getDaysAgo = (dateString: string) => {
         const postDate = new Date(dateString);
         const today = new Date();
@@ -74,75 +69,11 @@ export default function VendorServiceGrid({ services, onPageChange }: Props) {
         }
     };
 
-    if (!services.data.length) {
-        return (
-            <Card className="mx-auto w-full max-w-md overflow-hidden rounded-2xl border-0 shadow-lg">
-                <div className="flex justify-center bg-gradient-to-r from-blue-50 to-indigo-50 py-8">
-                    <div className="relative">
-                        <PackageX className="mx-auto h-20 w-20 text-blue-500" />
-                        <div className="absolute -inset-4 -z-10 rounded-full bg-blue-100 opacity-50"></div>
-                    </div>
-                </div>
-
-                <CardHeader className="space-y-4 px-8 pt-6 pb-2 text-center">
-                    <CardTitle className="text-2xl font-bold text-slate-800 md:text-3xl">No Services Available</CardTitle>
-                    <CardDescription className="text-base leading-relaxed text-slate-600">
-                        We couldn't find any vendor services at the moment. Please check back later or try a different search.
-                    </CardDescription>
-                </CardHeader>
-
-                <CardFooter className="flex flex-col justify-center gap-4 px-8 pt-4 pb-8 sm:flex-row">
-                    <Link href={route('home')} className="w-full sm:w-auto">
-                        <Button className="w-full gap-2" size="lg">
-                            <Home className="h-4 w-4" />
-                            Go Back Home
-                        </Button>
-                    </Link>
-                    <Button variant="outline" className="w-full gap-2 sm:w-auto" size="lg" onClick={() => window.location.reload()}>
-                        <RotateCcw className="h-4 w-4" />
-                        Try Again
-                    </Button>
-                </CardFooter>
-            </Card>
-        );
-    }
-
     return (
         <>
-            <div className="mb-10 pt-8 text-center">
-                <h2 className="mb-4 text-3xl font-bold tracking-tight text-primary md:text-4xl">Top Vendor Services</h2>
-                <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-                    Explore high-speed internet, secure VPN, dedicated lines, and more. Curated for your business and home needs.
-                </p>
-            </div>
-
-            {/* Search and Filter Bar */}
-            <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                <div className="relative max-w-md flex-1">
-                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
-                    <input
-                        type="text"
-                        placeholder="Search services..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full rounded-lg border py-2 pr-4 pl-10 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
-
-                <div className="flex gap-2">
-                    <Button variant="outline" className="gap-2" onClick={() => setFilterOpen(!filterOpen)}>
-                        <Filter className="h-4 w-4" />
-                        Filters
-                    </Button>
-                    <Button variant="outline" className="gap-2">
-                        Sort By
-                    </Button>
-                </div>
-            </div>
-
             {/* Services Grid */}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {services.data.map((service) => {
+                {services.data.map((service: VendorService) => {
                     const highlight = getHighlightDetails(service.highlight);
                     return (
                         <Card key={service.id} className="flex h-full flex-col overflow-hidden transition-all duration-300 hover:shadow-md">

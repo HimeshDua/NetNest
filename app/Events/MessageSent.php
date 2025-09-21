@@ -11,22 +11,22 @@ use Illuminate\Foundation\Events\Dispatchable;
 
 class MessageSent implements ShouldBroadcastNow
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+  use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
+  public $message;
 
-    public function __construct(Message $message)
-    {
-        $this->message = $message;
-    }
+  public function __construct(Message $message)
+  {
+    $this->message = $message;
+  }
 
-    public function broadcastOn()
-    {
-        return new PrivateChannel('chat.' . $this->message->conversation_id);
-    }
+  public function broadcastOn()
+  {
+    return new PrivateChannel('chat.' . $this->message->conversation_id);
+  }
 
-    public function broadcastWith()
-    {
-        return ['message' => $this->message];
-    }
+  public function broadcastWith()
+  {
+    return ['message' => $this->message];
+  }
 }
