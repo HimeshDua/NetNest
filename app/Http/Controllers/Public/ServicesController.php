@@ -23,7 +23,7 @@ class ServicesController
     // dd($subscribedServiceIds);
 
     $services = VendorService::query()
-      ->with('vendor:id,name') // Eager load vendor relationship with only id and name
+      ->with('vendor:id,name')
       ->whereNotIn('id', $subscribedServiceIds)
       ->orderBy('posted_date', 'desc')
       ->paginate(6)

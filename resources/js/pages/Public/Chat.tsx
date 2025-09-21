@@ -103,13 +103,13 @@ export default function Chat() {
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     };
 
-    const getInitials = (name: string) => {
-        return name
-            .split(' ')
-            .map((part) => part[0])
-            .join('')
-            .toUpperCase();
-    };
+    // const getInitials = (name: string) => {
+    //     return name
+    //         .split(' ')
+    //         .map((part) => part[0])
+    //         .join('')
+    //         .toUpperCase();
+    // };
 
     return (
         <ConditionalLayout title="Chat">

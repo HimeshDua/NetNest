@@ -7,7 +7,6 @@ function Billing() {
     const { billingData } = usePage<PageProps>().props;
     return (
         <Layout title="Billings">
-            {/* <DashboardLayout title="Billings"> */}
             <UserBilling billingData={billingData} />
         </Layout>
     );

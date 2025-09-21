@@ -27,7 +27,7 @@ class SupportController
       ]);
 
       return [
-        'id' => $conversation->id, // ✅ use conversation id
+        'id' => $conversation->id,
         'service_name' => $service->name,
         'vendor' => [
           'id' => $service->vendor->id,

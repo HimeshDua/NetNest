@@ -12,7 +12,7 @@ import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 
 type SupportThread = {
-    id: number; // conversation id
+    id: number;
     vendor_id: number;
     vendor: {
         id: number;
@@ -37,7 +37,6 @@ export default function CustomerSupport() {
 
     console.log('Support Threads:', threads);
 
-    // Search filter
     const filtered = useMemo(() => {
         const q = query.trim().toLowerCase();
         if (!q) return threads;
@@ -48,7 +47,6 @@ export default function CustomerSupport() {
         });
     }, [threads, query]);
 
-    // Subscribe to private channels for real-time updates
     useEffect(() => {
         if (!threads || threads.length === 0) return;
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
 use App\Models\Conversation;
-use App\Models\VendorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
