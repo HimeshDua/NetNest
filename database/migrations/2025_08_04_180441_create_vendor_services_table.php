@@ -19,8 +19,8 @@ return new class extends Migration
       $table->string('title');
       $table->string('slug')->unique();
       $table->string('location');
-      // $table->double('latitude', 10, 6)->nullable();
-      // $table->double('longitude', 10, 6)->nullable();
+      $table->double('latitude', 10, 6)->nullable();
+      $table->double('longitude', 10, 6)->nullable();
       $table->string('city');
 
       $table->enum('connection_type', ['fiber', 'dsl', 'wireless'])->default('fiber');

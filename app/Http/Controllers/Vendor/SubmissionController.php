@@ -22,6 +22,8 @@ class SubmissionController extends Controller
       'title'             => 'required|string|max:255',
       'slug'              => 'nullable|string|max:255',
       'city'              => 'nullable|string|max:255',
+      'latitude'          => 'required|numeric',
+      'longitude'         => 'required|numeric',
       'location'          => 'required|string|max:255',
       'connection_type'   => 'required|in:fiber,dsl,wireless,satellite',
       'highlight'         => 'nullable|in:new,trending,reliable,popular,undefined',

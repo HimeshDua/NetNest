@@ -18,6 +18,8 @@ class VendorService extends Model
     'title',
     'slug',
     'city',
+    'latitude',
+    'longitude',
     'location',
     'connection_type',
     'highlight',

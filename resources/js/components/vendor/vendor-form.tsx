@@ -32,6 +32,8 @@ export type VendorServiceFormData = {
     title: string;
     slug: string;
     city: string;
+    latitude: number | string;
+    longitude: number | string;
     location: string;
     posted_date: string;
     connection_type: 'fiber' | 'dsl' | 'wireless';
@@ -53,6 +55,8 @@ export default function VendorServiceForm() {
         title: '',
         slug: '',
         city: '',
+        latitude: '',
+        longitude: '',
         location: '',
         posted_date: new Date().toISOString().slice(0, 10), // YYYY-MM-DD
         connection_type: 'fiber',
@@ -139,6 +143,8 @@ export default function VendorServiceForm() {
                 slug: current.slug || undefined,
                 city: current.city,
                 location: current.location,
+                latitude: current.latitude,
+                longitude: current.longitude,
                 posted_date: current.posted_date || undefined,
                 connection_type: current.connection_type,
                 highlight: current.highlight,
@@ -157,7 +163,8 @@ export default function VendorServiceForm() {
                 faqs: (current.faqs as FaqItem[]).filter((f) => f.question.trim() && f.answer.trim()),
             };
         });
-        console.log(data);
+        console.log('data ', data);
+        console.log('errors ', errors);
         post(route('submission.store'), {
             forceFormData: true,
             preserveScroll: true,
@@ -201,12 +208,28 @@ export default function VendorServiceForm() {
                                     onChange={(e) => setData('location', e.target.value)}
                                     placeholder="DHA Phase 6"
                                 />
-                                <LocationPicker showTiles={false} onSelect={(loc) => setData('location', loc.name)} className="mt-2" />
+                                <LocationPicker
+                                    showTiles={false}
+                                    onSelect={(loc) => {
+                                        console.log('Selected location: ', loc);
+                                        setData('latitude', loc.lat);
+                                        setData('longitude', loc.lng);
+                                        setData('location', loc.name);
+                                    }}
+                                    className="mt-2"
+                                />
                                 {errors.location && <p className="text-sm text-red-500">{errors.location}</p>}
+
+                                <div className="flex gap-3">
+                                    <Input readOnly value={data.latitude} name="latitude" />
+                                    {errors.latitude && <p className="text-sm text-red-500">{errors.latitude}</p>}
+                                    <Input readOnly value={data.longitude} name="longitude" />
+                                    {errors.longitude && <p className="text-sm text-red-500">{errors.longitude}</p>}
+                                </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Calendar22 onSelect={(data) => setData('posted_date', data)} />
+                                <Calendar22 onSelect={(data: any) => setData('posted_date', data)} />
                                 {errors.posted_date && <p className="text-sm text-red-500">{errors.posted_date}</p>}
                             </div>
 
@@ -254,7 +277,7 @@ export default function VendorServiceForm() {
                             </div>
 
                             <div className="flex items-center gap-3">
-                                <input
+                                <Input
                                     id="is_active"
                                     type="checkbox"
                                     checked={data.is_active}

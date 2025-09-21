@@ -113,7 +113,7 @@ export default function DetailedVendorServices() {
                         )}
 
                         {/* FAQ */}
-                        {vendor.faqs.length > 10 && (
+                        {vendor.faqs.length > 0 && (
                             <div className="space-y-4">
                                 <Typography as="h2" variant="2xl/semibold">
                                     Frequently Asked Questions
