@@ -1,23 +1,61 @@
 import ServicesNotFound from '@/components/public/vendor/notfound';
+import ServiceLocationFetcher from '@/components/public/vendor/ServiceLocationFetcher';
 import VendorServiceGridSkeleton from '@/components/public/vendor/skeleton';
-import { Button } from '@/components/ui/button';
+import type { Location } from '@/components/shared/locationPicker';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import Layout from '@/layouts/layout';
+import type { VendorService } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
-import { Filter, Search } from 'lucide-react';
-import { lazy, Suspense, useState } from 'react';
+import { Search } from 'lucide-react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 
 function Vendors() {
     const { services } = usePage<any>().props;
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filterOpen, setFilterOpen] = useState(false);
+    const [userLocation, setUserLocation] = useState<Location | null>(null);
+    const [locationName, setLocationName] = useState<string | null>();
+    const [query, setQuery] = useState('');
 
     const handlePageChange = (url: string | null) => {
         if (url) router.get(url);
     };
 
-    const VendorService = lazy(() => import('@/components/public/vendor/default'));
+    const handleLocationSelect = (location: Location) => {
+        setUserLocation(location);
+        router.get(
+            route('services.index'),
+            {
+                lat: location.lat,
+                lng: location.lng,
+                radius: 20,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            },
+        );
+    };
 
+    const filteredServices = useMemo(() => {
+        if (!query.trim()) return services;
+        const lower = query.toLowerCase();
+        return {
+            ...services,
+            data: services.data.filter(
+                (s: VendorService) =>
+                    s.title.toLowerCase().includes(lower) ||
+                    s.short_description.toLowerCase().includes(lower) ||
+                    s.full_description.toLowerCase().includes(lower),
+            ),
+        };
+    }, [query, services]);
+
+    useEffect(() => {
+        const storedLocation = localStorage.getItem('location');
+        setLocationName(storedLocation || null);
+    }, []);
+
+    const VendorService = lazy(() => import('@/components/public/vendor/default'));
     return (
         <>
             <Head>
@@ -61,30 +99,40 @@ function Vendors() {
                     </p>
                 </div>
                 <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                    {/* Search */}
                     <div className="relative max-w-md flex-1">
-                        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
+                        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
                             type="text"
                             placeholder="Search services..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
                             className="w-full py-2 pr-4 pl-10"
                         />
                     </div>
 
+                    {/* Filters + Location */}
                     <div className="flex gap-2">
-                        <Button variant="outline" className="gap-2" onClick={() => setFilterOpen(!filterOpen)}>
-                            <Filter className="h-4 w-4" />
-                            Filters
-                        </Button>
-                        <Button variant="outline" className="gap-2">
-                            Sort By
-                        </Button>
+                        <ServiceLocationFetcher className="border-none" onSelect={handleLocationSelect} />
+
+                        {userLocation ? (
+                            <Badge className="w-full whitespace-nowrap" variant="outline">
+                                📍 {String(userLocation.name).split(',').splice(0, 3).join(',')}
+                            </Badge>
+                        ) : locationName ? (
+                            <Badge className="w-full whitespace-nowrap" variant="outline">
+                                📍 {locationName.split(',').splice(0, 3).join(',')}
+                            </Badge>
+                        ) : null}
                     </div>
                 </div>
 
                 <Suspense fallback={<VendorServiceGridSkeleton />}>
-                    {services.data.length ? <VendorService services={services} onPageChange={handlePageChange} /> : <ServicesNotFound />}
+                    {filteredServices.data.length ? (
+                        <VendorService services={filteredServices} onPageChange={handlePageChange} />
+                    ) : (
+                        <ServicesNotFound />
+                    )}
                 </Suspense>
             </Layout>
         </>

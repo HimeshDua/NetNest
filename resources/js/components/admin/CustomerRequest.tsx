@@ -54,7 +54,7 @@ export function CustomerRequest({
 
         router.patch(
             route('admin.role.update'),
-            { user_id: cr.id, role: 'vendor' },
+            { user_id: cr.id, role: 'vendor', phone: cr.phone },
             {
                 onFinish: () => {
                     setProcessingId(null);

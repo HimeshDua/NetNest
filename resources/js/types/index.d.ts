@@ -120,12 +120,14 @@ export type VendorService = {
     title: string;
     slug: string;
     city: string;
+    latitude: string;
+    longitude: string;
     location: string;
     posted_date: string;
     connection_type: ConnectionType;
     highlight: HighlightType;
 
-    vendor?: { id: number; name: string };
+    vendor?: { id: number; name: string; phone: string; email: string };
 
     short_description: string;
     full_description: string;
@@ -134,9 +136,15 @@ export type VendorService = {
 
     features: string[];
     faqs: { question: string; answer: string }[];
-    images: File[];
+    images: string[];
 
-    speed_details: string[];
+    speed_details: {
+        download: string;
+        upload: string;
+        latency?: string;
+        data_cap?: string;
+    };
+
     coverage_area: string;
     is_active: boolean;
 

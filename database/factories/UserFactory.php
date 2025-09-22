@@ -2,39 +2,79 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
-    protected static ?string $password;
+  public function definition(): array
+  {
+    $roles = ['customer', 'vendor', 'admin'];
 
-    protected $model = User::class;
+    return [
+      'name' => $this->faker->name(),
+      'email' => $this->faker->unique()->safeEmail(),
+      'password' => Hash::make('password'),
+      'role' => $this->faker->randomElement($roles),
+      'email_verified_at' => now(),
+      'remember_token' => Str::random(10),
+    ];
+  }
 
-    public function definition(): array
-    {
-        return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'role' => fake()->randomElement(['admin', 'vendor', 'customer']),
-            'password' => bcrypt('password'),
-            'remember_token' => Str::random(10),
-        ];
-    }
+  public function admin()
+  {
+    return $this->state(function (array $attributes) {
+      return [
+        'role' => 'admin',
+        'name' => 'Admin ' . $this->faker->firstName(),
+      ];
+    });
+  }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn(array $attributes) => [
-            'email_verified_at' => null,
-        ]);
-    }
+  public function vendor()
+  {
+    return $this->state(function (array $attributes) {
+      return [
+        'role' => 'vendor',
+        'name' => $this->faker->company() . ' Provider',
+        'phone' => $this->generatePakistaniPhoneNumber(),
+      ];
+    });
+  }
+
+  public function customer()
+  {
+    return $this->state(function (array $attributes) {
+      return [
+        'role' => 'customer',
+      ];
+    });
+  }
+
+  public function unverified(): static
+  {
+    return $this->state(function (array $attributes) {
+      return [
+        'email_verified_at' => null,
+      ];
+    });
+  }
+  private function generatePakistaniPhoneNumber(): string
+  {
+    $operatorCode = $this->faker->randomElement([
+      '0',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+      '9'
+    ]);
+    $number = '03' . $operatorCode . $this->faker->randomNumber(8, true);
+    return $number;
+  }
 }

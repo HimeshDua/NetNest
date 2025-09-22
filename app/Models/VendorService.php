@@ -30,7 +30,7 @@ class VendorService extends Model
     'features',         // JSON
     'faqs',             // JSON
     'images',           // JSON
-    'speed_details',    // JSON
+    'speed_details',    // JSON Object { download, upload, latency, data_cap }
     'coverage_area',
     'is_active',
   ];
@@ -68,6 +68,28 @@ class VendorService extends Model
     | Model Events
     |--------------------------------------------------------------------------
     */
+
+  public function scopeNearby($query, $lat, $lng, $radiusKm = 20)
+  {
+    if (!is_numeric($lat) || !is_numeric($lng)) {
+      return $query;
+    }
+
+    // Haversine formula (distance in km)
+    $haversine = "(6371 * acos(
+        cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?))
+        + sin(radians(?)) * sin(radians(latitude))
+    ))";
+
+    // selectRaw will add distance_km; using bindings to avoid injection
+    return $query->selectRaw("vendor_services.*, {$haversine} as distance_km", [$lat, $lng, $lat])
+      ->whereNotNull('latitude')
+      ->whereNotNull('longitude')
+      ->having('distance_km', '<=', $radiusKm)
+      ->orderBy('distance_km', 'asc');
+  }
+
+
   protected static function booted()
   {
     static::creating(function ($model) {

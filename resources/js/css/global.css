@@ -458,6 +458,11 @@
     scrollbar-width: none;
 }
 
+&::selection {
+    background-color: var(--primary, #2563eb);
+    color: var(--primary-foreground, #fff);
+}
+
 /* sr-only hotfix */
 .sr-only {
     top: 0;

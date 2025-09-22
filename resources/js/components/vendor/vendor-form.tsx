@@ -41,7 +41,12 @@ export type VendorServiceFormData = {
     short_description: string;
     full_description: string;
     featuresStr: string;
-    speedDetailsStr: string;
+    speedDetailsStr: {
+        download: string;
+        upload: string;
+        latency?: string;
+        data_cap?: string;
+    };
     packages: PackageForm[];
     faqs: FaqItem[];
     images: File[];
@@ -67,7 +72,14 @@ export default function VendorServiceForm() {
 
         // Arrays (handled as strings in UI, parsed on submit)
         featuresStr: '', // top-level features
-        speedDetailsStr: '', // top-level speed details (labels)
+
+        // Speed details as object
+        speedDetailsStr: {
+            download: '',
+            upload: '',
+            latency: '',
+            data_cap: '',
+        },
 
         // Structured
         packages: PACKAGE_NAMES.map<PackageForm>((name) => ({
@@ -107,6 +119,13 @@ export default function VendorServiceForm() {
         setData('packages', next);
     };
 
+    const handleSpeedDetailChange = <K extends keyof typeof data.speedDetailsStr>(key: K, value: string) => {
+        setData('speedDetailsStr', {
+            ...data.speedDetailsStr,
+            [key]: value,
+        });
+    };
+
     const addFaq = () => setData('faqs', [...data.faqs, { question: '', answer: '' }]);
     const removeFaq = (i: number) =>
         setData(
@@ -137,6 +156,9 @@ export default function VendorServiceForm() {
                     is_popular: !!p.is_popular,
                 }));
 
+            // Clean speed details object - remove empty values
+            const speedDetails = Object.fromEntries(Object.entries(current.speedDetailsStr).filter(([_, value]) => value.trim() !== ''));
+
             return {
                 // Direct scalars
                 title: current.title,
@@ -158,7 +180,7 @@ export default function VendorServiceForm() {
 
                 // Arrays/objects -> JSON strings (because forceFormData)
                 features: splitCSV(current.featuresStr),
-                speed_details: splitCSV(current.speedDetailsStr),
+                speed_details: speedDetails,
                 packages,
                 faqs: (current.faqs as FaqItem[]).filter((f) => f.question.trim() && f.answer.trim()),
             };
@@ -310,7 +332,7 @@ export default function VendorServiceForm() {
                         </section>
 
                         {/* ===== Top-level Features & Speed Details ===== */}
-                        <section className="grid gap-6 md:grid-cols-2">
+                        <section className="grid gap-6">
                             <div className="space-y-2">
                                 <Label>Service Features (comma separated)</Label>
                                 <Input
@@ -321,14 +343,49 @@ export default function VendorServiceForm() {
                                 {errors.featuresStr && <p className="text-sm text-red-500">{errors.featuresStr}</p>}
                             </div>
 
-                            <div className="space-y-2">
-                                <Label>Speed Details (comma separated)</Label>
-                                <Input
-                                    value={data.speedDetailsStr}
-                                    onChange={(e) => setData('speedDetailsStr', e.target.value)}
-                                    placeholder="Up to 50 Mbps, Upload 20 Mbps"
-                                />
-                                {errors.speedDetailsStr && <p className="text-sm text-red-500">{errors.speedDetailsStr}</p>}
+                            {/* Speed Details as Object Fields */}
+                            <div className="grid gap-4 rounded-lg border p-4 md:grid-cols-2">
+                                <h3 className="text-lg font-semibold md:col-span-2">Speed Details</h3>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="download-speed">Download Speed</Label>
+                                    <Input
+                                        id="download-speed"
+                                        value={data.speedDetailsStr.download}
+                                        onChange={(e) => handleSpeedDetailChange('download', e.target.value)}
+                                        placeholder="e.g., 50 Mbps"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="upload-speed">Upload Speed</Label>
+                                    <Input
+                                        id="upload-speed"
+                                        value={data.speedDetailsStr.upload}
+                                        onChange={(e) => handleSpeedDetailChange('upload', e.target.value)}
+                                        placeholder="e.g., 25 Mbps"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="latency">Latency (Optional)</Label>
+                                    <Input
+                                        id="latency"
+                                        value={data.speedDetailsStr.latency}
+                                        onChange={(e) => handleSpeedDetailChange('latency', e.target.value)}
+                                        placeholder="e.g., 10 ms"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="data-cap">Data Cap (Optional)</Label>
+                                    <Input
+                                        id="data-cap"
+                                        value={data.speedDetailsStr.data_cap}
+                                        onChange={(e) => handleSpeedDetailChange('data_cap', e.target.value)}
+                                        placeholder="e.g., Unlimited or 1TB"
+                                    />
+                                </div>
                             </div>
                         </section>
 
@@ -507,7 +564,6 @@ export default function VendorServiceForm() {
                             {errors.images && <p className="text-sm text-red-500">{errors.images}</p>}
                         </section>
 
-                        {/* ===== Submit ===== */}
                         <div className="flex justify-end">
                             <Button type="submit" disabled={processing}>
                                 {processing ? 'Submitting...' : 'Submit Service'}

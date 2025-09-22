@@ -11,7 +11,7 @@ use Inertia\Inertia;
 
 class ServicesController
 {
-  public function index()
+  public function index(Request $request)
   {
     if (Auth::check()) {
       $userId = Auth::id();
@@ -20,25 +20,37 @@ class ServicesController
     } else {
       $subscribedServiceIds = [];
     }
-    // dd($subscribedServiceIds);
 
-    $services = VendorService::query()
-      ->with('vendor:id,name')
-      ->whereNotIn('id', $subscribedServiceIds)
-      ->orderBy('posted_date', 'desc')
-      ->paginate(6)
-      ->withQueryString();
+    $query = VendorService::with('vendor:id,name')
+      ->whereNotIn('id', $subscribedServiceIds);
+
+
+    if ($request->has(['lat', 'lng'])) {
+      $lat = $request->lat;
+      $lng = $request->lng;
+      $radius = $request->radius ?? 20;
+
+      $query->nearby($lat, $lng, $radius);
+    } else {
+      $query->orderBy('posted_date', 'desc');
+    }
+
+    $services = $query->paginate(6)->withQueryString();
 
     return Inertia::render('Public/Services', [
-      'services' => $services ?? [],
+      'services' => $services,
     ]);
   }
 
+
   public function show($slug)
   {
-    $userId = Auth::id() ?? null;
-    $vendor = VendorService::where('slug', $slug)->firstOrFail();
+    $vendor = VendorService::with('vendor:id,name,email,phone')
+      ->where('slug', $slug)
+      ->firstOrFail()
+      ->toArray();
 
+    // dd($vendor);
     return Inertia::render('Public/DetailedVendorServices', [
       'vendor' => $vendor
     ]);

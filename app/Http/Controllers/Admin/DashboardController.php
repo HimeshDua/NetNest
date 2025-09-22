@@ -49,11 +49,13 @@ class DashboardController
   {
     $validated = $request->validate([
       'role' => 'required|in:customer,vendor,admin',
-      'user_id' => 'required|exists:users,id'
+      'user_id' => 'required|exists:users,id',
+      'phone' => 'required|string|max:15|unique:users,phone'
     ]);
 
     $user = User::findOrFail($validated['user_id']);
     $user->role = $validated['role'];
+    $user->phone = $validated['phone'] ?? $user->phone;
     $user->save();
 
     return back()->with('success', 'Role updated successfully.');

@@ -94,6 +94,7 @@ class ProfileController extends Controller
       return back()->with('error', "Only customers can request to become a vendor.");
     }
 
+
     CustomerRequest::firstOrCreate(
       ['email' => $request->email],
       [

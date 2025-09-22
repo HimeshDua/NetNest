@@ -1,4 +1,5 @@
 <?php
+// database/factories/CustomerTransactionFactory.php
 
 namespace Database\Factories;
 
@@ -8,18 +9,21 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CustomerTransactionFactory extends Factory
 {
-    protected $model = CustomerTransaction::class;
+  protected $model = CustomerTransaction::class;
 
-    public function definition(): array
-    {
-        return [
-            'customer_subscription_id' => CustomerSubscription::factory(),
-            'amount' => $this->faker->randomFloat(2, 10, 200),
-            'currency' => 'USD',
-            'payment_date' => now()->subDays(rand(1, 30)),
-            'payment_method' => $this->faker->randomElement(['credit_card', 'paypal', 'bank_transfer']),
-            'transaction_reference' => strtoupper($this->faker->bothify('TXN####??')),
-            'status' => $this->faker->randomElement(['pending', 'completed', 'failed', 'refunded']),
-        ];
-    }
+  public function definition()
+  {
+    $sub = CustomerSubscription::inRandomOrder()->first() ?? CustomerSubscription::factory()->create();
+    $amount = $this->faker->randomFloat(2, 500, 15000);
+
+    return [
+      'customer_subscription_id' => $sub->id,
+      'amount' => $amount,
+      'currency' => 'PKR',
+      'payment_date' => $this->faker->dateTimeBetween('-90 days', 'now'),
+      'payment_method' => $this->faker->randomElement(['card', 'bank_transfer', 'jazzcash', 'easypaisa']),
+      'transaction_reference' => strtoupper(uniqid('TX_')),
+      'status' => $this->faker->randomElement(['pending', 'completed', 'refunded']),
+    ];
+  }
 }
