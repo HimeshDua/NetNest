@@ -21,7 +21,7 @@ class DashboardController
     $customerRequests = User::whereIn('id', $requestedUserIds)->whereNotIn(
       'role',
       ['vendor', 'admin']
-    )->latest()->paginate(4);
+    )->latest()->paginate(2);
 
     $customerRequests->getCollection()->transform(function ($user) {
       $cr = $user->customerRequest;

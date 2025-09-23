@@ -9,11 +9,12 @@ import type { VendorService } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { object } from 'zod';
 
 function Vendors() {
     const { services } = usePage<any>().props;
     const [userLocation, setUserLocation] = useState<Location | null>(null);
-    const [locationName, setLocationName] = useState<string | null>();
+    const [location, setLocation] = useState<Location>();
     const [query, setQuery] = useState('');
 
     const handlePageChange = (url: string | null) => {
@@ -52,7 +53,9 @@ function Vendors() {
 
     useEffect(() => {
         const storedLocation = localStorage.getItem('location');
-        setLocationName(storedLocation || null);
+        if (storedLocation) {
+            setLocation(JSON.parse(storedLocation));
+        }
     }, []);
 
     const VendorService = lazy(() => import('@/components/public/vendor/default'));
@@ -112,16 +115,15 @@ function Vendors() {
                     </div>
 
                     {/* Filters + Location */}
-                    <div className="flex gap-2">
-                        <ServiceLocationFetcher className="border-none" onSelect={handleLocationSelect} />
-
+                    <div className="mt-2 flex-row gap-2 space-y-2 md:mt-0 md:flex">
+                        <ServiceLocationFetcher onSelect={handleLocationSelect} />
                         {userLocation ? (
-                            <Badge className="w-full whitespace-nowrap" variant="outline">
-                                📍 {String(userLocation.name).split(',').splice(0, 3).join(',')}
+                            <Badge className="h-9 w-fit rounded-md px-4 py-2 whitespace-nowrap" variant="outline">
+                                📍 {String(userLocation.name.split(',').splice(-8, 4).join(','))}
                             </Badge>
-                        ) : locationName ? (
-                            <Badge className="w-full whitespace-nowrap" variant="outline">
-                                📍 {locationName.split(',').splice(0, 3).join(',')}
+                        ) : location && typeof object(location) ? (
+                            <Badge className="h-9 w-fit rounded-md px-4 py-2 whitespace-nowrap" variant="outline">
+                                📍 {location.name.split(',').splice(-8, 4).join(',')}
                             </Badge>
                         ) : null}
                     </div>

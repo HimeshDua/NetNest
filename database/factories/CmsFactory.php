@@ -13,23 +13,23 @@ class CmsFactory extends Factory
   {
     return [
       'hero' => [
-        'title' => 'Welcome to NetNest',
-        'subtitle' => 'Reliable Internet for Everyone',
+        'title' => 'Build and Scale Your Internet Service with NetNest',
+        'subtitle' => 'NetNest helps ISPs streamline customer onboarding, manage internet plans, handle billing, and resolve support requests — all from one intuitive and efficient platform.',
         'buttons' => [
           [
             'text' => 'Get Started',
-            'href' => '/signup',
-            'variant' => 'primary',
+            'href' => '/register',
+            'variant' => 'default',
           ],
           [
-            'text' => 'Learn More',
-            'href' => '/about',
-            'variant' => 'secondary',
+            'text' => 'Github',
+            'href' => 'https://github.com/HimeshDua/NetNest',
+            'variant' => 'outline',
           ],
         ],
         'mockup' => [
-          'srcLight' => '/images/mockups/netnest-light.png',
-          'srcDark' => '/images/mockups/netnest-dark.png',
+          'srcLight' => '/app-light.png',
+          'srcDark' => '/app-dark.png',
           'alt' => 'NetNest Dashboard Mockup',
         ],
       ],

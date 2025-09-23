@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import axios from 'axios';
 import { Loader2, LocateFixed } from 'lucide-react';
 import { useState } from 'react';
 
@@ -30,16 +31,23 @@ export default function ServiceLocationFetcher({ onSelect, className }: ServiceL
 
                 try {
                     const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
-                    const res = await fetch(url);
-                    const data = await res.json();
-                    const name = data.display_name || 'Unknown location';
+                    const res = await axios.get(url);
+                    const data = res.data;
+                    console.log(data);
+                    const a = data.address;
+                    const name = a.amenity + ', ' + a.road + ', ' + a.town || 'Unknown location';
 
                     onSelect({
                         name,
                         lat: latitude,
                         lng: longitude,
                     });
-                    localStorage.setItem('location', name);
+                    const location = {
+                        name,
+                        lat: latitude,
+                        lng: longitude,
+                    };
+                    localStorage.setItem('location', JSON.stringify(location));
                 } catch {
                     // fallback with raw coords
                     onSelect({

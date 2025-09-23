@@ -54,6 +54,7 @@ export interface User {
     name: string;
     email: string;
     avatar?: string;
+    phone?: string;
     role: 'admin' | 'vendor' | 'customer' | null;
     email_verified_at: string | null;
     created_at: string;
@@ -65,6 +66,8 @@ export interface PageProps extends InertiaPageProps {
     auth: {
         user?: User | null;
     };
+    user: User;
+    users: User[];
     vendor: VendorService;
     seo: Seo[];
     aboutPage: {

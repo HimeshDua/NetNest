@@ -2,11 +2,14 @@
 
 use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
 require __DIR__ . '/channels.php';
+require __DIR__ . '/api.php';
 
 // Public routes
 Route::get('/', [\App\Http\Controllers\Public\HomeController::class, 'index'])->name('home');
@@ -64,12 +67,12 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     ->name('admin.role.update');
 
   Route::resource('/users', \App\Http\Controllers\Admin\UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
-  Route::resource('/plans', \App\Http\Controllers\Admin\PlanManagementController::class)->except(['edit', 'create']);
+  // Route::resource('/plans', \App\Http\Controllers\Admin\PlanManagementController::class)->except(['edit', 'create']);
 
   Route::get('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'edit'])->name('admin.cms.edit');
   Route::post('/cms/post', [\App\Http\Controllers\Admin\CmsController::class, 'update'])->name('admin.cms.update');
 
-  Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics');
+  // Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics');
 });
 
 // ---------------------------
@@ -107,3 +110,17 @@ Route::middleware(['auth'])->group(function () {
   Route::post('/conversations/{conversation}/send', [ChatController::class, 'send'])
     ->name('conversations.send');
 });
+
+// Route::get('/reverse-geocode', function (Request $request) {
+//   dd('here');
+//   $lat = $request->query('lat');
+//   $lon = $request->query('lon');
+
+//   $url = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat={$lat}&lon={$lon}";
+
+//   $response = Http::withHeaders([
+//     'User-Agent' => 'NetNest/1.0 (himeshdua22@gmail.com)',
+//   ])->get($url);
+
+//   return $response->json();
+// });

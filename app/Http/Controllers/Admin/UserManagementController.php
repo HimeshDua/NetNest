@@ -2,64 +2,65 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class UserManagementController
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return Inertia::render('Admin/Users');
+
+  public function index(Request $request)
+  {
+    $query = User::query();
+
+    if ($request->filled('role')) {
+      $query->where('role', $request->role);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    if ($request->filled('search')) {
+      $search = $request->search;
+      $query->where(function ($q) use ($search) {
+        $q->where('name', 'like', "%{$search}%")
+          ->orWhere('role', 'like', "%{$search}%")
+          ->orWhere('email', 'like', "%{$search}%")
+          ->orWhere('phone', 'like', "%{$search}%");
+      });
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    $users = $query->latest()->paginate(10);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+    return Inertia::render('Admin/Users/Index', [
+      'users' => $users,
+      'filters' => $request->only(['role', 'search']),
+    ]);
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+  public function show(User $user)
+  {
+    return Inertia::render('Admin/Users/Show', [
+      'user' => $user,
+    ]);
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+  public function update(Request $request, User $user)
+  {
+    $validated = $request->validate([
+      'role' => 'required|in:customer,vendor,admin',
+      'phone' => 'nullable|string|max:15|unique:users,phone,' . $user->id,
+      'status' => 'nullable|in:active,suspended',
+    ]);
+
+    $user->update($validated);
+
+    return back()->with('success', 'User updated successfully.');
+  }
+
+  // Soft delete or ban user
+  public function destroy(User $user)
+  {
+    $user->delete();
+
+    return back()->with('success', 'User deleted successfully.');
+  }
 }
