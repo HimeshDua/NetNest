@@ -49,20 +49,20 @@ class CmsFactory extends Factory
       ],
 
       'about' => [
-        'content' => 'NetNest is redefining internet in Pakistan with high-speed connectivity, unmatched reliability, and customer-first service. Our mission is to connect every home and business to the digital future.',
+        'content' => 'NetNest is redefining E-commerce Web Application for Internet Service Providers, Currently we are scalling In Pakistan with high-speed connectivity, unmatched reliability, and customer-first service. Our mission is to connect every home and business to the digital future.',
         'image' => '/images/about/netnest-team.jpg',
       ],
 
       'testimonials' => [
         [
           'name' => 'Ali Raza',
-          'text' => 'NetNest has been a game-changer for my remote work — fast and reliable!',
-          'avatar' => '/images/testimonials/ali.jpg',
+          'quote' => 'NetNest has been a game-changer for my remote work — fast and reliable!',
+          'avatar' => 'https://himeshdua.vercel.app/icon.pnghttps://himeshdua.vercel.app/icon.png',
         ],
         [
           'name' => 'Sara Khan',
-          'text' => 'Streaming is smooth, no more buffering. Highly recommended!',
-          'avatar' => '/images/testimonials/sara.jpg',
+          'quote' => 'Streaming is smooth, no more buffering. Highly recommended!',
+          'avatar' => 'https://himeshdua.vercel.app/icon.pnghttps://himeshdua.vercel.app/icon.png',
         ],
       ],
 

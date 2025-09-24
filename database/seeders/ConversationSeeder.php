@@ -11,7 +11,7 @@ class ConversationSeeder extends Seeder
 {
   public function run(): void
   {
-    $customers = User::where('role', 'customer')->take(20)->get();
+    $customers = User::where('role', 'customer')->take(40)->get();
     $vendors = User::where('role', 'vendor')->get();
 
     foreach ($customers as $customer) {
@@ -21,9 +21,9 @@ class ConversationSeeder extends Seeder
         'vendor_id' => $vendor->id,
       ]);
 
-      Message::factory()->count(rand(1, 4))->create([
+      Message::factory()->count(rand(5, 15))->create([
         'conversation_id' => $conv->id,
-        'user_id'         => $customer->id,
+        'user_id'         => rand(0, 1) ? $customer->id : $vendor->id,
       ]);
     }
   }

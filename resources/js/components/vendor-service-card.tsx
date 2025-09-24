@@ -5,7 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Typography } from '@/components/ui/typography';
-import { CheckCircle, Globe, HelpCircle, MapPin, Package, Rocket } from 'lucide-react';
+import { CheckCircle, Globe, HelpCircle, MapPin, Package, Rocket, ServerIcon } from 'lucide-react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from './ui/carousel';
 
 interface Props {}
 
@@ -56,19 +57,40 @@ interface VendorServiceCardProps {
 export function VendorServiceCard({ service }: VendorServiceCardProps) {
     return (
         <Card className="max-w-8xl my-8 w-full overflow-hidden shadow-lg">
-            <CardHeader className="p-6 md:p-8">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                    <CardTitle className="flex-1 text-3xl font-bold tracking-tight md:text-4xl">{service.title}</CardTitle>
-                    {service.highlight && (
-                        <Badge variant="secondary" className="text-xs font-medium uppercase">
-                            {service.highlight}
-                        </Badge>
+            <CardHeader className="flex flex-col justify-between p-6 md:flex-row md:p-8">
+                <div>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                        <CardTitle className="flex-1 text-3xl font-bold tracking-tight md:text-4xl">{service.title}</CardTitle>
+                    </div>
+                    <CardDescription className="mt-2 text-sm text-muted-foreground">
+                        Posted on {new Date(service.posted_date).toLocaleDateString()}
+                    </CardDescription>
+                </div>
+                <div className="space-y-4">
+                    {service.images?.length > 0 ? (
+                        <Carousel>
+                            <CarouselContent className="h-56 sm:h-72 md:h-96 lg:h-64">
+                                {service.images.map((image: string, index) => (
+                                    <CarouselItem key={index}>
+                                        <img
+                                            src={image.startsWith('http') ? image : `/storage/${image}`}
+                                            alt={service.title}
+                                            className="h-full w-full object-cover"
+                                        />
+                                    </CarouselItem>
+                                ))}
+                            </CarouselContent>
+                            <CarouselPrevious />
+                            <CarouselNext />
+                        </Carousel>
+                    ) : (
+                        <div className="flex h-48 w-full items-center justify-center bg-muted">
+                            <ServerIcon className="h-12 w-12 text-muted-foreground" />
+                        </div>
                     )}
                 </div>
-                <CardDescription className="mt-2 text-sm text-muted-foreground">
-                    Posted on {new Date(service.posted_date).toLocaleDateString()}
-                </CardDescription>
             </CardHeader>
+
             <Separator />
             <CardContent className="space-y-8 p-6 md:p-8">
                 {/* General Information */}

@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 
 export default function UsersShow() {
-    const { user } = usePage<PageProps>().props;
+    const { user, service } = usePage<PageProps>().props;
 
     const handleDelete = () => {
         if (confirm('⚠️ Are you sure you want to delete this user? This action cannot be undone.')) {
@@ -110,7 +110,7 @@ export default function UsersShow() {
             <Main className="container mx-auto space-y-6 p-6">
                 {/* Header Navigation */}
                 <div className="flex items-center gap-4">
-                    <Button variant="outline" size="icon" onClick={() => router.get(route('users.index'))}>
+                    <Button variant="outline" size="icon" onClick={() => router.get(route('admin.services.show', service.id))}>
                         <ArrowLeft className="h-4 w-4" />
                     </Button>
                     <div>

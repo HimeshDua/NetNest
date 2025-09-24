@@ -50,7 +50,7 @@ export default function CmsForm({ cms }: { cms: Cms }) {
         seo: false,
     });
 
-    const [previousAboutImage, setPreviousAboutImage] = useState<string | null>(data.about.image);
+    const previousAboutImage: string | null = data.about.image;
 
     const toggleSection = (section: string) => {
         setExpandedSections((prev) => ({
@@ -453,30 +453,6 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                                             </p>
                                                         )}
                                                     </div>
-                                                    <div className="grid gap-2">
-                                                        <Label className="flex items-center gap-1">
-                                                            Icon Name
-                                                            <TooltipProvider>
-                                                                <Tooltip>
-                                                                    <TooltipTrigger asChild>
-                                                                        <HelpCircle className="h-3 w-3 text-muted-foreground" />
-                                                                    </TooltipTrigger>
-                                                                    <TooltipContent>
-                                                                        <p>Use Lucide icon names (e.g., "CheckCircle")</p>
-                                                                    </TooltipContent>
-                                                                </Tooltip>
-                                                            </TooltipProvider>
-                                                        </Label>
-                                                        <Input
-                                                            placeholder="CheckCircle"
-                                                            value={f.icon}
-                                                            onChange={(e) => handleListChange('features_primary', i, 'icon', e.target.value)}
-                                                            className={getNestedError(`features_primary.${i}.icon`) ? 'border-destructive' : ''}
-                                                        />
-                                                        {getNestedError(`features_primary.${i}.icon`) && (
-                                                            <p className="text-sm text-destructive">{getNestedError(`features_primary.${i}.icon`)}</p>
-                                                        )}
-                                                    </div>
                                                 </div>
                                             </div>
                                         ))}
@@ -484,9 +460,7 @@ export default function CmsForm({ cms }: { cms: Cms }) {
                                             type="button"
                                             variant="outline"
                                             className="w-full gap-1"
-                                            onClick={() =>
-                                                setData('features_primary', [...data.features_primary, { title: '', description: '', icon: '' }])
-                                            }
+                                            onClick={() => setData('features_primary', [...data.features_primary, { title: '', description: '' }])}
                                         >
                                             <Plus className="h-4 w-4" /> Add Feature
                                         </Button>

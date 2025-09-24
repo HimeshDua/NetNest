@@ -62,6 +62,47 @@ class VendorService extends Model
     return $this->hasMany(CustomerSubscription::class, 'vendor_service_id');
   }
 
+  public function subscribers()
+  {
+    return $this->hasManyThrough(
+      User::class,
+      CustomerSubscription::class,
+      'vendor_service_id', // Foreign key on CustomerSubscription table
+      'id',                // Foreign key on User table
+      'id',                // Local key on VendorService table
+      'user_id'           // Local key on CustomerSubscription table
+    );
+  }
+
+  public function subscribersCount(): int
+  {
+    return $this->hasManyThrough(
+      User::class,
+      CustomerSubscription::class,
+      'vendor_service_id',
+      'id',
+      'id',
+      'user_id'
+    )->count();
+  }
+
+  public function activeSubscriptions()
+  {
+    return $this->hasMany(CustomerSubscription::class, 'vendor_service_id')->where('status', 'active');
+  }
+
+  public function transactions()
+  {
+    return $this->hasManyThrough(
+      CustomerTransaction::class,
+      CustomerSubscription::class,
+      'vendor_service_id', // Foreign key on CustomerSubscription table
+      'customer_subscription_id', // Foreign key on CustomerTransaction table
+      'id',                // Local key on VendorService table
+      'id'                 // Local key on CustomerSubscription table
+    );
+  }
+
 
   /*
     |--------------------------------------------------------------------------

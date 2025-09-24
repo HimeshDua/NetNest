@@ -38,11 +38,9 @@ export interface Testimonial {
 }
 
 export interface Seo {
-    seo: {
-        title: string;
-        description: string;
-        keywords: string;
-    };
+    title: string;
+    description: string;
+    keywords: string[];
 }
 
 export interface Cms {
@@ -53,8 +51,8 @@ export interface Cms {
     marquee_text?: string;
     marquee_link?: string;
 
-    features_primary?: Feature01[];
-    features_secondary?: Feature02[];
+    features_primary?: Feature1[];
+    features_secondary?: Feature2[];
 
     about?: About;
 
@@ -68,8 +66,8 @@ export interface CmsYes {
     marquee_text: string;
     marquee_link: string;
 
-    features_primary: Feature01[];
-    features_secondary: Feature02[];
+    features_primary: Feature1[];
+    features_secondary: Feature2[];
 
     about: About;
 

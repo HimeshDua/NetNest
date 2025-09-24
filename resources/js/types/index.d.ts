@@ -59,6 +59,7 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
+    transactions: UserTransaction[];
     [key: string]: unknown;
 }
 
@@ -67,7 +68,37 @@ export interface PageProps extends InertiaPageProps {
         user?: User | null;
     };
     user: User;
-    users: User[];
+    users: {
+        data: User[];
+        links: { url: string | null; label: string; active: boolean }[];
+        meta: {
+            current_page: number;
+            from: number;
+            last_page: number;
+            per_page: number;
+            to: number;
+            total: number;
+        };
+        total: number;
+        from: number;
+        to: number;
+    };
+    service: VendorService;
+    services: {
+        data: VendorService[];
+        links: { url: string | null; label: string; active: boolean }[];
+        meta: {
+            current_page: number;
+            from: number;
+            last_page: number;
+            per_page: number;
+            to: number;
+            total: number;
+        };
+        total: number;
+        from: number;
+        to: number;
+    };
     vendor: VendorService;
     seo: Seo[];
     aboutPage: {
@@ -87,6 +118,16 @@ export interface PageProps extends InertiaPageProps {
             marquee_link: string;
         },
     ];
+
+    filters: {
+        search?: string;
+        page: number;
+        status: 'all' | 'active' | 'inactive' | '';
+        role?: 'all' | 'admin' | 'vendor' | 'customer' | '';
+        highlight?: 'all' | 'new' | 'trending' | 'reliable' | 'popular' | 'undefined' | '';
+        connection_type?: 'all' | 'fiber' | 'dsl' | 'wireless' | '';
+    };
+
     [key: string]: any;
 }
 
@@ -119,7 +160,6 @@ export interface PackageForm {
 export type VendorService = {
     id: number;
     user_id: number;
-
     title: string;
     slug: string;
     city: string;
@@ -127,10 +167,12 @@ export type VendorService = {
     longitude: string;
     location: string;
     posted_date: string;
+    subscribers_count: number;
     connection_type: ConnectionType;
     highlight: HighlightType;
 
-    vendor?: { id: number; name: string; phone: string; email: string };
+    vendor: { id: number; name: string; phone: string; email: string };
+    subscribers: User[];
 
     short_description: string;
     full_description: string;

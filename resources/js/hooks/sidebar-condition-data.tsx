@@ -1,5 +1,5 @@
 import { IconBell, IconHistoryToggle, IconMessageDots, IconShare3 } from '@tabler/icons-react';
-import { BookOpen, FileCheck, Frame, Home, Map, PieChart, SquareTerminal, UserCircle2, Users } from 'lucide-react';
+import { BookOpen, FileCheck, Frame, Home, Map, SquareTerminal, UserCircle2, Users } from 'lucide-react';
 
 export function getSidebarData(role: string | null) {
     const sharedItems = [
@@ -20,16 +20,15 @@ export function getSidebarData(role: string | null) {
     if (role === 'admin') {
         return {
             navMain: [
-                { title: 'Dashboard', url: '/admin/dashboard', icon: SquareTerminal },
-                { title: 'Users', url: '/admin/users', icon: Users },
-                { title: 'Plans', url: '/admin/plans', icon: FileCheck },
-                { title: 'Billing', url: '/admin/billing', icon: PieChart },
-                { title: 'CMS', url: '/admin/cms', icon: Frame },
-                ...sharedItems,
+                { title: 'Dashboard', url: route('admin.dashboard'), icon: SquareTerminal },
+                { title: 'Users', url: route('users.index'), icon: Users },
+                { title: 'Services', url: route('admin.services.index'), icon: FileCheck },
+                { title: 'CMS', url: route('admin.cms.edit'), icon: Frame },
             ],
             userPages: [
-                { title: 'Home', url: '/', icon: Home },
-                { title: 'Services', url: '/services', icon: Map },
+                { title: 'Home', url: route('home'), icon: Home },
+                { title: 'Services', url: route('services.index'), icon: Map },
+                { title: 'About', url: '/about', icon: Map },
                 { title: 'Contact', url: '/contact', icon: UserCircle2 },
             ],
             navSecondary,

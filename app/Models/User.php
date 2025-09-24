@@ -11,6 +11,7 @@ class User extends Authenticatable
   use HasFactory, Notifiable;
 
   protected $fillable = [
+    'id',
     'name',
     'email',
     'password',
@@ -39,6 +40,17 @@ class User extends Authenticatable
     return $this->hasOne(VendorService::class);
   }
 
+  public function transactions()
+  {
+    return $this->hasManyThrough(
+      CustomerTransaction::class,
+      CustomerSubscription::class,
+      'user_id',                   // Foreign key on CustomerSubscription table...
+      'customer_subscription_id',  // Foreign key on CustomerTransaction table...
+      'id',                        // Local key on User table...
+      'id'                         // Local key on CustomerSubscription table...
+    );
+  }
 
   public function subscriptions()
   {
@@ -52,22 +64,6 @@ class User extends Authenticatable
   }
 
   // === Role Helpers ===
-
-  public function isAdmin(): bool
-  {
-    return $this->role === 'admin';
-  }
-
-  public function isVendor(): bool
-  {
-    return $this->role === 'vendor';
-  }
-
-  public function isCustomer(): bool
-  {
-    return $this->role === 'customer';
-  }
-
 
   public function conversations()
   {
@@ -83,5 +79,20 @@ class User extends Authenticatable
   public function conversationsAsVendor()
   {
     return $this->hasMany(Conversation::class, 'vendor_id');
+  }
+
+  public function isAdmin(): bool
+  {
+    return $this->role === 'admin';
+  }
+
+  public function isVendor(): bool
+  {
+    return $this->role === 'vendor';
+  }
+
+  public function isCustomer(): bool
+  {
+    return $this->role === 'customer';
   }
 }

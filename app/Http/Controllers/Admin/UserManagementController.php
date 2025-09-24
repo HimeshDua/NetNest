@@ -38,6 +38,7 @@ class UserManagementController
 
   public function show(User $user)
   {
+    $user->load(['subscriptions']);
     return Inertia::render('Admin/Users/Show', [
       'user' => $user,
     ]);
@@ -61,6 +62,6 @@ class UserManagementController
   {
     $user->delete();
 
-    return back()->with('success', 'User deleted successfully.');
+    return redirect()->route('users.index')->with('success', 'User deleted successfully.');
   }
 }

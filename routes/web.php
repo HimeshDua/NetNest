@@ -2,14 +2,11 @@
 
 use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
 require __DIR__ . '/channels.php';
-require __DIR__ . '/api.php';
 
 // Public routes
 Route::get('/', [\App\Http\Controllers\Public\HomeController::class, 'index'])->name('home');
@@ -68,6 +65,18 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
 
   Route::resource('/users', \App\Http\Controllers\Admin\UserManagementController::class)->only(['index', 'show', 'update', 'destroy']);
   // Route::resource('/plans', \App\Http\Controllers\Admin\PlanManagementController::class)->except(['edit', 'create']);
+
+  Route::get('/services', [\App\Http\Controllers\Admin\ServiceManagementController::class, 'index'])->name('admin.services.index');
+  Route::get('/services/{service}', [\App\Http\Controllers\Admin\ServiceManagementController::class, 'show'])->name('admin.services.show');
+
+  Route::get(
+    '/services/{service}/users/{user}',
+    [\App\Http\Controllers\Admin\ServiceManagementController::class, 'showUser']
+  )->name('admin.services.users.show');
+
+  Route::patch('/services/{service}/toggle', [\App\Http\Controllers\Admin\ServiceManagementController::class, 'toggleStatus'])->name('admin.services.toggle');
+  Route::delete('/services/{service}', [\App\Http\Controllers\Admin\ServiceManagementController::class, 'destroy'])->name('admin.services.destroy');
+
 
   Route::get('/cms', [\App\Http\Controllers\Admin\CmsController::class, 'edit'])->name('admin.cms.edit');
   Route::post('/cms/post', [\App\Http\Controllers\Admin\CmsController::class, 'update'])->name('admin.cms.update');
