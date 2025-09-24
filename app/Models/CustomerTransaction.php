@@ -17,11 +17,13 @@ class CustomerTransaction extends Model
     'payment_method',
     'transaction_reference',
     'status',
+    'meta',
   ];
 
   protected $casts = [
     'payment_date' => 'datetime',
     'amount' => 'decimal:2',
+    'meta'         => 'array',
   ];
 
   /*
