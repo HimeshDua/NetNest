@@ -81,6 +81,11 @@ class User extends Authenticatable
     return $this->hasMany(Conversation::class, 'vendor_id');
   }
 
+  public function isSubscribed()
+  {
+    return $this->hasOne(CustomerSubscription::class, 'user_id')->exists();
+  }
+
   public function isAdmin(): bool
   {
     return $this->role === 'admin';

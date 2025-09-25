@@ -3,7 +3,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from '../ui/navigation-menu';
 
 function Navigation() {
-    const { auth } = usePage<PageProps>().props;
+    const { auth, isSubscribed } = usePage<PageProps>().props;
     const userRole = auth?.user?.role;
 
     return (
@@ -71,24 +71,21 @@ function Navigation() {
                     <>
                         <NavigationMenuItem>
                             <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                                <Link href="/services">Services</Link>
+                                <Link href={route('services.index')}>Services</Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
                             <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                                <Link href="/billing">Billings</Link>
+                                <Link href={route('customer.subscription')}>Subscriptions</Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                                <Link href="/support">Support</Link>
-                            </NavigationMenuLink>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                                <Link href="/subscription">Subscriptions</Link>
-                            </NavigationMenuLink>
-                        </NavigationMenuItem>
+                        {isSubscribed && (
+                            <NavigationMenuItem>
+                                <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                    <Link href={route('customer.support')}>Support</Link>
+                                </NavigationMenuLink>
+                            </NavigationMenuItem>
+                        )}
                     </>
                 )}
             </NavigationMenuList>

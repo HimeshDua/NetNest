@@ -51,7 +51,7 @@ class ServicesController
     //   ->pluck('vendor_service_id');
 
 
-    $vendor = VendorService::with('vendor:id,name,email,phone')
+    $service = VendorService::with('vendor:id,name,email,phone')
       ->where('slug', $slug)
       ->firstOrFail()
       ->toArray();
@@ -60,13 +60,13 @@ class ServicesController
     if (Auth::check()) {
       $userId = Auth::id();
       $isSubscribed = CustomerSubscription::where('user_id', $userId)
-        ->where('vendor_service_id', $vendor['id'])
+        ->where('vendor_service_id', $service['id'])
         ->where('status', 'active')
         ->exists();
     }
     // dd($vendor);
     return Inertia::render('Public/DetailedVendorServices', [
-      'vendor' => $vendor,
+      'service' => $service,
       'isSubscribed' => $isSubscribed,
     ]);
   }

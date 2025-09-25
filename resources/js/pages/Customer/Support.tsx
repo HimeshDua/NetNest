@@ -1,11 +1,13 @@
-import ConditionalLayout from '@/components/layout/conditionalLayout';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Typography } from '@/components/ui/typography';
 import echo from '@/echo';
+import Layout from '@/layouts/layout';
+import { Main } from '@/layouts/main';
 import { PageProps } from '@/types';
 import { router, usePage } from '@inertiajs/react';
 import axios from 'axios';
@@ -99,12 +101,16 @@ export default function CustomerSupport() {
     };
 
     return (
-        <ConditionalLayout title="Customer Support">
-            <div className="mx-auto max-w-4xl p-6">
+        <Layout title="Customer Support">
+            <Main className="container mt-12 px-3">
                 <Card>
                     <CardHeader>
                         <div className="flex items-center justify-between">
-                            <CardTitle>Support</CardTitle>
+                            <CardTitle>
+                                <Typography as="h2" variant="lg/semibold" className="flex items-center gap-2 sm:text-xl">
+                                    Customer Support
+                                </Typography>
+                            </CardTitle>
                             <div className="flex items-center gap-2">
                                 <Input
                                     placeholder="Search vendors or messages..."
@@ -163,7 +169,7 @@ export default function CustomerSupport() {
                         </ScrollArea>
                     </CardContent>
                 </Card>
-            </div>
-        </ConditionalLayout>
+            </Main>
+        </Layout>
     );
 }

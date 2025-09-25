@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Typography } from '@/components/ui/typography';
 import Layout from '@/layouts/layout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 
 import TransactionDialog from '@/components/customer/transactions/default';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
@@ -29,6 +29,7 @@ import {
 
 import '@/css/styles/tiptap.scss';
 import '@/css/styles/utils.css';
+import { Main } from '@/layouts/main';
 
 const getHighlight = (highlight: VendorService['highlight']) => {
     switch (highlight) {
@@ -62,38 +63,47 @@ const appUrl = import.meta.env.APP_URL;
 const appName = import.meta.env.APP_NAME;
 
 export default function DetailedVendorServices() {
-    const { vendor, isSubscribed } = usePage<PageProps>().props;
-    const highlight = getHighlight(vendor.highlight);
-    const connectionType = getConnectionType(vendor.connection_type);
+    const { service, isSubscribed } = usePage<PageProps>().props;
+    const highlight = getHighlight(service.highlight);
+    const connectionType = getConnectionType(service.connection_type);
 
-    console.log(vendor);
+    console.log(service);
     return (
         <>
-            <Head title={`${vendor.title} - NetNest`}>
-                <meta name="description" content={vendor.short_description} />
-                <meta name="keywords" content={vendor?.features?.join(', ')} />
-                <meta property="og:title" content={vendor.title} />
-                <meta property="og:description" content={vendor.images[0]} />
+            <Head title={`${service.title} - NetNest`}>
+                <meta name="description" content={service.short_description} />
+                <meta name="keywords" content={service?.features?.join(', ')} />
+                <meta property="og:title" content={service.title} />
+                <meta property="og:description" content={service.images[0]} />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content={`https://${appUrl}${appName}`} />
                 <meta property="og:site_name" content="NetNest" />
                 <meta property="og:locale" content="en_US" />
                 <meta name="twitter:card" content="summary" />
-                <meta name="twitter:title" content={vendor.title} />
-                <meta name="twitter:description" content={vendor.short_description} />
+                <meta name="twitter:title" content={service.title} />
+                <meta name="twitter:description" content={service.short_description} />
             </Head>
 
-            <Layout title={vendor.title}>
-                <div className="container mt-12 grid grid-cols-1 gap-8 px-3 lg:grid-cols-12">
+            <Layout title={service.title}>
+                <Main className="container mt-12 grid grid-cols-1 gap-8 px-3 lg:grid-cols-12">
                     {/* Left Column */}
                     <div className="order-2 space-y-6 lg:order-1 lg:col-span-8">
                         {/* Header Section */}
                         <div>
+                            <div className="mb-3 hidden items-center justify-start gap-1.5 text-gray-400 lg:flex">
+                                <Link className="underline-offset-2 hover:underline" href={route('services.index')}>
+                                    Services
+                                </Link>
+                                /
+                                <Link className="underline-offset-2 hover:underline" href={route('services.show', service.slug)}>
+                                    {service.title}
+                                </Link>
+                            </div>
                             <div className="relative flex flex-row items-baseline justify-baseline">
                                 <Typography as="h1" variant="4xl/bold" className="relative flex items-center gap-2">
-                                    {vendor.title}
+                                    {service.title}
                                 </Typography>
-                                {vendor.is_active ? (
+                                {service.is_active ? (
                                     <Badge variant="default" size="sm" className="self-start text-[10px] font-medium">
                                         Active
                                     </Badge>
@@ -103,7 +113,6 @@ export default function DetailedVendorServices() {
                                     </Badge>
                                 )}
                             </div>
-
                             <div className="mt-2 flex flex-wrap items-center gap-2">
                                 {highlight && (
                                     <Badge className={`${highlight.color} flex items-center gap-1 text-xs`}>
@@ -116,20 +125,20 @@ export default function DetailedVendorServices() {
                                     {connectionType.label}
                                 </Badge>
 
-                                {vendor.latitude && vendor.longitude ? (
+                                {service.latitude && service.longitude ? (
                                     <a
-                                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${vendor.latitude},${vendor.longitude}`)}`}
+                                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${service.latitude},${service.longitude}`)}`}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="inline-flex items-center justify-center gap-2 text-sm text-primary hover:underline"
                                     >
                                         <ExternalLink className="h-4 w-4" />
-                                        {vendor.location}
+                                        {service.location}
                                     </a>
                                 ) : (
                                     <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                         <MapPinIcon className="h-4 w-4" />
-                                        {vendor.location}
+                                        {service.location}
                                     </div>
                                 )}
                             </div>
@@ -157,12 +166,12 @@ export default function DetailedVendorServices() {
                                         <div className="flex items-center gap-2">
                                             <MapPinIcon className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
                                             <span className="font-medium">City:</span>
-                                            <span>{vendor.city}</span>
+                                            <span>{service.city}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <WifiIcon className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
                                             <span className="font-medium">Coverage:</span>
-                                            <span className="line-clamp-1">{vendor.coverage_area}</span>
+                                            <span className="line-clamp-1">{service.coverage_area}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -176,12 +185,12 @@ export default function DetailedVendorServices() {
                                         <div className="flex items-center gap-2">
                                             <CalendarIcon className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
                                             <span className="font-medium">Posted:</span>
-                                            <span>{new Date(vendor.posted_date).toLocaleDateString()}</span>
+                                            <span>{new Date(service.posted_date).toLocaleDateString()}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <ClockIcon className="h-3 w-3 flex-shrink-0 text-muted-foreground sm:h-4 sm:w-4" />
                                             <span className="font-medium">Type:</span>
-                                            <span className="capitalize">{vendor.connection_type}</span>
+                                            <span className="capitalize">{service.connection_type}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -189,7 +198,7 @@ export default function DetailedVendorServices() {
                         </Card>
 
                         {/* Speed Details */}
-                        {vendor.speed_details && (
+                        {service.speed_details && (
                             <Card>
                                 <CardHeader>
                                     <Typography as="h2" variant="xl/semibold" className="flex items-center gap-2">
@@ -198,32 +207,32 @@ export default function DetailedVendorServices() {
                                     </Typography>
                                 </CardHeader>
                                 <CardContent>
-                                    {typeof vendor.speed_details === 'object' ? (
+                                    {typeof service.speed_details === 'object' ? (
                                         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                                            {'download' in vendor.speed_details && (
+                                            {'download' in service.speed_details && (
                                                 <div className="text-center">
                                                     <Typography variant="lg/bold" className="text-green-600">
-                                                        {vendor.speed_details.download}
+                                                        {service.speed_details.download}
                                                     </Typography>
                                                     <Typography variant="sm/normal" className="text-muted-foreground">
                                                         Download Speed
                                                     </Typography>
                                                 </div>
                                             )}
-                                            {'upload' in vendor.speed_details && (
+                                            {'upload' in service.speed_details && (
                                                 <div className="text-center">
                                                     <Typography variant="lg/bold" className="text-blue-600">
-                                                        {vendor.speed_details.upload}
+                                                        {service.speed_details.upload}
                                                     </Typography>
                                                     <Typography variant="sm/normal" className="text-muted-foreground">
                                                         Upload Speed
                                                     </Typography>
                                                 </div>
                                             )}
-                                            {'latency' in vendor.speed_details && (
+                                            {'latency' in service.speed_details && (
                                                 <div className="text-center">
                                                     <Typography variant="lg/bold" className="text-orange-600">
-                                                        {vendor.speed_details.latency}
+                                                        {service.speed_details.latency}
                                                     </Typography>
                                                     <Typography variant="sm/normal" className="text-muted-foreground">
                                                         Latency
@@ -233,10 +242,10 @@ export default function DetailedVendorServices() {
                                         </div>
                                     ) : (
                                         <ul className="list-disc space-y-1 pl-5">
-                                            {Array.isArray(vendor.speed_details) ? (
-                                                vendor.speed_details.map((detail: string, index: number) => <li key={index}>{detail}</li>)
+                                            {Array.isArray(service.speed_details) ? (
+                                                service.speed_details.map((detail: string, index: number) => <li key={index}>{detail}</li>)
                                             ) : (
-                                                <li>{vendor.speed_details}</li>
+                                                <li>{service.speed_details}</li>
                                             )}
                                         </ul>
                                     )}
@@ -254,17 +263,17 @@ export default function DetailedVendorServices() {
                             </CardHeader>
                             <CardContent>
                                 <Typography as="p" variant="lg/normal" className="mb-4">
-                                    {vendor.short_description}
+                                    {service.short_description}
                                 </Typography>
                                 <div
                                     className="prose tiptap prose-sm dark:tiptap dark:prose-invert -0! max-w-none border-0! bg-background! shadow-none!"
-                                    dangerouslySetInnerHTML={{ __html: vendor.full_description }}
+                                    dangerouslySetInnerHTML={{ __html: service.full_description }}
                                 />
                             </CardContent>
                         </Card>
 
                         {/* Features */}
-                        {vendor.features.length > 0 && (
+                        {service.features.length > 0 && (
                             <Card>
                                 <CardHeader>
                                     <Typography as="h2" variant="xl/semibold">
@@ -273,7 +282,7 @@ export default function DetailedVendorServices() {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                                        {vendor.features.map((feature, i) => (
+                                        {service.features.map((feature, i) => (
                                             <div key={i} className="flex items-center gap-2">
                                                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10">
                                                     <ShieldIcon className="h-3 w-3 text-primary" />
@@ -287,7 +296,7 @@ export default function DetailedVendorServices() {
                         )}
 
                         {/* FAQ */}
-                        {vendor.faqs.length > 0 && (
+                        {service.faqs.length > 0 && (
                             <Card>
                                 <CardHeader>
                                     <Typography as="h2" variant="xl/semibold">
@@ -296,7 +305,7 @@ export default function DetailedVendorServices() {
                                 </CardHeader>
                                 <CardContent>
                                     <Accordion type="multiple" className="w-full divide-y divide-muted">
-                                        {vendor.faqs.map((faq, i) => (
+                                        {service.faqs.map((faq, i) => (
                                             <AccordionItem value={`faq-${i}`} key={i}>
                                                 <AccordionTrigger>{faq.question}</AccordionTrigger>
                                                 <AccordionContent>{faq.answer}</AccordionContent>
@@ -314,14 +323,14 @@ export default function DetailedVendorServices() {
                             {/* Image Carousel */}
                             <Card className="overflow-hidden p-0">
                                 <CardHeader className="p-0">
-                                    {vendor.images?.length > 0 ? (
+                                    {service.images?.length > 0 ? (
                                         <Carousel>
                                             <CarouselContent className="h-56 sm:h-72 md:h-96 lg:h-64">
-                                                {vendor.images.map((image: string, index) => (
+                                                {service.images.map((image: string, index) => (
                                                     <CarouselItem key={index}>
                                                         <img
                                                             src={image.startsWith('http') ? image : `/storage/${image}`}
-                                                            alt={vendor.title}
+                                                            alt={service.title}
                                                             className="h-full w-full object-cover"
                                                         />
                                                     </CarouselItem>
@@ -339,16 +348,16 @@ export default function DetailedVendorServices() {
 
                                 {/* Packages */}
                                 <CardContent className="space-y-4 p-5">
-                                    {vendor.packages?.length ? (
-                                        <Tabs defaultValue={vendor.packages[0]?.name.toLowerCase()}>
+                                    {service.packages?.length ? (
+                                        <Tabs defaultValue={service.packages[0]?.name.toLowerCase()}>
                                             <TabsList className="mb-4 flex w-full overflow-x-auto whitespace-nowrap">
-                                                {vendor.packages.map((pkg) => (
+                                                {service.packages.map((pkg) => (
                                                     <TabsTrigger key={pkg.name} value={pkg.name.toLowerCase()} className="shrink-0 px-3 capitalize">
                                                         {pkg.name}
                                                     </TabsTrigger>
                                                 ))}
                                             </TabsList>
-                                            {vendor.packages.map((pkg) => (
+                                            {service.packages.map((pkg) => (
                                                 <TabsContent key={pkg.name} value={pkg.name.toLowerCase()}>
                                                     <div className="space-y-2">
                                                         <h3 className="text-lg font-semibold">{pkg.name} Package</h3>
@@ -364,7 +373,7 @@ export default function DetailedVendorServices() {
                                                         <TransactionDialog
                                                             isSubscribed={isSubscribed}
                                                             price={pkg.price}
-                                                            serviceId={vendor.id}
+                                                            serviceId={service.id}
                                                             package_name={pkg.name}
                                                             payment_method={'COD'}
                                                         />
@@ -389,16 +398,16 @@ export default function DetailedVendorServices() {
                                 <CardContent className="space-y-3">
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm font-medium">Vendor:</span>
-                                        <span>{vendor.vendor?.name || 'Not specified'}</span>
+                                        <span>{service.service?.name || 'Not specified'}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm font-medium">Phone:</span>
-                                        <span className="text-primary">{vendor.vendor?.phone || 'Not provided'}</span>
+                                        <span className="text-primary">{service.service?.phone || 'Not provided'}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm font-medium">Location:</span>
                                         <span className="text-right">
-                                            {vendor.city}, {vendor.location}
+                                            {service.city}, {service.location}
                                         </span>
                                     </div>
                                     <div className="pt-2">
@@ -411,7 +420,7 @@ export default function DetailedVendorServices() {
                             </Card>
                         </div>
                     </div>
-                </div>
+                </Main>
             </Layout>
         </>
     );

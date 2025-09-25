@@ -32,14 +32,17 @@ export default function TransactionDialog({
         e.preventDefault();
         const role = auth.user?.role;
         if (role == 'admin' || role == 'vendor') return toast.error('You are not Authorized to subscribe to this service');
+        if (!auth?.user) return toast.error('You are not Authorized to subscribe to this service Please Login');
 
-        // console.log(data);
-        post(route('transaction.store'), {
-            onSuccess: () => {
-                reset();
-                setOpen(false);
-            },
-        });
+        if (role == 'customer') {
+            // console.log(data);
+            post(route('customer.subscription.store'), {
+                onSuccess: () => {
+                    reset();
+                    setOpen(false);
+                },
+            });
+        }
     };
 
     const closeModal = () => {

@@ -31,7 +31,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
   //   ->name('chat.open');
 
 
-  Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index'])->name('customer.subscription');
+  Route::get('/subscriptions', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index'])->name('customer.subscription');
   Route::post('/store-subscription', [\App\Http\Controllers\Customer\TransactionController::class, 'store'])->name('customer.subscription.store');
 
   Route::post('/request', [\App\Http\Controllers\Settings\ProfileController::class, 'request'])->name('customer.request');

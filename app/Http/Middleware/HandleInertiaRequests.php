@@ -36,6 +36,8 @@ class HandleInertiaRequests extends Middleware
         'user' => $request->user(),
       ],
 
+      'isSubscribed' => $request->user() ? $request->user()->isSubscribed() : false,
+
       'marquee' => $marquee,
 
       'ziggy' => fn(): array => [
