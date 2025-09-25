@@ -1,3 +1,4 @@
+import { InfoBanner } from '@/components/customer/infoBanner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +20,6 @@ import {
     FileText,
     MapPinIcon,
     Package,
-    Settings,
     Wifi,
     WifiOff,
     Zap,
@@ -96,6 +96,10 @@ export default function SubscriptionsPage() {
     const totalSpent = transactions?.reduce((sum: number, tx: any) => sum + parseFloat(tx.amount), 0) || 0;
     const activeSubscriptions = customerServices?.length || 0;
 
+    const text =
+        'We haven’t integrated premium gateway APIs yet, but we’ve optimized payments to provide a smooth and secure experience. As part of the Vision 2025 Aptech Garden project, there are no subscription limits for our customers.';
+
+    const link = 'https://github.com/HimeshDua/NetNest';
     return (
         <Layout title="My Account">
             <Main className="mx-auto max-w-7xl px-4 py-8">
@@ -124,6 +128,8 @@ export default function SubscriptionsPage() {
                     />
                 </div>
 
+                <InfoBanner text={text} link={link} />
+
                 {/* Main Content Tabs */}
                 <Tabs defaultValue="subscriptions" className="space-y-6">
                     <TabsList className="grid w-full grid-cols-2">
@@ -145,10 +151,6 @@ export default function SubscriptionsPage() {
                                     <CardTitle>My Subscriptions</CardTitle>
                                     <CardDescription>Your active service subscriptions</CardDescription>
                                 </div>
-                                <Button variant="outline" className="gap-2">
-                                    <Settings className="h-4 w-4" />
-                                    Manage Services
-                                </Button>
                             </CardHeader>
 
                             <CardContent className="p-6">

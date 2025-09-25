@@ -93,7 +93,8 @@ export default function CustomerSupport() {
     const openThread = async (conversationId: number) => {
         try {
             await axios.get(route('chat.open', conversationId));
-        } catch (e) {
+        } catch (e: any) {
+            console.log("Couldn't Open Chat ", e.message);
             // ignore
         }
 

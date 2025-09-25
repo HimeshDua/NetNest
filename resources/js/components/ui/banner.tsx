@@ -4,7 +4,7 @@ import { usePage } from '@inertiajs/react';
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-export const Banner = ({ className }: { className?: string }) => {
+export const Banner = ({ propText, propLink, className }: { propText?: string; propLink?: string; className?: string }) => {
     const { marquee } = usePage<PageProps>().props;
 
     const link = marquee[0]?.marquee_link || '';
@@ -52,15 +52,16 @@ export const Banner = ({ className }: { className?: string }) => {
                     {/* Marquee text with smooth transition */}
                     <p className="overflow-hidden text-sm font-medium whitespace-nowrap text-white md:text-base">
                         <span className={cn('inline-block transition-all duration-700', isHovered ? 'translate-x-1' : 'translate-x-0')}>
-                            {text}
-                            {link && (
-                                <a
-                                    href={link}
-                                    className="ml-2 font-semibold underline underline-offset-2 transition-all duration-300 hover:text-blue-100 hover:no-underline"
-                                >
-                                    Learn more →
-                                </a>
-                            )}
+                            {propText || text}
+                            {propLink ||
+                                (link && (
+                                    <a
+                                        href={propLink || link}
+                                        className="ml-2 font-semibold underline underline-offset-2 transition-all duration-300 hover:text-blue-100 hover:no-underline"
+                                    >
+                                        Learn more →
+                                    </a>
+                                ))}
                         </span>
                     </p>
                 </div>
