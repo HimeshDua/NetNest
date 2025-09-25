@@ -62,7 +62,7 @@ const appUrl = import.meta.env.APP_URL;
 const appName = import.meta.env.APP_NAME;
 
 export default function DetailedVendorServices() {
-    const { vendor } = usePage<PageProps>().props;
+    const { vendor, isSubscribed } = usePage<PageProps>().props;
     const highlight = getHighlight(vendor.highlight);
     const connectionType = getConnectionType(vendor.connection_type);
 
@@ -362,6 +362,7 @@ export default function DetailedVendorServices() {
                                                         </ul>
 
                                                         <TransactionDialog
+                                                            isSubscribed={isSubscribed}
                                                             price={pkg.price}
                                                             serviceId={vendor.id}
                                                             package_name={pkg.name}

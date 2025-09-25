@@ -27,15 +27,12 @@ Route::middleware(['auth', 'redirect.role'])->get('/dashboard', fn() => null)->n
 
 Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
 
-  Route::get('/billing', [\App\Http\Controllers\Customer\BillingController::class, 'index'])->name('customer.billing');
-
-
   // Route::get('/chat/v/{vendorId}', [ChatController::class, 'openWithVendor'])
   //   ->name('chat.open');
 
-  // previous and current subscriptions management
-  Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index']);
-  Route::post('/transaction', [\App\Http\Controllers\Customer\TransactionController::class, 'store'])->name('transaction.store');
+
+  Route::get('/subscription', [\App\Http\Controllers\Customer\SubscriptionController::class, 'index'])->name('customer.subscription');
+  Route::post('/store-subscription', [\App\Http\Controllers\Customer\TransactionController::class, 'store'])->name('customer.subscription.store');
 
   Route::post('/request', [\App\Http\Controllers\Settings\ProfileController::class, 'request'])->name('customer.request');
 });

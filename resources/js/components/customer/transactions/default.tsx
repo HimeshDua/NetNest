@@ -10,11 +10,13 @@ export default function TransactionDialog({
     price,
     serviceId,
     package_name,
+    isSubscribed,
     payment_method,
 }: {
     price: number;
     serviceId: number;
     payment_method: string;
+    isSubscribed: boolean;
     package_name: string;
 }) {
     const { auth } = usePage<PageProps>().props;
@@ -49,7 +51,9 @@ export default function TransactionDialog({
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button className="w-full">Subscribe Now</Button>
+                <Button disabled={isSubscribed} className="w-full">
+                    {isSubscribed ? 'Subscribed' : 'Subscribe Now'}
+                </Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader className="text-center">

@@ -45,14 +45,29 @@ class ServicesController
 
   public function show($slug)
   {
+
+    // $userId = Auth::id();
+    // $subscribedServiceIds = CustomerSubscription::where('user_id', $userId)
+    //   ->pluck('vendor_service_id');
+
+
     $vendor = VendorService::with('vendor:id,name,email,phone')
       ->where('slug', $slug)
       ->firstOrFail()
       ->toArray();
 
+    $isSubscribed = false;
+    if (Auth::check()) {
+      $userId = Auth::id();
+      $isSubscribed = CustomerSubscription::where('user_id', $userId)
+        ->where('vendor_service_id', $vendor['id'])
+        ->where('status', 'active')
+        ->exists();
+    }
     // dd($vendor);
     return Inertia::render('Public/DetailedVendorServices', [
-      'vendor' => $vendor
+      'vendor' => $vendor,
+      'isSubscribed' => $isSubscribed,
     ]);
   }
 }

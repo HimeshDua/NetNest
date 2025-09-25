@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Seeders\CustomerSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -60,6 +61,18 @@ class VendorService extends Model
   public function subscriptions()
   {
     return $this->hasMany(CustomerSubscription::class, 'vendor_service_id');
+  }
+
+  public function isSubscribed()
+  {
+    return $this->hasOneThrough(
+      User::class,
+      CustomerSubscription::class,
+      'vendor_service_id',
+      'id',
+      'id',
+      'user_id'
+    );
   }
 
   public function subscribers()

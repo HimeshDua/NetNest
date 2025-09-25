@@ -83,6 +83,14 @@ export interface PageProps extends InertiaPageProps {
         from: number;
         to: number;
     };
+    billingData?: {
+        transactions: UserTransaction[]!;
+        customerServices: VendorService[];
+        subsByService: {
+            package_name: 'Basic' | 'Standard' | 'Premium';
+            status: 'active' | 'cancelled' | 'expired';
+        }[];
+    };
     service: VendorService;
     services: {
         data: VendorService[];
