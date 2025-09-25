@@ -4,27 +4,30 @@ import VendorServiceGridSkeleton from '@/components/public/vendor/skeleton';
 import type { Location } from '@/components/shared/locationPicker';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import Layout from '@/layouts/layout';
 import type { VendorService } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { object } from 'zod';
 
 function Vendors() {
     const { services } = usePage<any>().props;
     const [userLocation, setUserLocation] = useState<Location | null>(null);
-    const [location, setLocation] = useState<Location>();
+    const [location, setLocation] = useState<Location | null>(null);
     const [query, setQuery] = useState('');
 
     const handlePageChange = (url: string | null) => {
         if (url) router.get(url);
     };
 
+    const url = 'services.index';
+
     const handleLocationSelect = (location: Location) => {
         setUserLocation(location);
         router.get(
-            route('services.index'),
+            route(url),
             {
                 lat: location.lat,
                 lng: location.lng,
@@ -57,6 +60,21 @@ function Vendors() {
             setLocation(JSON.parse(storedLocation));
         }
     }, []);
+
+    useEffect(() => {
+        router.get(
+            route(url),
+            {
+                lat: location?.lat,
+                lng: location?.lng,
+                radius: location?.name && 50,
+            },
+            {
+                preserveState: true,
+                replace: true,
+            },
+        );
+    }, [location]);
 
     const VendorService = lazy(() => import('@/components/public/vendor/default'));
     return (
@@ -119,11 +137,43 @@ function Vendors() {
                         <ServiceLocationFetcher onSelect={handleLocationSelect} />
                         {userLocation ? (
                             <Badge className="h-9 w-fit rounded-md px-4 py-2 whitespace-nowrap" variant="outline">
-                                📍 {String(userLocation.name.split(',').splice(-8, 4).join(','))}
+                                <>📍 {String(userLocation.name.split(',').splice(-8, 4).join(','))}</>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <button
+                                            className="text-center"
+                                            onClick={() => {
+                                                localStorage.removeItem('location');
+                                                setLocation(null);
+                                                setUserLocation(null);
+                                                router.get(route(url));
+                                            }}
+                                        >
+                                            <X size="15" className="cursor-pointer" />
+                                        </button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Clear Filter</TooltipContent>
+                                </Tooltip>
                             </Badge>
                         ) : location && typeof object(location) ? (
                             <Badge className="h-9 w-fit rounded-md px-4 py-2 whitespace-nowrap" variant="outline">
-                                📍 {location.name.split(',').splice(-8, 4).join(',')}
+                                <>📍 {location.name.split(',').splice(-8, 4).join(',')}</>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <button
+                                            className="text-center"
+                                            onClick={() => {
+                                                localStorage.removeItem('location');
+                                                setLocation(null);
+                                                setUserLocation(null);
+                                                router.get(route(url));
+                                            }}
+                                        >
+                                            <X size="15" className="cursor-pointer" />
+                                        </button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Clear Filter</TooltipContent>
+                                </Tooltip>
                             </Badge>
                         ) : null}
                     </div>
