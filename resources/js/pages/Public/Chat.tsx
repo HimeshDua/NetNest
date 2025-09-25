@@ -24,10 +24,6 @@ interface Message {
     };
 }
 
-interface MessageEvent {
-    message: Message;
-}
-
 export default function Chat() {
     const { auth, conversationId } = usePage<PageProps>().props;
     const user = auth.user;

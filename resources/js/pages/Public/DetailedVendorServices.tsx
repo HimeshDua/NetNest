@@ -398,11 +398,11 @@ export default function DetailedVendorServices() {
                                 <CardContent className="space-y-3">
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm font-medium">Vendor:</span>
-                                        <span>{service.service?.name || 'Not specified'}</span>
+                                        <span>{service.vendor?.name || 'Not specified'}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm font-medium">Phone:</span>
-                                        <span className="text-primary">{service.service?.phone || 'Not provided'}</span>
+                                        <span className="text-primary">{service.vendor?.phone || 'Not provided'}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-sm font-medium">Location:</span>
