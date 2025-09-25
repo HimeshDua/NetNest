@@ -43,6 +43,10 @@ Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
 Route::middleware(['auth', 'verified', 'role:vendor'])->group(function () {
   Route::get('/vendor/dashboard', [\App\Http\Controllers\Vendor\DashboardController::class, 'index'])->name('vendor.dashboard');
   Route::resource('/submission', \App\Http\Controllers\Vendor\SubmissionController::class)->only(['index', 'store', 'edit', 'update']);
+
+  Route::get('/conversations', [ChatController::class, 'vendorIndex'])->name('vendor.conversations');
+  Route::get('/conversations/{conversation}', [ChatController::class, 'show'])->name('vendor.conversations.show');
+
   // Route::get('/assigned-connections', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'index'])->name('vendor.assigned');
   // Route::get('/installation-requests', [\App\Http\Controllers\Vendor\InstallationRequestController::class, 'requests'])->name('vendor.installation');
 
@@ -104,11 +108,11 @@ Route::middleware(['auth'])->group(function () {
       ->name('chat.open'); // e.g. route('chat.open', $vendor->id)
   });
 
-  // VENDOR: vendor inbox + open a specific conversation
-  Route::middleware(['role:vendor'])->prefix('vendor')->group(function () {
-    Route::get('/conversations', [ChatController::class, 'vendorIndex'])->name('vendor.conversations');
-    Route::get('/conversations/{conversation}', [ChatController::class, 'show'])->name('vendor.conversations.show');
-  });
+  // </  // VENDOR: vendor inbox + open a specific conversation
+  // Route::middleware(['role:vendor'])->prefix('vendor')->group(function () {
+  //   Route::get('/conversations', [ChatController::class, 'vendorIndex'])->name('vendor.conversations');
+  //   Route::get('/conversations/{conversation}', [ChatController::class, 'show'])->name('vendor.conversations.show');
+  // }); />
 
   // Shared API endpoints (both participants may use, controller will authorize)
   Route::get('/conversations/{conversation}/messages', [ChatController::class, 'fetch'])
