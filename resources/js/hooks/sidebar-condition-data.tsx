@@ -1,20 +1,17 @@
-import { IconBell, IconHistoryToggle, IconMessageDots, IconShare3 } from '@tabler/icons-react';
-import { BookOpen, FileCheck, Frame, Home, Map, SquareTerminal, UserCircle2, Users } from 'lucide-react';
+import { IconColorFilter, IconPasswordUser } from '@tabler/icons-react';
+import { FileCheck, Frame, Home, Map, SquareTerminal, User, UserCircle2, Users } from 'lucide-react';
 
 export function getSidebarData(role: string | null) {
-    const sharedItems = [
-        {
-            title: 'Support',
-            url: `/${role}/support`,
-            icon: BookOpen,
-        },
-    ];
-
     const navSecondary = [
-        { title: 'Notifications', url: '/notifications', icon: IconBell },
-        { title: 'Refer a Friend', url: '/referral', icon: IconShare3 },
-        { title: 'Changelog', url: '/changelog', icon: IconHistoryToggle },
-        { title: 'Feedback', url: '/feedback', icon: IconMessageDots },
+        { title: 'Profile', url: route('profile.edit'), icon: User },
+        { title: 'Credentials', url: route('password.edit'), icon: IconPasswordUser },
+        { title: 'Appearance', url: route('appearance'), icon: IconColorFilter },
+    ];
+    const userPages = [
+        { title: 'Home', url: route('home'), icon: Home },
+        { title: 'Services', url: route('services.index'), icon: Map },
+        { title: 'About', url: route('about'), icon: Map },
+        { title: 'Contact', url: route('contact'), icon: UserCircle2 },
     ];
 
     if (role === 'admin') {
@@ -25,24 +22,15 @@ export function getSidebarData(role: string | null) {
                 { title: 'Services', url: route('admin.services.index'), icon: FileCheck },
                 { title: 'CMS', url: route('admin.cms.edit'), icon: Frame },
             ],
-            userPages: [
-                { title: 'Home', url: route('home'), icon: Home },
-                { title: 'Services', url: route('services.index'), icon: Map },
-                { title: 'About', url: '/about', icon: Map },
-                { title: 'Contact', url: '/contact', icon: UserCircle2 },
-            ],
+            userPages,
             navSecondary,
         };
     }
 
     if (role === 'vendor') {
         return {
-            navMain: [
-                { title: 'Dashboard', url: '/vendor/dashboard', icon: SquareTerminal },
-                { title: 'Operations', url: '/vendor/submission', icon: Map },
-                { title: 'Conversations', url: route('vendor.conversations'), icon: IconMessageDots },
-                ...sharedItems,
-            ],
+            navMain: [{ title: 'Dashboard', url: '/vendor/dashboard', icon: SquareTerminal }],
+            userPages,
             navSecondary,
         };
     }
@@ -50,10 +38,9 @@ export function getSidebarData(role: string | null) {
     // Guest/default fallback
     return {
         navMain: [
-            { title: 'Home', url: '/', icon: Home },
-            { title: 'Plans', url: '/plans', icon: FileCheck },
-            { title: 'Services', url: '/services', icon: Map },
-            { title: 'Contact', url: '/contact', icon: UserCircle2 },
+            { title: 'Home', url: route('home'), icon: Home },
+            { title: 'Services', url: route('services.index'), icon: Map },
+            { title: 'Contact', url: route('contact'), icon: UserCircle2 },
         ],
         navSecondary,
     };

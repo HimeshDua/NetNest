@@ -18,18 +18,18 @@ const applyTheme = (appearance: Appearance) => {
 const mediaQuery = () => (typeof window !== 'undefined' ? window.matchMedia('(prefers-color-scheme: dark)') : null);
 
 const handleSystemThemeChange = () => {
-    const currentAppearance = (localStorage.getItem('appearance') as Appearance) || 'system';
+    const currentAppearance = (localStorage.getItem('appearance') as Appearance) || 'light';
     applyTheme(currentAppearance);
 };
 
 export function initializeTheme() {
-    const savedAppearance = (localStorage.getItem('appearance') as Appearance) || 'system';
+    const savedAppearance = (localStorage.getItem('appearance') as Appearance) || 'light';
     applyTheme(savedAppearance);
     mediaQuery()?.addEventListener('change', handleSystemThemeChange);
 }
 
 export function useAppearance() {
-    const [appearance, setAppearance] = useState<Appearance>('system');
+    const [appearance, setAppearance] = useState<Appearance>('light');
     const [resolvedAppearance, setResolvedAppearance] = useState<'light' | 'dark'>(prefersDark() ? 'dark' : 'light');
 
     const updateAppearance = useCallback((mode: Appearance) => {
@@ -41,7 +41,7 @@ export function useAppearance() {
     }, []);
 
     useEffect(() => {
-        const savedAppearance = (localStorage.getItem('appearance') as Appearance) || 'system';
+        const savedAppearance = (localStorage.getItem('appearance') as Appearance) || 'light';
         updateAppearance(savedAppearance);
 
         const mq = mediaQuery();
