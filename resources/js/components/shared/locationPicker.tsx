@@ -31,6 +31,7 @@ export type Location = {
     name: string;
     lat: number;
     lng: number;
+    city: string;
 };
 
 type LocationPickerProps = {
@@ -58,12 +59,16 @@ export default function LocationPicker({ onSelect, showTiles = true, className }
                 const response = await fetch(url);
                 const data = await response.json();
                 const name = data.display_name || 'Unknown location';
+                const add = data.address;
+                // console.log(data);
+                const city = add.city || add.city_district || 'Unknown location';
                 setLocationName(name);
 
                 const location: Location = {
                     name,
                     lat: position.lat,
                     lng: position.lng,
+                    city,
                 };
                 onSelect(location);
             } catch {

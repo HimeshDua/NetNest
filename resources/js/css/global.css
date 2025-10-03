@@ -121,7 +121,7 @@
     --shadow-2xl: 0px 2px 0px 0px hsl(0 0% 20% / 0.38);
     --tracking-normal: 0em;
     --spacing: 0.25rem;
-}
+}*/
 
 .dark {
     --background: oklch(0.2178 0 0);
@@ -168,7 +168,7 @@
     --shadow-lg: 0px 2px 0px 0px hsl(0 0% 20% / 0.15), 0px 4px 6px -1px hsl(0 0% 20% / 0.15);
     --shadow-xl: 0px 2px 0px 0px hsl(0 0% 20% / 0.15), 0px 8px 10px -1px hsl(0 0% 20% / 0.15);
     --shadow-2xl: 0px 2px 0px 0px hsl(0 0% 20% / 0.38);
-} */
+}
 
 :root {
     --background: oklch(0.9383 0.0042 236.4993);

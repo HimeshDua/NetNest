@@ -1,7 +1,6 @@
 import ServicesNotFound from '@/components/public/vendor/notfound';
-import ServiceLocationFetcher from '@/components/public/vendor/ServiceLocationFetcher';
+import ServiceLocationFetcher, { type LocationProps } from '@/components/public/vendor/ServiceLocationFetcher';
 import VendorServiceGridSkeleton from '@/components/public/vendor/skeleton';
-import type { Location } from '@/components/shared/locationPicker';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -14,8 +13,8 @@ import { object } from 'zod';
 
 function Vendors() {
     const { services } = usePage<any>().props;
-    const [userLocation, setUserLocation] = useState<Location | null>(null);
-    const [location, setLocation] = useState<Location | null>(null);
+    const [userLocation, setUserLocation] = useState<LocationProps | null>(null);
+    const [location, setLocation] = useState<LocationProps | null>(null);
     const [query, setQuery] = useState('');
 
     const handlePageChange = (url: string | null) => {
@@ -24,7 +23,7 @@ function Vendors() {
 
     const url = 'services.index';
 
-    const handleLocationSelect = (location: Location) => {
+    const handleLocationSelect = (location: LocationProps) => {
         setUserLocation(location);
         router.get(
             route(url),

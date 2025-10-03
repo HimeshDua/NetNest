@@ -59,11 +59,18 @@ function Navigation() {
                 )}
 
                 {userRole === 'vendor' && (
-                    <NavigationMenuItem>
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
-                            <Link href="/vendor/conversations">Conversations</Link>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
+                    <>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href={route('vendor.conversations')}>Conversations</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                                <Link href={route('services.index')}>Services</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </>
                 )}
 
                 {/* Customer */}

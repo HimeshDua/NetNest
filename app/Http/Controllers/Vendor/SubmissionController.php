@@ -43,8 +43,11 @@ class SubmissionController extends Controller
     $validated['user_id'] = Auth::user()->id;
 
     // Slug fallback
-    if (empty($validated['slug'])) {
-      $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
+    if (empty($validated['slug']) || Str::slug($validated['slug']) === '') {
+      $validated['slug'] = Str::slug($validated['title']);
+      if (VendorService::where('slug', $validated['slug'])->exists()) {
+        $validated['slug'] .= '-' . Str::random(5);
+      }
     }
 
     // Handle images
