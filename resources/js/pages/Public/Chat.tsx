@@ -3,9 +3,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import echo from '@/echo';
+import { cn } from '@/lib/utils';
 import { PageProps } from '@/types';
 import { usePage } from '@inertiajs/react';
 import axios from 'axios';
@@ -119,7 +118,7 @@ export default function Chat() {
                     </div>
                 </CardHeader>
 
-                <CardContent className="flex flex-1 flex-col p-0">
+                <CardContent className="relative flex flex-1 flex-col p-0">
                     {isLoading ? (
                         <div className="flex flex-1 items-center justify-center">
                             <Loader2 className="mr-2 h-6 w-6 animate-spin" />
@@ -127,58 +126,49 @@ export default function Chat() {
                         </div>
                     ) : (
                         <>
-                            <ScrollArea className="flex-1 p-4">
-                                <div className="space-y-4">
-                                    {messages.length === 0 ? (
-                                        <div className="flex h-60 flex-col items-center justify-center text-center">
-                                            <div className="rounded-full bg-muted p-4">
-                                                <Smile className="h-8 w-8" />
-                                            </div>
-                                            <h3 className="mt-4 text-lg font-semibold">No messages yet</h3>
-                                            <p className="mt-2 text-muted-foreground">Start the conversation by sending a message.</p>
+                            <div className="space-y-4 p-4">
+                                {messages.length === 0 ? (
+                                    <div className="flex h-60 flex-col items-center justify-center text-center">
+                                        <div className="rounded-full bg-muted p-4">
+                                            <Smile className="h-8 w-8" />
                                         </div>
-                                    ) : (
-                                        messages.map((msg) => {
-                                            const isCurrentUser = msg.user_id === user?.id;
-                                            return (
-                                                <div key={msg.id} className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
-                                                    <div className={`flex max-w-[80%] gap-2 ${isCurrentUser ? 'flex-row-reverse' : ''}`}>
-                                                        {/* <Avatar className="h-8 w-8">
-                                                            <AvatarImage src={msg.user.avatar} />
-                                                            <AvatarFallback>{getInitials(msg.user.name)}</AvatarFallback>
-                                                        </Avatar> */}
-                                                        <div className="flex flex-col">
-                                                            <div className="flex items-center gap-2">
-                                                                {!isCurrentUser && <span className="text-sm font-medium">{msg?.user?.name}</span>}
-                                                                <TooltipProvider>
-                                                                    <Tooltip>
-                                                                        <TooltipTrigger asChild>
-                                                                            <span className="text-xs text-muted-foreground">
-                                                                                {formatTime(msg.created_at)}
-                                                                            </span>
-                                                                        </TooltipTrigger>
-                                                                        <TooltipContent>
-                                                                            <p>{new Date(msg.created_at).toLocaleString()}</p>
-                                                                        </TooltipContent>
-                                                                    </Tooltip>
-                                                                </TooltipProvider>
-                                                            </div>
-                                                            <div
-                                                                className={`mt-1 rounded-2xl px-4 py-2 ${
-                                                                    isCurrentUser ? 'bg-primary text-primary-foreground' : 'bg-muted'
-                                                                }`}
+                                        <h3 className="mt-4 text-lg font-semibold">No messages yet</h3>
+                                        <p className="mt-2 text-muted-foreground">Start the conversation by sending a message.</p>
+                                    </div>
+                                ) : (
+                                    messages.map((msg) => {
+                                        const isCurrentUser = msg.user_id === user?.id;
+                                        return (
+                                            <div key={msg.id} className={`mt-6 flex gap-y-4 ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
+                                                <div className={`flex max-w-[80%] gap-2 ${isCurrentUser ? 'flex-row-reverse' : ''}`}>
+                                                    <div className="flex flex-col">
+                                                        <div className="flex items-center gap-2">
+                                                            {!isCurrentUser && <span className="text-sm font-medium">{msg?.user?.name}</span>}
+                                                        </div>
+                                                        <div
+                                                            className={cn(
+                                                                'relative rounded-2xl px-4 py-2 text-sm leading-relaxed break-words shadow-sm transition-colors',
+                                                                isCurrentUser
+                                                                    ? 'rounded-br-sm bg-primary text-primary-foreground hover:bg-primary/90'
+                                                                    : 'rounded-bl-sm border bg-muted text-foreground hover:bg-accent hover:text-accent-foreground',
+                                                            )}
+                                                        >
+                                                            {msg.body}
+
+                                                            <span
+                                                                className={`absolute ${isCurrentUser ? 'left-2' : 'right-2'} -bottom-5 text-[10px] text-muted-foreground`}
                                                             >
-                                                                {msg.body}
-                                                            </div>
+                                                                {formatTime(msg.created_at)}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            );
-                                        })
-                                    )}
-                                    <div ref={messagesEndRef} />
-                                </div>
-                            </ScrollArea>
+                                            </div>
+                                        );
+                                    })
+                                )}
+                                <div ref={messagesEndRef} />
+                            </div>
 
                             <form onSubmit={sendMessage} className="border-t p-4">
                                 <div className="flex items-center gap-2">

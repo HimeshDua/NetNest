@@ -1,5 +1,5 @@
 import { IconColorFilter, IconPasswordUser } from '@tabler/icons-react';
-import { FileCheck, Frame, Home, Map, SquareTerminal, User, UserCircle2, Users } from 'lucide-react';
+import { FileCheck, Frame, Home, Map, MessageSquare, SquareTerminal, User, UserCircle2, Users } from 'lucide-react';
 
 export function getSidebarData(role: string | null) {
     const navSecondary = [
@@ -29,7 +29,10 @@ export function getSidebarData(role: string | null) {
 
     if (role === 'vendor') {
         return {
-            navMain: [{ title: 'Dashboard', url: '/vendor/dashboard', icon: SquareTerminal }],
+            navMain: [
+                { title: 'Dashboard', url: route('vendor.dashboard'), icon: SquareTerminal },
+                { title: 'Conversations', url: route('vendor.conversations'), icon: MessageSquare },
+            ],
             userPages,
             navSecondary,
         };
