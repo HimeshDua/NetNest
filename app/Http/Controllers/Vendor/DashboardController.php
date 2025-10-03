@@ -27,8 +27,8 @@ class DashboardController
     $cancelledCustomers = $subscriptions->where('status', 'cancelled')->count();
     // $expiredCustomers = $subscriptions->where('status', 'expired')->count();
 
-    // revenue
-    $totalRevenue = $activeCustomers * $service->price;
+
+    $totalRevenue = $service->transactions()->completed()->sum('amount');
 
     // Recent 5 subscribers
     $recentSubscribers = CustomerSubscription::with('customer')->where('vendor_service_id', $service->id)
@@ -45,20 +45,20 @@ class DashboardController
         ];
       });
 
-    $monthlyRevenue = CustomerSubscription::selectRaw('MONTH(subscribed_at) as month, YEAR(subscribed_at) as year, COUNT(*) as subscriptions')
-      ->where('vendor_service_id', $service->id)
-      ->where('status', 'active')
-      ->where('subscribed_at', '>=', now()->subYear())
-      ->groupBy('year', 'month')
-      ->orderBy('year', 'asc')
-      ->orderBy('month', 'asc')
+    $monthlyRevenue = $service->transactions()
+      ->where('customer_transactions.status', 'completed')
+      ->where('payment_date', '>=', now()->subYear())
+      ->selectRaw('YEAR(payment_date) as year, MONTH(payment_date) as month, SUM(amount) as revenue')
+      ->groupBy('year', 'month', 'customer_subscriptions.vendor_service_id')
+      ->orderBy('year')
+      ->orderBy('month')
       ->get();
 
-    // Map the query result to the format needed for the chart
-    $chartData = $monthlyRevenue->map(function ($item) use ($service) {
+
+    $chartData = $monthlyRevenue->map(function ($item) {
       return [
-        'name' => \DateTime::createFromFormat('!m', $item->month)->format('M'),
-        'total' => $item->subscriptions * $service->price,
+        'name'  => \DateTime::createFromFormat('!m', $item->month)->format('M'),
+        'total' => $item->revenue,
       ];
     })->values();
 

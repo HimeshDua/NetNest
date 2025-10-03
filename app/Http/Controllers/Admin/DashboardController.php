@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\CustomerRequest;
 use App\Models\User;
 use App\Models\CustomerTransaction;
+use App\Models\VendorService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -39,7 +40,13 @@ class DashboardController
       ];
     });
 
+    $query = VendorService::with('vendor:id,name,email')->withCount('subscribers');
+    $services = $query->orderBy('subscribers_count', 'desc')->limit(5)->get();
+
+
+
     return Inertia::render('Admin/Dashboard',  [
+      'servicesFromAdmin' => $services,
       'user' => $user,
       'customerRequests' => $customerRequests
     ]);

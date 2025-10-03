@@ -92,6 +92,7 @@ export interface PageProps extends InertiaPageProps {
         }[];
     };
     service: VendorService;
+    servicesFromAdmin: VendorService[];
     services: {
         data: VendorService[];
         links: { url: string | null; label: string; active: boolean }[];

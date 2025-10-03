@@ -53,6 +53,6 @@ class CustomerTransaction extends Model
 
   public function scopeCompleted($query)
   {
-    return $query->where('status', 'completed');
+    return $query->where('customer_transactions.status', 'completed');
   }
 }
