@@ -44,15 +44,15 @@ export default function HeroPage({ hero }: { hero?: HeroCMS }) {
                                     <a href={button.href}>{button.text}</a>
                                 </Button>
                             ))}
-                        </div>  
+                        </div>
                     )}
                     {safeHero.mockup && (
                         <div className="relative w-full pt-12">
                             <MockupFrame size="small">
                                 <Mockup>
                                     <Screenshot
-                                        srcLight={`${safeHero.mockup.srcLight}`}
-                                        srcDark={`${safeHero.mockup.srcDark}`}
+                                        srcLight={hero?.mockup?.srcLight ? `/storage/${safeHero.mockup.srcLight}` : `${safeHero.mockup.srcLight}`}
+                                        srcDark={hero?.mockup?.srcDark ? `/storage/${safeHero.mockup.srcDark}` : `${safeHero.mockup.srcDark}`}
                                         alt={safeHero.mockup.alt}
                                         width={1248}
                                         height={765}

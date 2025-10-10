@@ -1,0 +1,49 @@
+# =======================================
+# Stage 1 — Build Frontend (Vite)
+# =======================================
+FROM node:18 AS frontend
+WORKDIR /app
+
+# Install frontend dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy source and build React assets
+COPY . .
+RUN npm run build
+
+
+# =======================================
+# Stage 2 — Laravel Backend (PHP + Composer)
+# =======================================
+FROM php:8.3-cli AS backend
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git curl unzip libpq-dev libzip-dev libpng-dev \
+    && docker-php-ext-install pdo pdo_mysql zip gd
+
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www
+
+# Copy backend source
+COPY . .
+
+# Copy built frontend assets from stage 1
+COPY --from=frontend /app/public/dist ./public/dist
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Cache configs for faster boot
+RUN php artisan config:clear && \
+    php artisan route:clear && \
+    php artisan view:clear
+
+# Expose the Render port
+EXPOSE 10000
+
+# Start Laravel server on Render's expected port
+CMD php artisan serve --host=0.0.0.0 --port=10000

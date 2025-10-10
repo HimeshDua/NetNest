@@ -410,11 +410,13 @@ export default function DetailedVendorServices() {
                                             {service.city}, {service.location}
                                         </span>
                                     </div>
-                                    <div className="pt-2">
-                                        <button className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
-                                            <PhoneIcon className="mr-2 inline h-4 w-4" />
-                                            Call Now
-                                        </button>
+                                    <div className="pt-2 lg:hidden">
+                                        <a href={`tel:${service.vendor.phone}`}>
+                                            <button className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+                                                <PhoneIcon className="mr-2 inline h-4 w-4" />
+                                                Call Now {service.vendor.phone}
+                                            </button>
+                                        </a>
                                     </div>
                                 </CardContent>
                             </Card>

@@ -52,19 +52,26 @@ class DashboardController
     ]);
   }
 
-  public function updateCustomerRole(Request $request) // params
+  public function updateCustomerRole(Request $request)
   {
     $validated = $request->validate([
       'role' => 'required|in:customer,vendor,admin',
       'user_id' => 'required|exists:users,id',
-      'phone' => 'required|string|max:15|unique:users,phone'
+      'phone' => 'nullable|string|max:15|unique:users,phone,' . $request->user_id,
     ]);
 
     $user = User::findOrFail($validated['user_id']);
     $user->role = $validated['role'];
-    $user->phone = $validated['phone'] ?? $user->phone;
+
+    if (!empty($validated['phone'])) {
+      $user->phone = $validated['phone'];
+    }
+
     $user->save();
 
-    return back()->with('success', 'Role updated successfully.');
+    // Optionally delete the request after approval
+    CustomerRequest::where('user_id', $user->id)->delete();
+
+    return back()->with('success', 'User approved and role updated successfully.');
   }
 }
